@@ -24,9 +24,9 @@
     # always loaded
     'data': [
         # 'security/ir.model.access.csv',
+        'views/report_wrr.xml',
         'views/views.xml',
         'views/templates.xml',
-        'views/report_wrr.xml',        
         'views/stock_picking_views.xml',
     ],
     # only loaded in demonstration mode
