@@ -1,2 +1,2 @@
-# omni_gh
+# Omnitechnical - GH REPO
 Omnitechnical - GoodHeart
