@@ -1,0 +1,205 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+    <!--
+    <record model="ir.ui.view" id="omni_gh_mo.list">
+      <field name="name">omni_gh_mo list</field>
+      <field name="model">omni_gh_mo.omni_gh_mo</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="value"/>
+          <field name="value2"/>
+        </tree>
+      </field>
+    </record>
+    -->
+
+    <!-- actions opening views on models -->
+    <!--
+    <record model="ir.actions.act_window" id="omni_gh_mo.action_window">
+      <field name="name">omni_gh_mo window</field>
+      <field name="res_model">omni_gh_mo.omni_gh_mo</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+    -->
+
+    <!-- server action to the one above -->
+    <!--
+    <record model="ir.actions.server" id="omni_gh_mo.action_server">
+      <field name="name">omni_gh_mo server</field>
+      <field name="model_id" ref="model_omni_gh_mo_omni_gh_mo"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": self._name,
+        }
+      </field>
+    </record>
+    -->
+
+    <!-- Top menu item -->
+    <!--
+    <menuitem name="omni_gh_mo" id="omni_gh_mo.menu_root"/>
+    -->
+    <!-- menu categories -->
+    <!--
+    <menuitem name="Menu 1" id="omni_gh_mo.menu_1" parent="omni_gh_mo.menu_root"/>
+    <menuitem name="Menu 2" id="omni_gh_mo.menu_2" parent="omni_gh_mo.menu_root"/>
+    -->
+    <!-- actions -->
+    <!--
+    <menuitem name="List" id="omni_gh_mo.menu_1_list" parent="omni_gh_mo.menu_1"
+              action="omni_gh_mo.action_window"/>
+    <menuitem name="Server to list" id="omni_gh_mo" parent="omni_gh_mo.menu_2"
+              action="omni_gh_mo.action_server"/>
+    -->
+
+
+
+    <!-- <record id="mrp_production_wizard_extend" model="ir.ui.view">
+      <field name="name">BOM Check Lots Age</field>
+        <field name="model">mrp.production.wizard</field>
+        <field name="arch" type="xml">
+          <form string="Bill Of Materials Check Age">
+            <group>
+              <field name="product_id" />
+              <field name="product_qty" />
+              <field name="product_uom_id" />
+            </group>
+            <group>
+              <field name="bom_id" />
+            </group>
+            <footer>
+              <button name="_btn_click" string="Confirm" type="object" class="btn-primary"/>  
+            </footer>
+          </form>
+        </field>
+    </record> --> -->
+
+    <!-- <record id="action_view_mrp_production" model="ir.actions.act_window">
+        <field name="name">BOM FIFO</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">mrp.production.wizard</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="model_mrp_production" />        
+    </record> -->
+
+    <record id="mrp_production_form_view_extend" model="ir.ui.view">
+        <field name="name">Mrp Production Extend</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+        <field name="arch" type="xml">
+          <xpath expr="//sheet/group/group[1]/field[7]" position="after">
+            <field name="is_parent" widget="checkbox" string="Parent" type="object"/>
+            <field name="is_child_generated" attrs="{'invisible': 1}"/>
+            <field name="child_no" string="No. of Child" attrs="{'invisible': [('is_parent', '!=', True)], 'readonly': [('is_parent', '!=', True)]}"/>
+            <field name="parent_id" string="Child of" attrs="{ 'readonly': 1}"/>
+          </xpath>
+          <xpath expr="//button[2]" position="after">
+            <button name="btn_generate_child" string="Generate Child MO" class="oe_highlight" type="object"/>
+          </xpath>
+          <!-- <xpath expr="//button[2]" position="after">
+            <button name="select_bom" string="Select BOM" class="oe_highlight" type="action"/>
+          </xpath> -->
+          <xpath expr="//page[3]" position="after">
+            <page string="Childs" attrs="{'invisible': [('is_child_generated', '=', False)]}">
+              <field name="children_ids"/>
+            </page>
+          </xpath>
+
+          <xpath expr="//field[@name='child_no']" position="attributes">
+                <attribute name="attrs">{'readonly':[('is_child_generated','=', True)]}</attribute>
+          </xpath>
+
+          <xpath expr="//button[@name='btn_generate_child']" position="attributes">
+                <attribute name="attrs">{'invisible':[('parent_id','!=', False)]}</attribute>
+          </xpath>
+
+
+        </field>
+    </record>
+    <record id="mrp_production_tree_view_extend" model="ir.ui.view">
+      <field name="name">mrp.production.tree.extend</field>
+      <field name="model">mrp.production</field>
+      <field name="inherit_id" ref="mrp.mrp_production_tree_view"/>
+      <field name="arch" type="xml">
+        <xpath expr="//tree/field[7]" position="after">
+          <field name="parent_id" string="Child of" attrs="{ 'readonly': 1}"/>
+        </xpath>
+        <xpath expr="//tree/field[8]" position="after">
+          <field name="date_planned_start_wo" string="Scheduled Date" attrs="{ 'readonly': 1}"/>
+        </xpath>
+        <xpath expr="//tree/field[9]" position="after">
+          <field name="date_planned_start" string="Date Started" attrs="{ 'readonly': 1}"/>
+        </xpath>
+      </field>
+    </record>
+
+    <record id="view_mrp_production_filter_extension" model="ir.ui.view">
+        <field name="name">mrp.production.select</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.view_mrp_production_filter"/>
+        <field name="arch" type="xml">
+          <field name="name" position="after">
+             <field name="parent_id" string="Child Of" filter_domain="['|',('name','ilike', self),('parent_id','ilike', self)]"/>
+          </field>
+        </field>
+    </record>
+
+    <record id="view_mrp_production_filter_extend" model="ir.ui.view">
+            <field name="name">Mrp Production Search Extend</field>
+            <field name="model">mrp.production</field>
+            <field name="inherit_id" ref="mrp.view_mrp_production_filter"/>
+            <field name="arch" type="xml">
+              <xpath expr="//search/filter[1]" position="replace">
+                <filter string="To Do" name="todo" domain="[('parent_id','=',  False),('state','in',('confirmed', 'planned','progress'))]"
+                        help="Manufacturing Orders which are parent."/>
+              </xpath>
+                <!-- <search string="Search Production">
+                    <field name="name" string="Production" filter_domain="['|',('name','ilike',self),('origin','ilike',self)]"/>
+                    <filter string="To Do" name="todo" domain="[('state','in',('confirmed', 'planned','progress'))]"
+                        help="Manufacturing Orders which are in confirmed state."/>
+                    <separator/>
+                    <filter string="Confirmed" name="confirmed" domain="[('state','=','confirmed')]"/>
+                    <filter string="Planned" name="planned" domain="[('state','=','planned')]"/>
+                    <filter string="In Progress" name="inprogress" domain="[('state','=','progress')]"
+                        help="Manufacturing Orders which are currently in production."/>
+                    <filter string="Done" name="done" domain="[('state', '=', 'done')]"/>
+                    <filter string="Waiting" name="waiting" domain="[('availability', '=', 'waiting')]"/>
+                    <separator/>
+                    <filter string="Late" domain="['&amp;', ('date_planned_start', '&lt;', current_date), ('state', '=', 'confirmed')]"
+                        name="late" help="Production started late"/>
+                    <separator/>
+                    <filter string="No Routing" domain="[('routing_id','=', False)]" name="norouting" groups="mrp.group_mrp_routings"/>
+                    <field name="product_id"/>
+                    <field name="move_raw_ids" string="Raw Material" filter_domain="[('move_raw_ids.product_id','ilike',self)]"/>
+                    <field name="name" string="Work Center" filter_domain="[('routing_id.operation_ids.workcenter_id','ilike',self)]"/>
+                    <field name="routing_id" groups="mrp.group_mrp_routings"/>
+                    <separator/>
+                    <filter string="My Activities" name="activities_my"
+                        domain="[('activity_ids.user_id', '=', uid)]"/>
+                    <separator/>
+                    <filter string="Late Activities" name="activities_overdue"
+                        domain="[('activity_ids.date_deadline', '&lt;', context_today().strftime('%Y-%m-%d'))]"
+                        help="Show all records which has next action date is before today"/>
+                    <filter string="Today Activities" name="activities_today"
+                        domain="[('activity_ids.date_deadline', '=', context_today().strftime('%Y-%m-%d'))]"/>
+                    <filter string="Future Activities" name="activities_upcoming_all"
+                        domain="[('activity_ids.date_deadline', '&gt;', context_today().strftime('%Y-%m-%d'))
+                        ]"/>
+                    <group expand="0" string="Group By...">
+                        <filter string="Product" domain="[]" context="{'group_by':'product_id'}"/>
+                        <filter string="Routing" domain="[]" context="{'group_by':'routing_id'}"/>
+                        <filter string="Status" domain="[]" context="{'group_by':'state'}"/>
+                        <filter string="Scheduled Month" domain="[]" context="{'group_by':'date_planned_start'}" help="Scheduled Date by Month"/>
+                    </group>
+               </search> -->
+            </field>
+    </record>
+  </data>
+</odoo>

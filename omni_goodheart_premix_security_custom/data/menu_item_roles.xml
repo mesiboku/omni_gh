@@ -1,0 +1,33 @@
+<odoo>
+  <data>
+<!--Dashboard Hide Pigment Data-->
+<record model="ir.ui.menu" id="mrp.menu_mrp_dashboard">
+      <field name="groups_id" eval="[(6, False, [ref('confidential'),])]">
+      </field>
+</record>
+
+<!-- <record model="ir.ui.menu" id="menu_mrp_dashboard_extend">
+      <field name="groups_id" eval="[(6, False, [ref('do_not_allow')])]"/>
+</record> -->
+
+<!--Work Centers-->
+<record model="ir.ui.menu" id="mrp.menu_view_resource_search_mrp">
+      <field name="groups_id" eval="[(6, False, [ref('confidential'),])]">
+        </field>
+</record>
+<!-- <record model="ir.ui.menu" id="menu_view_resource_search_mrp_extend">
+      <field name="groups_id" eval="[(6, False, [ref('omni_goodheart_premix_security_custom.do_not_allow')])]"/>
+</record> -->
+
+<!--Inventory Products-->
+<record model="ir.ui.menu" id="stock.menu_product_variant_config_stock">
+      <field name="groups_id" eval="[(6, False, [ref('confidential'),])]">
+        </field>
+</record>
+<!-- <record model="ir.ui.menu" id="menu_product_variant_config_stock_extend">
+      <field name="groups_id" eval="[(6, False, [ref('omni_goodheart_premix_security_custom.do_not_allow')])]"/>
+</record> -->
+
+
+  </data>
+</odoo>

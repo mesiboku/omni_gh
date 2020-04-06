@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <!-- <record id="invoice_form_extend" model="ir.ui.view">
+      <field name="name">account.invoice.form</field>
+      <field name="model">account.invoice</field>
+      <field name="inherit_id" ref="account.invoice_form"/>
+      <field name="arch" type="xml">
+          <xpath expr="//header/button[2]" position="after">
+            <button name="invoice_credit_memo_print" string="Print Credit Memo Invoice" type="object" attrs="{'invisible':['|',('sent','=',False), ('state', 'not in', ('open','paid'))]}" class="oe_highlight" groups="base.group_user"/>
+          </xpath>
+      </field>
+  </record> -->
+</odoo>

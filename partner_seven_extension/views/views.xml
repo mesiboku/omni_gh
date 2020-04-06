@@ -1,0 +1,38 @@
+<odoo>
+  <data>
+    <record id="seven_partner_extension" model="ir.ui.view">
+    <field name="name">partner_seven_extension.partners_form</field>
+    <field name="model">res.partner</field>
+    <field name="inherit_id" ref="base.view_partner_form"/>
+    <field name="arch" type="xml">
+        <!-- find field description and add the field
+             idea_ids after it -->
+
+         <xpath expr="//field[@name='website']" position="before">
+            <field name="area_id"/>
+            <field name="store_status_note"/>
+        </xpath>
+
+        
+        <xpath expr="//field[@name='child_ids']/form/sheet/field[@name='parent_id']" position="before">
+          <group attrs="{'invisible': [('type','=', 'contact')]}">
+            <group>
+            <field name="store_number"/>
+            <field name="store_name"/>
+            <field name="store_manager"/>
+            <field name="area_id"/>
+          </group>
+          <group>
+            <field name="globe_number"/>
+            <field name="smart_number"/>
+            <field name="sun_number"/>
+            <field name="landline_number"/>
+          </group>
+          </group>
+         
+        </xpath>
+
+    </field>
+</record>
+  </data>
+</odoo>

@@ -1,0 +1,272 @@
+<odoo>
+  <data>
+
+    <!-- explicit list view definition -->
+    
+    <record model="ir.ui.view" id="seven_call_sheet.list">
+      <field name="name">seven_call_sheet list</field>
+      <field name="model">seven_call_sheet.call_sheet</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="call_date"/>
+          <field name="sales_area_id"/>
+          <field name="call_date_submitted"/>
+          <field name="state"/>
+        </tree>
+      </field>
+    </record>
+    
+
+    <!-- actions opening views on models -->
+    
+    <record model="ir.actions.act_window" id="seven_call_sheet.action_window">
+      <field name="name">7/11 Call Sheet</field>
+      <field name="res_model">seven_call_sheet.call_sheet</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <record model="ir.ui.view" id="call_sheet_form">
+      <field name="name">Call Sheet Form</field>
+      <field name="model">seven_call_sheet.call_sheet</field>
+      <field name="arch" type="xml">
+        <form string="Call Sheet">
+          <header>
+            <button string="Upload Orders from Excel" type="action" name="%(action_view_call_sheet_upload)d" class="oe_highlight" attrs="{'invisible': [('state', 'not in', ['draft'])]}"/>            
+            <button string="Load stores in area" type="object" name="area_changed" class="oe_highlight"
+              attrs="{'invisible': [('state', 'not in', ['draft'])]}"/>
+            <button string="Submit for Approval" type="object" name="submit_approval" class="oe_highlight"
+              attrs="{'invisible': [('state', 'not in', ['draft'])]}"/>
+            <field name="state" widget="statusbar"/>
+          </header>
+          <sheet>
+            <div class="oe_button_box" name="button_box">
+              <button name="action_view_sale" type="object" class="oe_stat_button" icon="fa fa-fw fa-usd" attrs="{'invisible': [('sale_count', '=', 0)]}">
+                <field name="sale_count" widget="statinfo" string="Sales"/>
+              </button>
+              <button name="action_view_delivery" type="object" class="oe_stat_button" icon="fa-truck" attrs="{'invisible': [('delivery_count', '=', 0)]}">
+                <field name="delivery_count" widget="statinfo" string="Delivery"/>
+              </button>
+              <button name="action_view_invoice" type="object" class="oe_stat_button" icon="fa-pencil-square-o" attrs="{'invisible': [('invoice_count', '=', 0)]}">
+                <field name="invoice_count" widget="statinfo" string="Invoices"/>
+              </button>
+            </div>
+            <div class="oe_title">   
+              <h1>
+                <field name="name" />
+              </h1> 
+            </div> 
+            <group>
+                <group>
+                   <field name="call_date" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+                   <field name="call_date_submitted" attrs="{'invisible': [('state', 'not in', ['submitted'])]}"/>
+                   <field name="sales_area_id" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+                   <field name="warehouse_id" attrs="{'readonly': [('state', 'not in', ['draft'])]}" options="{'no_create': True}"/>
+                   <!--
+                   <field name="price_box" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+                   <field name="price_box_2" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+                   <field name="price_box_3" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+
+                   <field name="price_box_4" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+                   <field name="price_box_5" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+                   <field name="price_box_6" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+
+                   <field name="price_box_7" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+                   <field name="price_box_8" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+                   <field name="price_box_9" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+                   <field name="price_box_10" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+                    -->
+                </group>
+ <!--             
+               <group>
+                           
+                    <field name="cone_1_id" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+                    <field name="cone_2_id" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+                    <field name="cone_3_id" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+
+                    <field name="cone_4_id" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+                    <field name="cone_5_id" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+                    <field name="cone_6_id" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+
+                    <field name="cone_7_id" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+                    <field name="cone_8_id" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+                    <field name="cone_9_id" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+                    <field name="cone_10_id" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>                   
+                                
+          
+                    <field name="total_cone_1" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+                    <field name="total_cone_2" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+                    <field name="total_cone_3" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+
+                    <field name="total_cone_4" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+                    <field name="total_cone_5" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+                    <field name="total_cone_6" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+
+                    <field name="total_cone_7" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+                    <field name="total_cone_8" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+                    <field name="total_cone_9" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>              
+                    <field name="total_cone_10" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+               </group>
+-->  
+            </group>
+             <group string ="Cone Information" col="3">
+                  <group string = "Items">
+                      <field name="cone_1_id" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+                      <field name="cone_2_id" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+                      <field name="cone_3_id" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+
+                      <field name="cone_4_id" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+                      <field name="cone_5_id" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+                      <field name="cone_6_id" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+
+                      <field name="cone_7_id" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+                      <field name="cone_8_id" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+                      <field name="cone_9_id" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+                      <field name="cone_10_id" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>                      
+                  </group>
+                  <group string = "Price">
+                     <field name="price_box" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+                     <field name="price_box_2" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+                     <field name="price_box_3" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+
+                     <field name="price_box_4" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+                     <field name="price_box_5" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+                     <field name="price_box_6" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+
+                     <field name="price_box_7" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+                     <field name="price_box_8" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+                     <field name="price_box_9" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+                     <field name="price_box_10" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>                    
+                  </group>
+                  <group string = "Total">
+                      <field name="total_cone_1" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+                      <field name="total_cone_2" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+                      <field name="total_cone_3" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+
+                      <field name="total_cone_4" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+                      <field name="total_cone_5" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+                      <field name="total_cone_6" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+
+                      <field name="total_cone_7" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+                      <field name="total_cone_8" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+                      <field name="total_cone_9" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>              
+                      <field name="total_cone_10" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>                     
+                  </group>                    
+             </group>            
+          </sheet>
+          <sheet>
+            <notebook>
+              <page string="Lines">
+                <field name="call_sheet_line_ids" attrs="{'readonly': [('state', 'not in', ['draft'])]}"> 
+                  <tree editable="top">
+                    <field name="partner_id"/>
+                    <field name="store_number"/>
+                    <field name="store_name"/>
+                    <field name="store_manager"/>
+                    <field name="legacy_invoice_number" attrs="{'required': [('total_amount', '>', 0)]}"/>
+                    <field name="sun_number"/>
+                    <field name="smart_number"/>
+                    <field name="globe_number"/>
+                    <field name="landline_number"/>
+                    <field name="store_status_note"/>
+                    <field name="cone_1"/>
+                    <field name="cone_2"/>
+                    <field name="cone_3"/>
+
+                    <field name="cone_4"/>
+                    <field name="cone_5"/>
+                    <field name="cone_6"/>
+                    <field name="cone_7"/>
+                    <field name="cone_8"/>
+                    <field name="cone_9"/>
+                    <field name="cone_10"/>
+
+                    <field name="total_unit_price"/>
+                    <field name="tax"/>
+                    <field name="total_amount"/>
+                  </tree>
+                </field>
+              </page>
+              <page string="Other Info">
+                <group>
+                  <!-- <group>
+                    <field name="warehouse_id" attrs="{'readonly': [('state', 'not in', ['draft'])]}" options="{'no_create': True}"/>
+                  </group> -->
+
+                  <group string="Unit Of Measurement">
+                    <field name="cone_1_product_uom" groups="base.group_multi_company" options="{'no_create': True}"/>
+                    <field name="cone_2_product_uom" groups="base.group_multi_company" options="{'no_create': True}"/>
+                    <field name="cone_3_product_uom" groups="base.group_multi_company" options="{'no_create': True}"/>
+
+                    <field name="cone_4_product_uom" groups="base.group_multi_company" options="{'no_create': True}"/>
+                    <field name="cone_5_product_uom" groups="base.group_multi_company" options="{'no_create': True}"/>
+                    <field name="cone_6_product_uom" groups="base.group_multi_company" options="{'no_create': True}"/>
+                    <field name="cone_7_product_uom" groups="base.group_multi_company" options="{'no_create': True}"/>
+                    <field name="cone_8_product_uom" groups="base.group_multi_company" options="{'no_create': True}"/>
+                    <field name="cone_9_product_uom" groups="base.group_multi_company" options="{'no_create': True}"/>
+                    <field name="cone_10_product_uom" groups="base.group_multi_company" options="{'no_create': True}"/>
+                  </group>                  
+                
+                  <group string="Sales Delivery Report Config">
+                    <field name="cone_1_label" placeholder="Optional Column name for Cone 1"/>
+                    <field name="cone_2_label" placeholder="Optional Column name for Cone 2"/>
+                    <field name="cone_3_label" placeholder="Optional Column name for Cone 3"/>
+                    <field name="cone_4_label" placeholder="Optional Column name for Cone 4"/>
+                    <field name="cone_5_label" placeholder="Optional Column name for Cone 5"/>
+                    <field name="cone_6_label" placeholder="Optional Column name for Cone 6"/>
+                    <field name="cone_7_label" placeholder="Optional Column name for Cone 7"/>
+                    <field name="cone_8_label" placeholder="Optional Column name for Cone 8"/>
+                    <field name="cone_9_label" placeholder="Optional Column name for Cone 9"/>
+                    <field name="cone_10_label" placeholder="Optional Column name for Cone 10"/>
+                  </group>
+                  <group>
+                    <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}" readonly="1"/>
+                  </group> 
+                </group>
+              </page>
+            </notebook>
+            
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+
+    <menuitem name="Call Sheet" id="seven_call_sheet.call_sheet_menu" action="seven_call_sheet.action_window"
+      parent= "sale.sale_menu_root"/>
+    
+
+    <!-- server action to the one above -->
+    <!--
+    <record model="ir.actions.server" id="seven_call_sheet.action_server">
+      <field name="name">seven_call_sheet server</field>
+      <field name="model_id" ref="model_seven_call_sheet_seven_call_sheet"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": self._name,
+        }
+      </field>
+    </record>
+    -->
+
+    <!-- Top menu item -->
+    <!--
+    <menuitem name="seven_call_sheet" id="seven_call_sheet.menu_root"/>
+    -->
+    <!-- menu categories -->
+    <!--
+    <menuitem name="Menu 1" id="seven_call_sheet.menu_1" parent="seven_call_sheet.menu_root"/>
+    <menuitem name="Menu 2" id="seven_call_sheet.menu_2" parent="seven_call_sheet.menu_root"/>
+    -->
+    <!-- actions -->
+    <!--
+    <menuitem name="List" id="seven_call_sheet.menu_1_list" parent="seven_call_sheet.menu_1"
+              action="seven_call_sheet.action_window"/>
+    <menuitem name="Server to list" id="seven_call_sheet" parent="seven_call_sheet.menu_2"
+              action="seven_call_sheet.action_server"/>
+    -->
+  </data>
+</odoo>

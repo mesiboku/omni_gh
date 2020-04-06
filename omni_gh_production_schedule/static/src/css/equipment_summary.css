@@ -1,0 +1,55 @@
+
+.table_header
+{
+	text-align: center;
+	min-width:100px;
+	vertical-align: middle;
+}
+
+.table_reserved
+{
+	background-color: green;
+	color: white;
+	text-align: center;
+	min-width:100px;
+	vertical-align: middle;
+	cursor:pointer;
+}
+.table_reserved1
+{
+	background-color: blue;
+	color: white;
+	text-align: center;
+	min-width:100px;
+	vertical-align: middle;
+	cursor:pointer;
+}
+.table_free
+{
+	background-color: white;
+	color: black;
+	text-align: center;
+	min-width:100px;
+	vertical-align: middle;
+	cursor:pointer;
+}
+
+.table_unpaid
+{
+	background-color: red;
+	color: white;
+	text-align: center;
+	min-width:100px;
+	vertical-align: middle;
+	cursor:pointer;
+}
+
+.table_partially_paid
+{
+	background-color: yellow;
+	color: black;
+	text-align: center;
+	min-width:100px;
+	vertical-align: middle;
+	cursor:pointer;
+}

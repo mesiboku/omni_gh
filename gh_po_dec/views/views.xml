@@ -1,0 +1,8 @@
+<odoo>
+  <data>
+    <record model="decimal.precision" id="decimal_purchase_qty">
+      <field name="name">Purchase Quantity</field>
+      <field name="digits">2</field>
+    </record>
+  </data>
+</odoo>
