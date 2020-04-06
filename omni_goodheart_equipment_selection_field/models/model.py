@@ -6,11 +6,11 @@ class EquipmentField(models.Model):
 
 	equips = fields.Many2one(
         'maintenance.equipment', 'Equipment',
-        index=True, ondelete='cascade', required=True)
+        index=True, required=True)
 
 
 
 class EquipmentFieldWO(models.Model):
 	_inherit = 'mrp.workorder'
 
-	equips_id = fields.Many2one( 'maintenance.equipment', 'Equipment', related='production_id.equips')
+	equips_id = fields.Many2one( 'maintenance.equipment', 'Equipment')
