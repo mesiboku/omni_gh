@@ -1,0 +1,103 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+    <!--
+    <record model="ir.ui.view" id="omni_gh_mo.list">
+      <field name="name">omni_gh_mo list</field>
+      <field name="model">omni_gh_mo.omni_gh_mo</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="value"/>
+          <field name="value2"/>
+        </tree>
+      </field>
+    </record>
+    -->
+
+    <!-- actions opening views on models -->
+    <!--
+    <record model="ir.actions.act_window" id="omni_gh_mo.action_window">
+      <field name="name">omni_gh_mo window</field>
+      <field name="res_model">omni_gh_mo.omni_gh_mo</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+    -->
+
+    <!-- server action to the one above -->
+    <!--
+    <record model="ir.actions.server" id="omni_gh_mo.action_server">
+      <field name="name">omni_gh_mo server</field>
+      <field name="model_id" ref="model_omni_gh_mo_omni_gh_mo"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": self._name,
+        }
+      </field>
+    </record>
+    -->
+
+    <!-- Top menu item -->
+    <!--
+    <menuitem name="omni_gh_mo" id="omni_gh_mo.menu_root"/>
+    -->
+    <!-- menu categories -->
+    <!--
+    <menuitem name="Menu 1" id="omni_gh_mo.menu_1" parent="omni_gh_mo.menu_root"/>
+    <menuitem name="Menu 2" id="omni_gh_mo.menu_2" parent="omni_gh_mo.menu_root"/>
+    -->
+    <!-- actions -->
+    <!--
+    <menuitem name="List" id="omni_gh_mo.menu_1_list" parent="omni_gh_mo.menu_1"
+              action="omni_gh_mo.action_window"/>
+    <menuitem name="Server to list" id="omni_gh_mo" parent="omni_gh_mo.menu_2"
+              action="omni_gh_mo.action_server"/>
+    -->
+
+
+
+    <!-- <record id="mrp_production_wizard_extend" model="ir.ui.view">
+      <field name="name">BOM Check Lots Age</field>
+        <field name="model">mrp.production.wizard</field>
+        <field name="arch" type="xml">
+          <form string="Bill Of Materials Check Age">
+            <group>
+              <field name="product_id" />
+              <field name="product_qty" />
+              <field name="product_uom_id" />
+            </group>
+            <group>
+              <field name="bom_id" />
+            </group>
+            <footer>
+              <button name="_btn_click" string="Confirm" type="object" class="btn-primary"/>  
+            </footer>
+          </form>
+        </field>
+    </record> --> -->
+
+    <!-- <record id="action_view_mrp_production" model="ir.actions.act_window">
+        <field name="name">BOM FIFO</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">mrp.production.wizard</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="model_mrp_production" />        
+    </record> -->
+
+    <record id="stock_picking_form_extends" model="ir.ui.view">
+        <field name="name">stock.picking.form</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+          <xpath expr="//button[@name='button_validate']" position="replace">
+              <button name="button_validate" attrs="{'invisible': [('show_validate', '=', False)]}" string="Validate" groups="stock.group_stock_manager" type="object" class="oe_highlight"/>
+          </xpath>
+        </field>
+    </record>
+  </data>
+</odoo>

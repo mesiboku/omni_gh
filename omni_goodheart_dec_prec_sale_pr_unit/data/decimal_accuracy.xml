@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+      <data>
+        <record model="decimal.precision" id="decimal_so_priceunit">
+          <field name="name">Sale Order Line Price Unit</field>
+          <field name="digits">3</field>
+        </record>
+      </data>
+</odoo>

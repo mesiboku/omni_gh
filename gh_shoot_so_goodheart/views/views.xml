@@ -1,0 +1,45 @@
+<odoo>
+  <data>
+    <record id="paperformat_si_goodheart" model="report.paperformat">
+    <field name="name">Sales Invoice Custom Goodheart</field>
+    <field name="default" eval="True"/>
+    <field name="format">custom</field>
+    <field name="page_height">200</field>
+    <field name="page_width">200</field>
+    <field name="orientation">Portrait</field>
+    <field name="margin_top">12</field>
+    <field name="margin_bottom">5</field>
+    <field name="margin_left">3</field>
+    <field name="margin_right">3</field>
+    <field name="header_line" eval="False"/>
+    <field name="header_spacing">8</field>
+    <field name="dpi">90</field>
+    </record>
+    <report
+    id="goodheart_shoot_sales_inv"
+    model="account.invoice"
+    string="Goodheart Sales Invoice"
+    report_type="qweb-pdf"
+    name="gh_shoot_so_goodheart.report_gh_sales_inv"
+    file="gh_shoot_so_goodheart.report_gh_sales_inv"
+    attachment_use="False"
+    paperformat="paperformat_si_goodheart"
+    />
+  </data>
+
+    <record id="invoice_sales_button_extend_goodheart" model="ir.ui.view">
+        <field name="name">invoice.sales.button.extend.goodheart</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="account.invoice_form"/>
+        <field name="arch" type="xml">
+          <xpath expr="//button[@name='action_invoice_sent']" position="before">
+              <button name="%(gh_shoot_so_goodheart.goodheart_shoot_sales_inv)d" class="oe_highlight" string="Print Invoice" type="action" attrs="{'invisible':[('company_id','!=',1)]}"/>
+          </xpath>
+        </field>
+    </record>   
+
+    <record id="gh_shoot_so_goodheart.goodheart_shoot_sales_inv" model="ir.actions.report">
+        <field name="binding_model_id" eval="False"/>
+    </record>    
+
+</odoo>

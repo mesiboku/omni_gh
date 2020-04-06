@@ -1,0 +1,25 @@
+<odoo>
+	<data>
+        <record id="mrp_production_form_view_extend_field" model="ir.ui.view">
+            <field name="name">mrp.production.form</field>
+            <field name="model">mrp.production</field>
+            <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+            <field name="arch" type="xml">
+							<xpath expr="//field[@name='routing_id']" position="after">
+            		<field name="equips" widget="selection" string="Equipment"/>
+            	</xpath>
+	    	</field>
+	    </record>
+
+			<record model="ir.ui.view" id="mrp_production_workcenter_form_view_inherit_again">
+	        <field name="name">mrp.production.work.order.form</field>
+	        <field name="model">mrp.workorder</field>
+					<field name="inherit_id" ref="mrp.mrp_production_workcenter_form_view_inherit"/>
+	        <field name="arch" type="xml">
+						<xpath expr="//field[@name='product_id']" position="after">
+							<field name="equips_id" widget="selection" readonly="1"/>
+						</xpath>
+					</field>
+			</record>
+	</data>
+</odoo>

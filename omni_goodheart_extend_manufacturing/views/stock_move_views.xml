@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_stock_move_lots_extend" model="ir.ui.view">
+        <field name="name">stock.move.lots.form.extend</field>
+        <field name="model">stock.move</field>
+        <field name="inherit_id" ref="mrp.view_stock_move_lots"/>
+        <field name="arch" type="xml">
+            <field name= "finished_lots_exist" position="after">
+                <field name="allow_alter_info" invisible="1"/>                
+            </field>
+        </field>
+    </record>        
+</odoo>

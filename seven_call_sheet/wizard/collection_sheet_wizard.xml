@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <record id="view_call_sheet_upload" model="ir.ui.view">
+            <field name="name">Upload Call Sheet</field>
+            <field name="model">seven_call_sheet.call_sheet_wiz</field>
+            <field name="arch" type="xml">
+                <form string="Upload Call Sheet">
+                    <!--
+                    <p class="oe_grey">
+                        Upload the Call Sheet.
+                    </p>
+                -->
+                    <group>
+                        <field name="coll_sheet_file_import" string="Call Sheet"/>
+                        <!--
+                        <field name="coll_sheet_export_file_name" invisible="1"/>
+                        <field name="coll_sheet_file_export"  readonly="1" filename="coll_sheet_export_file_name" widget="download_link"/>
+                        -->
+
+                    </group>
+                    <footer>
+                        
+                        <button name="createCallSheetLine" string="Confirm" type="object" class="btn-primary"/>                        
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_view_call_sheet_upload" model="ir.actions.act_window">
+            <field name="name">Upload Call Sheet</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">seven_call_sheet.call_sheet_wiz</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <!-- TODO: check if we need this -->
+            <field name="binding_model_id" ref="model_seven_call_sheet_call_sheet" />        
+        </record>
+
+</odoo>

@@ -1,0 +1,25 @@
+<odoo>
+  <data>
+
+    <menuitem id="menu_mrp_dashboard_extend"
+        name="Dashboard"
+        action="mrp.mrp_workcenter_kanban_action_extend"
+        groups="omni_goodheart_premix_security_custom.do_not_allow"
+        parent="mrp.menu_mrp_root"
+        sequence="5"/>
+
+    <menuitem id="menu_view_resource_search_mrp_extend"
+        name="Work Centers"
+        action="mrp.mrp_workcenter_action_extend"
+        groups="omni_goodheart_premix_security_custom.do_not_allow"
+        parent="mrp.menu_mrp_bom"
+        sequence="90"/>
+
+    <menuitem id="menu_product_variant_config_stock_extend"
+      name="Products"
+      action="product.product_template_action_extend"
+      groups="omni_goodheart_premix_security_custom.do_not_allow"
+      parent="stock.menu_stock_inventory_control"
+      sequence="1"/>
+  </data>
+</odoo>

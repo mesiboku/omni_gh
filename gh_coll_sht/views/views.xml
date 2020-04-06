@@ -1,0 +1,29 @@
+<odoo>
+  <data>
+    <record id="paperformat_collectionsheet" model="report.paperformat">
+    <field name="name">Landscape List</field>
+    <field name="default" eval="True"/>
+    <field name="format">custom</field>
+    <field name="page_height">280</field>
+    <field name="page_width">215</field>
+    <field name="orientation">Landscape</field>
+    <field name="margin_top">20</field>
+    <field name="margin_bottom">20</field>
+    <field name="margin_left">3</field>
+    <field name="margin_right">3</field>
+    <field name="header_line" eval="False"/>
+    <field name="header_spacing">8</field>
+    <field name="dpi">80</field>
+    </record>
+    <report
+    id="goodheart_coll_sht"
+    model="seven_call_sheet.call_sheet"
+    string="Collection Sheet"
+    report_type="qweb-pdf"
+    name="gh_coll_sht.report_coll_sht"
+    file="gh_coll_sht.report_coll_sht"
+    attachment_use="False"
+    paperformat="paperformat_collectionsheet"
+    />
+  </data>
+</odoo>

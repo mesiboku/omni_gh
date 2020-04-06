@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <record id="purchase_request_tree" model="ir.ui.view">
+            <field name="name">purchase.request.tree</field>
+            <field name="model">purchase.request</field>
+            <field name="arch" type="xml">
+                <tree decoration-muted="state=='cancel'" decoration-info="state in ('draft','sent')" string="Purchase Request">
+                    <field name="name" string="Reference"/>
+                    <field name="date_needed"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="purchase_request_form" model="ir.ui.view">
+            <field name="name">purchase.request.form</field>
+            <field name="model">purchase.request</field>
+            <field name="arch" type="xml">
+                <form string="Purchase Order">
+                    <header>
+
+                        <button name="sent_rfp" states="draft" string="Submit RFP" type="object"  class="oe_highlight"/>
+                        <button name="cancel_purchase_request" states="draft,sent" string="Cancel" type="object"  class="oe_highlight"/>
+                        <button name="validate_creation_purchase_order" states="sent" string="Create RFQ" type="object"  class="oe_highlight" groups="purchase.group_purchase_user"/>
+                        <button name="draft_purchase_request" states="cancel" string="Set to Draft" type="object"  class="oe_highlight"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,sent,done,cancel" readonly="1"/>
+                    </header>
+                    <sheet>
+
+                        <div class="oe_button_box" name="button_box">
+                            <button type="object"
+                                name="action_view_purchase_order"
+                                class="oe_stat_button"
+                                icon="fa-pencil-square-o" attrs="{'invisible':[('state', 'in', ('draft','sent','cancel'))]}">
+                                <field name="purchase_count" widget="statinfo" help="Created Purchase Order"/>
+                            </button>
+                        </div>
+
+                        <div class="oe_title">
+                            <label string="Purchase Request No."/>
+                            <!--
+                            <label string="Request to Purchase Submitted" attrs="{'invisible': [('state','in',('sent'))]}"/>
+                            -->
+                            <!--<label string="Purchase Quotation " attrs="{'invisible': [('state','in',('draft','sent'))]}"/>-->
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="date_needed" attrs="{'readonly': [('state', 'in', ('sent','done', 'cancel'))]}"/>
+                                <field name="remarks" attrs="{'readonly': [('state', 'in', ('sent','done', 'cancel'))]}"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Products">
+                                <field name="order_line" attrs="{'readonly': [('state', 'in', ('done', 'sent','cancel'))]}">
+                                     <tree string="Purchase Request Lines" editable="bottom">
+                                        <field name="currency_id" invisible="1"/>
+                                        <field name="state" invisible="1"/>
+                                        <field name="sequence" widget="handle"/>
+                                        <field name="product_id" attrs="{'readonly': [('state', 'in', ('purchase', 'to approve','done', 'cancel'))]}" force_save="1"/>
+                                        <field name="name"/>
+                                        <field name="partner_id" invisible="1"/>
+                                        <field name="supplier_id" readonly="0" string="Supplier"/>
+                                        <field name="move_dest_ids" invisible="1"/>
+                                        <field name="date_planned" invisible="1"/>
+                                        <field name="product_uom" groups="product.group_uom" attrs="{'readonly': [('state', 'in', ('purchase', 'done', 'cancel'))]}" force_save="1"/>
+                                        <field name="product_qty"/>
+                                        <field name="price_unit" invisible="1"/>
+
+                                    </tree>
+                                    <form string="Purchase Request Line">
+                                        <sheet>
+                                            <group>
+                                                <group>
+                                                    <field name="product_id"/>
+                                                    <label for="product_qty"/>
+                                                    <div>
+                                                        <field name="product_qty" class="oe_inline"/>
+                                                        <span class="oe_inline">&#160;</span>
+                                                        <field name="product_uom" groups="product.group_uom" class="oe_inline"/>
+                                                    </div>
+                                                    <field name="price_unit" invisible="1"/>
+                                                </group>
+                                                <group>
+                                                    <field name="date_planned" widget="date"/>
+                                                </group>
+                                            </group>
+                                            <notebook>
+                                            <page string="Notes">
+                                                <field name="name"/>
+                                            </page>
+                                            </notebook>
+                                        </sheet>
+                                    </form>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+
+
+       <record id="view_purchase_request_filter" model="ir.ui.view">
+            <field name="name">purchase.request.select</field>
+            <field name="model">purchase.request</field>
+            <field name="arch" type="xml">
+                <search string="Search Purchase Request">
+                    <field name="name" string="Reference"/>
+                    <field name="date_needed"/>
+                    <field name="remarks"/>
+                    <field name="create_uid"/>
+                    <filter name="draft" string="Draft PR" domain="[('state','=',('draft'))]"/>
+                    <filter name="sent" string="PR Submitted" domain="[('state','=',('sent'))]"/>
+                    <filter name="done" string="RFQ Created" domain="[('state','=',('done'))]"/>
+                    <separator/>
+                    <group expand="0" string="Group By">
+                        <filter string="Status" domain="[]" context="{'group_by':'state'}"/>
+                    </group>
+                </search>
+            </field>
+       </record>
+
+       <record id="purchase_request_form_exted" model="ir.ui.view">
+            <field name="name">purchase.request.form.exted</field>
+            <field name="model">purchase.request</field>
+            <field name="inherit_id" ref="purchase_request_form"/>
+            <field name="groups_id" eval="[(6,0, [ref('purchase.group_purchase_manager')])]"/>
+            <field name="arch" type="xml">
+                <field name="order_line"  position="attributes">
+                    <attribute name="attrs">{'readonly': [('state', 'not in', ('draft','sent'))]}</attribute>
+                </field>
+            </field>
+       </record>
+
+        <record id="purchase_request_form_action" model="ir.actions.act_window">
+            <field name="name">Purchase Request</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">purchase.request</field>
+            <field name="context">{'search_default_draft':1}</field>
+            <field name="domain">[('state','in',('draft','sent','cancel', 'done'))]</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_purchase_request_filter"/>
+
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to create a request for Purchase Request.
+              </p>
+            </field>
+        </record>
+
+        <menuitem action= "purchase_request_form_action" id="menu_procurement_requisition_management" name="Purchase Requisition"
+            parent="stock.menu_stock_warehouse_mgmt" groups="stock.group_stock_user" sequence="1"  />
+
+        <record id="purchase_request_form_action_2" model="ir.actions.act_window">
+            <field name="name">Purchase Request</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">purchase.request</field>
+            <field name="context">{'search_default_sent':1}</field>
+            <field name="domain">[('state','in',('draft','sent','cancel', 'done'))]</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_purchase_request_filter"/>
+
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to create a request for Purchase Request.
+              </p>
+            </field>
+        </record>
+
+        <menuitem action= "purchase_request_form_action_2" id="menu_procurement_requisition_2_management" name="Purchase Requisition"
+            parent="purchase.menu_procurement_management" groups="purchase.group_purchase_user" sequence="0" />
+
+
+        <record id="purchase.menu_purchase_rfq" model="ir.ui.menu">
+            <field name="sequence">1</field>
+        </record>
+
+        <record id="purchase_request_form_exted" model="ir.ui.view">
+             <field name="name">purchase.request.form.exted</field>
+             <field name="model">purchase.request</field>
+             <field name="inherit_id" ref="purchase_request_form"/>
+             <field name="groups_id" eval="[(6,0, [ref('purchase.group_purchase_user')])]"/>
+             <field name="arch" type="xml">
+                 <field name="order_line"  position="attributes">
+                     <attribute name="attrs">{'readonly': [('state', 'not in', ('draft','sent'))]}</attribute>
+                 </field>
+             </field>
+        </record>
+</odoo>

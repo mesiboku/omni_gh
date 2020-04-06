@@ -1,0 +1,140 @@
+<odoo>
+    <data>
+      <report
+          id="action_report_delivery_others_extend"
+          model="stock.picking"
+          string="Delivery Receipt Others"
+          report_type="qweb-pdf"
+          name="omni_gh_shoot_dr_inventory.report_delivery_others_extend"
+          file="omni_gh_shoot_dr_inventory.report_delivery_others_extend"
+          attachment_use="True"
+          print_report_name="'Delivery Receipt Others - %s - %s' % (object.partner_id.name or '', object.name)"
+          groups="sales_team.group_sale_manager"
+          paperformat="paperformat_selecta_other"
+      />
+
+      <template id="report_delivery_others_extend">
+        <t t-call="web.html_container">
+          <t t-foreach="docs" t-as="o">
+            <!--<t t-call="web.external_layout"> -->
+            <!--
+              <t t-call="omni_gh_shoot_dr_inventory.external_layout_shoot_dr">
+                <t t-set="o" t-value="o.with_context(lang=o.partner_id.lang)" />
+                <div class="page article" style="top:0in;left:0in;position:relative;font-size:12pt;width:8.46in">
+
+                    <span id="customer_name" class="customer_name" t-field="o.partner_id" style="top: 28mm;left: 5mm;position:absolute;"/>
+                    <span id="customer_address" class="customer_address" t-field="o.partner_id.street" style="top: 42mm;left: 5mm;position:absolute; font-size:90%;width:30%"/>
+
+
+                    <span id="customer_legacyinvoice" class="customer_legacyinvoice" t-field="o.dr_legacy_invoice" style="top: 28mm;left: 95mm;position:absolute;"/>
+                    <span id="customer_dr_payment_term_id" class="customer_dr_payment_term_id" t-field="o.dr_payment_term_id" style="top: 55mm;left: 85mm;position:absolute;"/>
+
+                    <table style="top: 65mm;left: 6mm;position:absolute;">
+                      <thead>
+                        <tr>
+                          <th colspan="1" class="text-center"></th>
+                          <th colspan="3" style="width:50%" class="text-center"></th>
+                          <th colspan="1" class="text-center"></th>
+                          <th colspan="1" class="text-center"></th>
+                        </tr>
+                      </thead>
+
+                      <tbody class="movelines_tbody">
+                            <tr t-foreach="o.move_lines" t-as="l">                            
+                                <t t-set="qty_done_converted" t-value="l.QuantityInSales()"/>
+                                <td class="text-left"></td>
+                                <td class="text-left">
+                                    <span t-field="l.product_id"/>: <span t-field="l.sale_line_id.price_unit"/>
+                                </td>
+                                <td class="text-right">
+                                    <span  t-esc="'{0:,.2f}'.format(qty_done_converted[0])"/> <br/>
+                                    <span t-esc="'{0:,.2f}'.format(float(qty_done_converted[0]) * float(l.sale_line_id.price_unit))"/>
+                                </td>
+                                <td class="text-center">
+                                    <span t-field="l.sale_line_id.product_uom"/>
+                                </td>
+                            </tr>
+
+                            <t t-if="o.dr_sale_note">
+                              <tr>
+                                <td class="text-left"></td>
+                                <td class="center" colspan="3">
+                                  Note: <span t-field="o.dr_sale_note"/>
+                                </td>
+                              </tr>                              
+                            </t>
+
+
+
+                      </tbody>
+                    </table>
+                </div>
+              </t>
+            -->
+              <t t-call="omni_gh_shoot_dr_inventory.external_layout_shoot_dr">
+                  <t t-set="o" t-value="o.with_context(lang=o.partner_id.lang)"/>
+                  <div class="page article" style="top:0in;left:0in;position:relative;font-size:12pt;width:8.46in">
+                      <span id="customer_name" class="customer_name" t-field="o.partner_id" style="top: 10mm;left: 5mm;position:absolute;"/>
+                      <span id="customer_address" class="customer_address" t-field="o.partner_id.street" style="top: 25mm;left: 5mm;position:absolute; font-size:90%;width:30%"/>
+                      <span id="customer_legacyinvoice" class="customer_legacyinvoice" t-field="o.dr_legacy_invoice" style="top: 10mm;left: 120mm;position:absolute;"/>
+                      <span id="customer_dr_payment_term_id" class="customer_dr_payment_term_id" t-field="o.dr_payment_term_id" style="top: 22mm;left: 120mm;position:absolute;"/>
+
+                      <table style="top: 75mm;left: 22mm;position:absolute;">
+                        <thead>
+                          <tr>
+                            <th colspan="1" class="text-center"/>
+                            <th colspan="3" style="width:60%" class="text-center"/>
+                            <th colspan="1" class="text-center"/>
+                            <th colspan="1" class="text-right"/>
+                          </tr>
+                        </thead>
+
+                        <tbody class="movelines_tbody">
+                            <t  t-foreach="o.move_lines" t-as="l">
+                              <tr>                            
+                                  <t t-set="qty_done_converted" t-value="l.QuantityInSales()"/>
+                                  <td class="text-left"/>
+                                  <td class="text-left">
+                                      <span t-field="l.product_id"/>:  <span t-field="l.product_uom"/>
+                                  </td>
+                                  <td class="text-right">
+                                      <span t-esc="'{0:,.2f}'.format(l.quantity_done)"/>
+                                  </td>
+                                  <td class="text-right">
+                                      <span t-field="l.product_uom"/>
+                                  </td>
+                              </tr>
+                              
+                              <t t-if="l.sale_line_id.product_uom != l.product_uom">
+                                 <tr>   
+                                   <td class="text-left"/>
+                                   <td class="center"/>
+                                   <td class="text-right">
+                                       <span t-esc="'{0:,.2f}'.format(qty_done_converted[0])"/>
+                                   </td>
+                                   <td class="text-right">
+                                       <span t-field="l.sale_line_id.product_uom"/>
+                                   </td>
+                                 </tr>                              
+                              </t>                            
+                              <t t-if="o.dr_sale_note">
+                                 <tr/>
+                                 <tr/>
+                                 <tr>
+                                   <td class="text-left"/>
+                                   <td class="center" colspan="3">
+                                     Note: <span t-field="o.dr_sale_note"/>
+                                   </td>
+                                 </tr>                              
+                               </t>                            
+                            </t>
+                        </tbody>
+                      </table>
+                  </div>
+            </t>            
+          </t>
+
+        </t>
+      </template>
+    </data>
+</odoo>

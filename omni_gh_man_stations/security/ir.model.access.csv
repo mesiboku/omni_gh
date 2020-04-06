@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_omni_gh_manpower,mrp.manpower.tracking.manager,omni_gh_man_stations.model_omni_gh_manpower_tracking,mrp.group_mrp_manager,1,1,1,1
+access_omni_gh_manpower_operator,mrp.manpower.operator.manager,omni_gh_man_stations.model_omni_gh_manpower_operator,mrp.group_mrp_manager,1,1,1,1
+access_omni_gh_manpower_shifts,mrp.manpower.shifts.manager,omni_gh_man_stations.model_omni_gh_manpower_shifts,mrp.group_mrp_manager,1,1,1,1
+access_omni_gh_manpower_list_role,mrp.manpower.list.role.manager,omni_gh_man_stations.model_omni_gh_list_role,mrp.group_mrp_manager,1,1,1,1
+access_omni_gh_manpower_list_operator,mrp.manpower.list.operator.manager,omni_gh_man_stations.model_omni_gh_list_operator,mrp.group_mrp_manager,1,1,1,1
