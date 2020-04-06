@@ -16,5 +16,5 @@
     'data/custom_menu.xml',
     'views/sales_invoice.xml',
     'views/stock_new_dr_field.xml'],
-    'demo': ['demo.xml'],
+    # 'demo': ['demo.xml'],
 }
