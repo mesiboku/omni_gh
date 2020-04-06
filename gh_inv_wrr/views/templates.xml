@@ -89,7 +89,7 @@
          <template id="external_layout_wrr" inherit_id="web.external_layout" primary="True">
 
             <xpath expr="//t[@t-call='web.external_layout_standard']" position="replace">
-                <t t-call="gh_inv_wrr.report_wrr_footer"><t t-raw="0"/></t>                
+                <t t-call="report_wrr_footer"><t t-raw="0"/></t>                
             </xpath>
 
         </template>

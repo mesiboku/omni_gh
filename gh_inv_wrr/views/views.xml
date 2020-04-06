@@ -45,8 +45,8 @@
     model="stock.picking"
     string="Warehouse Receiving Report (Half)"
     report_type="qweb-pdf"
-    name="gh_inv_wrr.report_wrr_half"
-    file="gh_inv_wrr.report_wrr_half"
+    name="report_wrr_half"
+    file="report_wrr_half"
     attachment_use="False"
     paperformat="paperformat_half"
     />
@@ -57,7 +57,7 @@
       <field name="attachment_use" eval="False"/>
     </record>    
 
-    <template id="report_wrr_half" inherit_id="gh_inv_wrr.report_wrr" primary="True"/>
+    <template id="report_wrr_half" inherit_id="report_wrr" primary="True"/>
     <!-- <template id="report_wrr_full" inherit_id="gh_inv_wrr.report_wrr" primary="True"/> -->
 
 
