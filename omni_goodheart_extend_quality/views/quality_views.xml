@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="quality_check_view_form_extend" model="ir.ui.view">
+        <field name="name">quality.check.view.form.extend</field>
+        <field name="model">quality.check</field>
+        <field name="inherit_id" ref="quality.quality_check_view_form"/>
+        <field name="arch" type="xml">   
+            <field name="team_id" position="after">
+                <field name="stock_move_line_id" readonly="1" string ="Move Lines" groups="base.group_system"/>
+            </field>
+            <xpath expr="//notebook/page[1]" position="after">
+                <page string="Result">
+                    <field name="quality_check_result" required="True"/>
+                </page>                
+            </xpath>
+        </field>
+    </record>    
+
+    <record id="quality_check_view_form_small_extend" model="ir.ui.view">
+        <field name="name">quality.check.view.form.small.extend</field>
+        <field name="model">quality.check</field>
+        <field name="inherit_id" ref="quality.quality_check_view_form_small"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/group[1]" position="after">
+                <group>
+                    <group>
+                        <!--<field name="stock_move_line_lot_name" readonly="1"  string="Lot/Serial Number"/>-->
+                        <field name="stock_move_line_lot_name_2" readonly="1" string="Lot/Serial Number"/>                        
+                        <field name="stock_move_line_id" invisible="1"/>   
+                        <field name="quality_check_result" required="True" readonly="False"/>
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+
+    <record id="quality_check_view_tree_extend" model="ir.ui.view">
+        <field name="name">quality.check.view.tree.extend</field>
+        <field name="model">quality.check</field>
+        <field name="inherit_id" ref="quality.quality_check_view_tree"/>
+        <field name="arch" type="xml">
+            <field name="lot_id" position="before">
+                <field name="picking_id"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="quality.quality_check_action_main" model="ir.actions.act_window">
+        <field name="context">{'search_default_progress':1}</field>
+        <field name="view_mode">tree,kanban,form,pivot,graph</field>
+    </record>
+
+</odoo>

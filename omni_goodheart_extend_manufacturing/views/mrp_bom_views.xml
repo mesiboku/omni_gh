@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="mrp_bom_form_view_extend" model="ir.ui.view">
+        <field name="name">quality.check.view.form.extend</field>
+        <field name="model">mrp.bom</field>
+        <field name="inherit_id" ref="mrp.mrp_bom_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook/page[1]/field[@name='bom_line_ids']/tree[1]/field[@name='product_qty']" position="before">
+               <!-- <field name="product_manu_qty"/>-->
+                <field name="product_allowance_qty"/>
+            </xpath>
+        </field>
+    </record>    
+</odoo>
