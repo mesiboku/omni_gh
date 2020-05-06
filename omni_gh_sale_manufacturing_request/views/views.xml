@@ -86,9 +86,9 @@
                                 <field name="remarks" />
                             </group>
                             <group>
-                                <field name="start_dt" attrs="{'readonly': [('state', 'in', ('sent','done', 'cancel'))]}"/>
-                                <field name="end_dt" attrs="{'readonly': [('state', 'in', ('sent','done', 'cancel'))]}"/>
-                                <field name="equipments" attrs="{'readonly': [('state', 'in', ('sent','done', 'cancel'))]}"/>
+                                <field name="start_dt" attrs="{'readonly': [('state', 'in', ('done', 'cancel'))]}"/>
+                                <field name="end_dt" attrs="{'readonly': [('state', 'in', ('done', 'cancel'))]}"/>
+                                <field name="equipments" attrs="{'readonly': [('state', 'in', ('done', 'cancel'))]}"/>
                             </group>
                         </group>
                         <notebook>
