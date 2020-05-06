@@ -6,7 +6,7 @@ class EquipmentField(models.Model):
 
 	equips = fields.Many2one(
         'maintenance.equipment', 'Equipment',
-        index=True)
+        index=True, required=True)
 
 
 
