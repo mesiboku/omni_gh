@@ -91,7 +91,8 @@ class account_payment_report(models.Model):
                 invoices += invoice.number + "/"
             if invoices[len(invoices)-1:len(invoices)] == '/':
                 invoices = invoices[0:len(invoices)-1]
-        return invoices
+            return invoices
+        return False
 
 
 
