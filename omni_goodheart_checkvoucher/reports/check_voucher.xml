@@ -1,0 +1,252 @@
+<odoo>
+  <data>
+        <record id="paperformat_checkvoucher" model="report.paperformat">
+            <field name="name">Check Voucher</field>
+            <field name="default" eval="False"/>
+            <field name="format">custom</field>
+            <field name="page_height">150</field>
+            <field name="page_width">114</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">0</field>
+            <field name="margin_bottom">0</field>
+            <field name="margin_left">7</field>
+            <field name="margin_right">0</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">8</field>
+            <field name="dpi">100</field>
+        </record>
+
+        <report
+            id="omni_gh_checvoucher_act"
+            model="account.payment"
+            string="Check Voucher"
+            report_type="qweb-pdf"
+            name="omni_goodheart_checkvoucher.omni_gh_checvoucher_rpt"
+            file="omni_goodheart_checkvoucher.omni_gh_checvoucher_rpt"
+            attachment_use="False"
+            paperformat="paperformat_checkvoucher"/>
+
+
+        <report
+            id="omni_gh_cashvoucher_act"
+            model="account.payment"
+            string="Cash Voucher"
+            report_type="qweb-pdf"
+            name="omni_goodheart_checkvoucher.omni_gh_cashvoucher_rpt"
+            file="omni_goodheart_checkvoucher.omni_gh_cashvoucher_rpt"
+            attachment_use="False"
+            paperformat="paperformat_checkvoucher"/>
+
+        <template id="external_layout_voucher">
+            <t t-if="not o and doc">
+                <t t-set="o" t-value="doc"/>
+            </t>
+
+            <t t-if="o and 'company_id' in o">
+                <t t-set="company" t-value="o.company_id.sudo()"/>
+            </t>
+
+            <t t-if="not o or not 'company_id' in o">
+                <t t-set="company" t-value="res_company"/>
+            </t>
+
+            <t t-call="gh_shoot_so_goodheart.external_layout_invoice_gh_custom"><t t-raw="0"/></t>
+        </template>
+
+<!-- CHECK -->
+        <template id="omni_gh_checvoucher_rpt">
+          <t t-call="web.html_container">
+              <t t-foreach="docs" t-as="o">
+                <t t-call="omni_goodheart_checkvoucher.external_layout_voucher">
+                    <div class="page" style="top:0in;left:0in;position:relative;font-size:15pt;width:8.46in">
+                        <span t-field="o.partner_id.name" style="top:.5in;left:1.5in;position:absolute"/>
+
+                        <span t-field="o.create_date" t-options='{"format": "MM/dd/yyyy"}' style="top:1in;left:5.5in;position:absolute"/>
+
+                        <!-- PARTICULARS -->
+
+                        <table style="position:absolute;top:2in;left:0.3in;border-collapse: collapse; width: 65%;" border="1">
+                           <tbody>
+                            
+                            <tr style="height: 18px;">
+                              <td colspan="3">
+                                <span style="font-size: 10pt;"> Payment for: [<span t-esc="o.getJLItems()"/>]</span>
+                              </td>
+                            </tr>
+                            <tr/>
+                            <t t-foreach="o.invoice_ids" t-as="invoice_id">
+                                <t t-foreach="invoice_id.invoice_line_ids" t-as="invoice_line_id">
+                                    <tr style="height: 18px;">
+                                        <td style="width:58%">
+                                          <span style="font-size: 10pt;" t-field="invoice_line_id.product_id"/>
+                                        </td>
+
+                                        <td style="width:28%">
+                                          <span style="font-size: 10pt;" t-field="invoice_line_id.quantity"/>
+                                        </td>        
+                                        <!--                                
+
+                                        <td style="width:58%">
+                                          <span style="font-size: 10pt;" t-field="o.checkvoucher_amount_total"/>
+                                        </td>
+                                      -->
+                                        <td class="text-right" style="width:28%">
+                                          <span style="font-size: 10pt;" class="text-right" t-esc="'{0:,.2f}'.format(invoice_line_id.price_total)"/>
+                                          <!--
+
+                                          <span style="font-size: 10pt;" t-field="invoice_line_id.price_subtotal"/>-->
+                                        </td>
+
+                                    </tr>
+                                </t>
+                            </t>                         
+                           </tbody>
+                        </table>
+
+                        <table style="position:absolute;top:3.5in;left:0.3in;border-collapse: collapse; width: 65%;" border="1">
+                           <tbody>                          
+                              <!-- Date -->
+                              <tr style="height: 18px;">
+                                <td colspan="3">
+                                  <span style="font-size: 10pt;"> Del Date. : <span t-esc="o.getDeliverDates()"/></span>
+                                </td>
+                              </tr>  
+                              <!-- INVOICE -->
+                              <tr style="height: 18px;">
+                                <td colspan="3">
+                                  <span style="font-size: 10pt;"> S.I. : <span t-esc="o.getSaleInvoice()"/></span>
+                                </td>
+                              </tr>                               
+                           </tbody>
+                        </table>
+
+
+
+                        <table style="position:absolute;top:4.1in;left:0.1in;border-collapse: collapse; width: 39%;" border="1">
+                           <tbody>
+                            <t t-foreach="o.getJournalItems()" t-as="jl_items">
+                                <tr style="height: 18px;">
+                                    <td>
+                                      <span style="font-size: 10pt;" t-field="jl_items.account_id.name"/>
+                                    </td>
+                                    <td class="text-right">
+
+                                      <span style="font-size: 10pt;" class="text-right" t-esc="'{0:,.2f}'.format(jl_items.debit)"/>
+                                      <!--
+                                      <span style="font-size: 10pt;" t-field="jl_items.debit"/>-->
+                                    </td>
+                                    <td class="text-right">
+
+                                      <span style="font-size: 10pt;" class="text-right" t-esc="'{0:,.2f}'.format(jl_items.credit)"/>
+                                      <!--
+                                      <span style="font-size: 10pt;" t-field="jl_items.credit"/>-->
+                                    </td>
+                                </tr>
+                            </t>
+                           </tbody>
+                        </table>
+
+                         <!-- left:4.25in; -->
+                         <span t-esc="'{0:,.2f}'.format(o.amount)" style="top:3.8in;left:5.11in;position:absolute;font-size: 10pt;"/>
+                         <span t-esc="o.check_amount_in_words + ' ' + 'Only'" style="top:4.2in;left:4.45in;position:absolute;font-size: 10pt;"/>
+
+                         <span t-field="o.bank" style="top:4.70in;left:4.25in;position:absolute;font-size: 10pt;"/>
+                         <span t-field="o.check_number" style="top:4.70in;left:6.10in;position:absolute;font-size: 10pt;"/>
+
+                    </div>
+                </t>
+              </t>
+          </t>
+        </template>
+
+<!-- CASH -->
+        <template id="omni_gh_cashvoucher_rpt">
+          <t t-call="web.html_container">
+              <t t-foreach="docs" t-as="o">
+                <t t-call="omni_goodheart_checkvoucher.external_layout_voucher">
+                    <div class="page" style="top:0in;left:0in;position:relative;font-size:15pt;width:8.46in">
+                        <span t-field="o.partner_id.name" style="top:.5in;left:1.5in;position:absolute"/>
+
+                        <span t-field="o.create_date" t-options='{"format": "MM/dd/yyyy"}' style="top:1in;left:5.5in;position:absolute"/>
+
+                        <!-- PARTICULARS -->
+
+                        <table style="position:absolute;top:2in;left:0.3in;border-collapse: collapse; width: 65%;" border="1">
+                           <tbody>
+                            
+                              <tr style="height: 18px;">
+                                <td colspan="3">
+                                  <span style="font-size: 10pt;"> Payment for: [<span t-esc="o.getJLItems()"/>]</span>
+                                </td>
+                              </tr>
+                              <tr/>
+                              <t t-foreach="o.invoice_ids" t-as="invoice_id">
+                                  <t t-foreach="invoice_id.invoice_line_ids" t-as="invoice_line_id">
+                                      <tr style="height: 18px;">
+                                          <td style="width:58%">
+                                            <span style="font-size: 10pt;" t-field="invoice_line_id.product_id"/>
+                                          </td>
+                                          <!--
+                                          <td style="width:58%">
+                                            <span style="font-size: 10pt;" t-field="o.checkvoucher_amount_total"/>
+                                          </td>
+                                        -->
+                                          <td class="text-right" style="width:42%">
+                                            <span style="font-size: 10pt;" class="text-right" t-esc="'{0:,.2f}'.format(invoice_line_id.price_total)"/>
+                                          </td>
+
+                                      </tr>
+                                  </t>
+                              </t>                            
+                           </tbody>
+                        </table>
+
+                        <table style="position:absolute;top:3.5in;left:0.3in;border-collapse: collapse; width: 65%;" border="1">
+                           <tbody>                          
+                              <!-- Date -->
+                              <tr style="height: 18px;">
+                                <td colspan="3">
+                                  <span style="font-size: 10pt;"> Del Date. : <span t-esc="o.getDeliverDates()"/></span>
+                                </td>
+                              </tr>  
+                              <!-- INVOICE -->
+                              <tr style="height: 18px;">
+                                <td colspan="3">
+                                  <span style="font-size: 10pt;"> D.R. No. : <span t-esc="o.getSaleInvoice()"/></span>
+                                </td>
+                              </tr>                               
+                           </tbody>
+                        </table>
+
+
+                        <table style="position:absolute;top:4.1in;left:0.1in;border-collapse: collapse; width: 39%;" border="1">
+                           <tbody>
+                            <t t-foreach="o.getJournalItems()" t-as="jl_items">
+                                <tr style="height: 18px;">
+                                    <td>
+                                      <span style="font-size: 10pt;" t-field="jl_items.account_id.name"/>
+                                    </td>
+                                    <td class="text-right">
+
+                                      <span style="font-size: 10pt;" class="text-right" t-esc="'{0:,.2f}'.format(jl_items.debit)"/>
+                                    </td>
+                                    <td class="text-right">
+
+                                      <span style="font-size: 10pt;" class="text-right" t-esc="'{0:,.2f}'.format(jl_items.credit)"/>
+                                    </td>
+                                </tr>
+                            </t>
+                           </tbody>
+                        </table>
+
+                         <!-- left:4.25in; -->
+                         <span t-esc="'{0:,.2f}'.format(o.amount)" style="top:3.8in;left:4.33in;position:absolute;font-size: 10pt;"/>
+                         <span t-esc="o.check_amount_in_words + ' ' + 'Only'" style="top:4.2in;left:4.45in;position:absolute;font-size: 10pt;"/>
+
+                    </div>
+                </t>
+              </t>
+          </t>
+        </template>
+  </data>
+</odoo>

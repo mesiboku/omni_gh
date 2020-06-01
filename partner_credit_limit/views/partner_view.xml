@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_category_property_form" model="ir.ui.view">
+        <field name="name">partner.over.credit.limit.form.inherit</field>
+        <field name="model">res.partner</field>
+        <field name="type">form</field>
+        <field name="inherit_id" ref="account.view_partner_property_form"/>
+        <field name="arch" type="xml">
+            <group name="acc_sale" position="inside">
+                <field name="credit_limit"/>
+                <field name="over_credit"/>
+            </group>
+        </field>
+    </record>
+
+
+    <record id="partner_credit_limit" model="ir.ui.view">
+        <field name="name">Partner Credit Limit</field>
+        <field name="model">res.partner</field>
+        <field name="type">form</field>
+        <field name="inherit_id" ref="account.view_partner_property_form"/>
+        <field name="groups_id" eval="[(6,0, [ref('account.group_account_user'),ref('account.group_account_invoice')])]" />
+        <field name="arch" type="xml">
+          <xpath expr="//group[@name='acc_sale']/field[@name='credit_limit']" position="attributes">
+            <attribute name="attrs">{'readonly':1}</attribute>
+          </xpath>
+          <xpath expr="//group[@name='acc_sale']/field[@name='over_credit']" position="attributes">
+            <attribute name="attrs">{'readonly':1}</attribute>
+          </xpath>
+        </field>
+    </record>
+
+
+    <record id="view_partner_property_form_extend" model="ir.ui.view">
+        <field name="name">Partner Credit Limit</field>
+        <field name="model">res.partner</field>
+        <field name="type">form</field>
+        <field name="inherit_id" ref="partner_credit_limit.partner_credit_limit"/>
+          <field name="groups_id" eval="[(6, 0, [ref('sales_team.group_sale_manager')])]"/>
+        <field name="arch" type="xml">
+          <xpath expr="//group[@name='acc_sale']/field[@name='credit_limit']" position="attributes">
+            <attribute name="attrs">{'readonly':0}</attribute>
+          </xpath>
+          <xpath expr="//group[@name='acc_sale']/field[@name='over_credit']" position="attributes">
+            <attribute name="attrs">{'readonly':0}</attribute>
+          </xpath>
+        </field>
+    </record>
+
+
+</odoo>

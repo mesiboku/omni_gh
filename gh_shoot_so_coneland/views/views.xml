@@ -1,0 +1,47 @@
+<odoo>
+  <data>
+    <record id="paperformat_so" model="report.paperformat">
+        <field name="name">Sales Invoice Custom</field>
+        <field name="default" eval="True"/>
+        <field name="format">custom</field>
+        <field name="page_height">150</field>
+        <field name="page_width">114</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">20</field>
+        <field name="margin_bottom">0</field>
+        <field name="margin_left">7</field>
+        <field name="margin_right">0</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">8</field>
+        <field name="dpi">100</field>
+        </record>
+        <report
+        id="coneland_shoot_sales_inv"
+        model="account.invoice"
+        string="Coneland Sales Invoice"
+        report_type="qweb-pdf"
+        name="gh_shoot_so_coneland.report_cl_sales_inv"
+        file="gh_shoot_so_coneland.report_cl_sales_inv"
+        attachment_use="False"
+        paperformat="paperformat_so"
+    />
+
+    <!-- Forms -->
+    <record id="invoice_sales_button_extend_coneland" model="ir.ui.view">
+        <field name="name">invoice.sales.button.extend.coneland</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="account.invoice_form"/>
+        <field name="arch" type="xml">
+          <xpath expr="//button[@name='action_invoice_sent']" position="before">
+              <button name="%(gh_shoot_so_coneland.coneland_shoot_sales_inv)d" class="oe_highlight" string="Print Invoice" type="action" attrs="{'invisible':[('company_id','!=',3)]}"/>
+          </xpath>
+        </field>
+    </record>    
+
+    <record id="gh_shoot_so_coneland.coneland_shoot_sales_inv" model="ir.actions.report">
+        <field name="binding_model_id" eval="False"/>
+    </record>    
+
+
+  </data>
+</odoo>

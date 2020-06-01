@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_omni_gh_mo_omni_gh_mo,omni_gh_mo.omni_gh_mo,model_omni_gh_mo_omni_gh_mo,,1,1,1,0

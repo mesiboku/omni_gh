@@ -1,0 +1,16 @@
+<odoo>
+  <data  noupdate="1">
+    <record id="confidential" model="res.groups">
+        <field name="name">Show Confidential Premix BoM (Pre-Mixes)</field>
+        <field name="category_id" ref="base.module_category_usability"/>
+        <field name="comment">Access Rights for Confidential Premix BOQ</field>
+    </record>
+
+    <record id="do_not_allow" model="res.groups">
+        <field name="name">Hide Confidential Premix BoM (Pre-Mixes)</field>
+        <field name="category_id" ref="base.module_category_usability"/>
+        <field name="comment">Non- Access Rights for Confidential Premix BOQ</field>
+    </record>
+
+  </data>
+</odoo>

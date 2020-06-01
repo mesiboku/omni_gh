@@ -1,0 +1,93 @@
+<odoo>
+  <data>
+    <record id="omni_manpower_tracking_form" model="ir.ui.view">
+      <field name="name">omni.gh.manpower.tracking.form</field>
+      <field name="model">omni.gh.manpower.tracking</field>
+      <field name="arch" type="xml">
+        <form string="Manpower Tracking">
+          <header>
+          </header>
+          <sheet>
+            <div class="oe_title">
+                <h1><field name="name" placeholder="Manpower" /></h1>
+            </div>
+            <group>
+              <group>
+                <field name="track_shifts"/>
+                <field name="track_dt"/>
+              </group>
+              <group>
+                <field name="start_dt" attrs="{'readonly': 0}" widget="float_time"/>
+                <field name="end_dt" attrs="{'readonly': 0}" widget="float_time"/>
+              </group>
+            </group>
+            <notebook>
+              <page string="Scheduled Operation" attrs="{'invisible': [('name','=', False)]}">
+                <field name="schedule_sheets">
+                  <tree delete="0">
+                    <field name="mp_role" />
+                    <field name="mp_equipment" />
+                    <field name="mp_operator"/>
+                  </tree>
+                </field>
+              </page>
+            </notebook>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <record id="omni_manpower_shift_form" model="ir.ui.view">
+      <field name="name">omni.gh.manpower.shifts.form</field>
+      <field name="model">omni.gh.manpower.shifts</field>
+      <field name="arch" type="xml">
+        <form string="Manpower Tracking Shift">
+          <header>
+          </header>
+          <sheet>
+            <div class="oe_title">
+                <h1><field name="name" placeholder="Shift Name" /></h1>
+            </div>
+            <group>
+              <group>
+                <field name="start_dt" attrs="{'readonly': 0}" widget="float_time"/>
+                <field name="end_dt" attrs="{'readonly': 0}" widget="float_time"/>
+              </group>
+            </group>
+            <notebook>
+              <page string="Scheduled Operation" attrs="{'invisible': [('name','=', False)]}">
+                <field name="schedule_sheets_draft" context="{'start_dt':start_dt}">
+                  <tree delete="1">
+                    <field name="mp_role" />
+                    <!-- <field name="mp_operator" attrs="{'invisible': 1}"/> -->
+                    <field name="mp_equipment" />
+                  </tree>
+                </field>
+              </page>
+            </notebook>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <record id="omni_manpower_operator_form" model="ir.ui.view">
+      <field name="name">omni.gh.manpower.operator.form</field>
+      <field name="model">omni.gh.manpower.operator</field>
+      <field name="arch" type="xml">
+        <form string="Manpower Tracking Operators">
+          <header>
+          </header>
+          <sheet>
+            <group>
+                <field name="mp_role" />
+                <field name="mp_equipment" />
+                <field name="mp_operator"/>
+                <field name="manpower" attrs="{'invisible': 1}"/>
+                <field name="manpower_draft" attrs="{'invisible': 1}"/>
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+  </data>
+</odoo>

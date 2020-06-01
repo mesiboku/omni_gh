@@ -1,0 +1,361 @@
+<odoo>
+    <data>
+    <template id="report_coll_sht">
+    <t t-name="gh_coll_sht.report_coll_sht">
+    <t t-name="gh_coll_sht.report_coll_sht">
+    <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="o">
+            <t t-call="web.external_layout">
+              <t t-set="page_lists" t-value="o._group_by_invoice_ids(o.invoice_ids)"/>
+              <t t-foreach="page_lists" t-as="page_list">
+                  <div class="page" style="padding-top:90px">
+                    <br/>
+                    
+                     <div class="row" name="customer_address">
+                       <div class="col-xs-6 pull-left">
+                         <h5>COLLECTION</h5>
+                       </div>
+                         <div class="col-xs-6 pull-right">
+                           <h5>CHEQUE BREAKDOWN</h5>
+                         </div>
+                     </div>
+                     <div class="row">
+                       <div class="col-xs-6">
+                          <table class="table table-bordered">
+                              <thead>
+                                 <tr>
+                                   <th style="font-size:90%;width:100px">Customer<br/>Name</th>
+                                    <th class="text-center" style="font-size:90%">Invoice  <br/> Number</th>
+                                    <th class="text-center" style="font-size:90%;width:100px">CM#</th>
+                                    <th class="text-center" style="font-size:90%;width:100px">Amount <br/>Remaining</th>
+                                    <th class="text-center" style="font-size:90%">Cash/<br/>Coins</th>
+                                    <th class="text-center" style="font-size:90%">Cheque</th>
+                                 </tr> 
+                              </thead>
+                              <tbody>
+                                 <tr t-foreach="page_list" t-as="invoice_ids">
+                                       <t t-set="call_sheet_line" t-value="o._get_call_sheet_line_via_invoice(o.id,invoice_ids.id)"/>
+                                       <td class="text-left" style="font-size:90%;width:120px">
+                                          <t t-if="call_sheet_line">
+                                            <span t-field="call_sheet_line.store_name"/>
+                                          </t>
+                                      </td>
+                                      <td class="text-left">
+                                          <t t-if="invoice_ids.number">
+                                            <span t-field="invoice_ids.number"/>
+                                          </t>
+                                      </td>
+
+                                      <td class="text-right">
+                                        <span>  <![CDATA[&nbsp;]]><![CDATA[&nbsp;]]> </span>
+                                      </td>
+                                      <td class="text-right">
+                                        <t t-if="call_sheet_line">
+                                          <span t-field="call_sheet_line.total_amount"/>
+                                        </t>                                
+                                      </td>
+                                      <td class="text-right">
+                                        <span>  <![CDATA[&nbsp;]]><![CDATA[&nbsp;]]> </span>
+                                      </td>
+                                      <td class="text-right">
+                                        <span>  <![CDATA[&nbsp;]]><![CDATA[&nbsp;]]> </span>
+                                      </td>
+                                 </tr> 
+                              </tbody>
+                          </table> 
+                       </div>
+                       <div class="col-xs-6">
+                          <table class="table table-bordered">
+                              <thead>
+                                  <tr>
+                                     <th style="font-size:90%;width:100px">Customer Name</th>
+                                    <th style="font-size:90%;width:110px">Bank</th>
+                                    <th style="font-size:90%">Cheque <br/>Number</th>
+                                    <th style="font-size:90%">Date of <br/>Cheque</th>
+                                   <th style="font-size:90%">Amount</th>  
+                                  </tr>
+                              </thead>
+                              <tbody>
+                                  <t t-set="loop" t-value="int(6)"/>
+                                  <t t-foreach="range(loop)" t-as="l">
+                                    <tr>
+                                      <t t-set="loop_1" t-value="int(5)"/>
+                                      <t t-foreach="range(loop_1)" t-as="l_1">
+                                        <td>
+                                            <br/>
+                                        </td>
+                                      </t>
+                                    </tr>
+                                  </t>
+                              </tbody>
+                          </table>
+
+                          <div>
+                            <h5>CASH SUMMARY</h5>
+                          </div>
+
+
+                          <table class="table table-bordered">
+                              <thead>
+                                  <th style="font-size:90%;width:100px">Customer Name</th>
+                                  <th style="font-size:90%;width:110px">Bank</th>
+                                  <th style="font-size:90%">Cheque <br/> Number</th>
+                                  <th style="font-size:90%">Date of <br/>  Cheque</th>
+                                  <th style="font-size:90%">Amount</th>
+                              </thead>
+                              <tbody>
+                                <t t-set="loop" t-value="int(6)"/>
+                                <t t-foreach="range(loop)" t-as="l">
+                                  <tr>
+                                    <t t-set="loop_1" t-value="int(5)"/>
+                                    <t t-foreach="range(loop_1)" t-as="l_1">
+                                      <td>
+                                          <br/>
+                                      </td>
+                                    </t>
+                                  </tr>
+                                </t>                       
+                              </tbody>
+                          </table>
+                       </div>
+                     </div>     
+                     <p style="page-break-before:always;"/>            
+                  </div>
+              </t>
+
+              <t t-if="not page_lists">
+                  <div class="page" style="padding-top:90px">
+                    <br/>
+                    
+                     <div class="row" name="customer_address">
+                       <div class="col-xs-6 pull-left">
+                         <h5>COLLECTION</h5>
+                       </div>
+                         <div class="col-xs-6 pull-right">
+                           <h5>CHEQUE BREAKDOWN</h5>
+                         </div>
+                     </div>
+                     <div class="row">
+                       <div class="col-xs-6">
+                          <table class="table table-bordered">
+                              <thead>
+                                 <tr>
+                                   <th style="font-size:90%;width:100px">Customer<br/>Name</th>
+                                    <th class="text-center" style="font-size:90%">Invoice  <br/> Number</th>
+                                    <th class="text-center" style="font-size:90%;width:100px">CM#</th>
+                                    <th class="text-center" style="font-size:90%;width:100px">Amount <br/>Remaining</th>
+                                    <th class="text-center" style="font-size:90%">Cash/<br/>Coins</th>
+                                    <th class="text-center" style="font-size:90%">Cheque</th>
+                                 </tr> 
+                              </thead>
+                              <tbody>
+                                 <tr t-foreach="o.invoice_ids" t-as="invoice_ids">
+                                       <t t-set="call_sheet_line" t-value="o._get_call_sheet_line_via_invoice(o.id,invoice_ids.id)"/>
+                                       <td class="text-left" style="font-size:90%;width:120px">
+                                          <t t-if="call_sheet_line">
+                                            <span t-field="call_sheet_line.store_name"/>
+                                          </t>
+                                      </td>
+                                      <td class="text-left">
+                                          <t t-if="invoice_ids.number">
+                                            <span t-field="invoice_ids.number"/>
+                                          </t>
+                                      </td>
+
+                                      <td class="text-right">
+                                        <span>  <![CDATA[&nbsp;]]><![CDATA[&nbsp;]]> </span>
+                                      </td>
+                                      <td class="text-right">
+                                        <t t-if="call_sheet_line">
+                                          <span t-field="call_sheet_line.total_amount"/>
+                                        </t>                                
+                                      </td>
+                                      <td class="text-right">
+                                        <span>  <![CDATA[&nbsp;]]><![CDATA[&nbsp;]]> </span>
+                                      </td>
+                                      <td class="text-right">
+                                        <span>  <![CDATA[&nbsp;]]><![CDATA[&nbsp;]]> </span>
+                                      </td>
+                                 </tr> 
+                              </tbody>
+                          </table> 
+                       </div>
+                       <div class="col-xs-6">
+                          <table class="table table-bordered">
+                              <thead>
+                                  <tr>
+                                     <th style="font-size:90%;width:100px">Customer Name</th>
+                                    <th style="font-size:90%;width:110px">Bank</th>
+                                    <th style="font-size:90%">Cheque <br/>Number</th>
+                                    <th style="font-size:90%">Date of <br/>Cheque</th>
+                                   <th style="font-size:90%">Amount</th>  
+                                  </tr>
+                              </thead>
+                              <tbody>
+                                  <t t-set="loop" t-value="int(6)"/>
+                                  <t t-foreach="range(loop)" t-as="l">
+                                    <tr>
+                                      <t t-set="loop_1" t-value="int(5)"/>
+                                      <t t-foreach="range(loop_1)" t-as="l_1">
+                                        <td>
+                                            <br/>
+                                        </td>
+                                      </t>
+                                    </tr>
+                                  </t>
+                              </tbody>
+                          </table>
+
+                          <div>
+                            <h5>CASH SUMMARY</h5>
+                          </div>
+
+
+                          <table class="table table-bordered">
+                              <thead>
+                                  <th style="font-size:90%;width:100px">Customer Name</th>
+                                  <th style="font-size:90%;width:110px">Bank</th>
+                                  <th style="font-size:90%">Cheque <br/> Number</th>
+                                  <th style="font-size:90%">Date of <br/>  Cheque</th>
+                                  <th style="font-size:90%">Amount</th>
+                              </thead>
+                              <tbody>
+                                <t t-set="loop" t-value="int(6)"/>
+                                <t t-foreach="range(loop)" t-as="l">
+                                  <tr>
+                                    <t t-set="loop_1" t-value="int(5)"/>
+                                    <t t-foreach="range(loop_1)" t-as="l_1">
+                                      <td>
+                                          <br/>
+                                      </td>
+                                    </t>
+                                  </tr>
+                                </t>                       
+                              </tbody>
+                          </table>
+                       </div>
+                     </div>                 
+                  </div>
+              </t>
+<!--
+              <div class="page" style="padding-top:90px">
+                <br/>
+                
+                 <div class="row" name="customer_address">
+                   <div class="col-xs-6 pull-left">
+                     <h5>COLLECTION</h5>
+                   </div>
+                     <div class="col-xs-6 pull-right">
+                       <h5>CHEQUE BREAKDOWN</h5>
+                     </div>
+                 </div>
+                 <div class="row">
+                   <div class="col-xs-6">
+                      <table class="table table-bordered">
+                          <thead>
+                             <tr>
+                               <th style="font-size:90%;width:100px">Customer<br/>Name</th>
+                                <th class="text-center" style="font-size:90%">Invoice  <br/> Number</th>
+                                <th class="text-center" style="font-size:90%;width:100px">CM#</th>
+                                <th class="text-center" style="font-size:90%;width:100px">Amount <br/>Remaining</th>
+                                <th class="text-center" style="font-size:90%">Cash/<br/>Coins</th>
+                                <th class="text-center" style="font-size:90%">Cheque</th>
+                             </tr> 
+                          </thead>
+                          <tbody>
+                             <tr t-foreach="o.invoice_ids" t-as="invoice_ids">
+                                   <t t-set="call_sheet_line" t-value="o._get_call_sheet_line_via_invoice(o.id,invoice_ids.id)"/>
+                                   <td class="text-left" style="font-size:90%;width:120px">
+                                      <t t-if="call_sheet_line">
+                                        <span t-field="call_sheet_line.store_name"/>
+                                      </t>
+                                  </td>
+                                  <td class="text-left">
+                                      <t t-if="invoice_ids.number">
+                                        <span t-field="invoice_ids.number"/>
+                                      </t>
+                                  </td>
+
+                                  <td class="text-right">
+                                    <span>  <![CDATA[&nbsp;]]><![CDATA[&nbsp;]]> </span>
+                                  </td>
+                                  <td class="text-right">
+                                    <t t-if="call_sheet_line">
+                                      <span t-field="call_sheet_line.total_amount"/>
+                                    </t>                                
+                                  </td>
+                                  <td class="text-right">
+                                    <span>  <![CDATA[&nbsp;]]><![CDATA[&nbsp;]]> </span>
+                                  </td>
+                                  <td class="text-right">
+                                    <span>  <![CDATA[&nbsp;]]><![CDATA[&nbsp;]]> </span>
+                                  </td>
+                             </tr> 
+                          </tbody>
+                      </table> 
+                   </div>
+                   <div class="col-xs-6">
+                      <table class="table table-bordered">
+                          <thead>
+                              <tr>
+                                 <th style="font-size:90%;width:100px">Customer Name</th>
+                                <th style="font-size:90%;width:110px">Bank</th>
+                                <th style="font-size:90%">Cheque <br/>Number</th>
+                                <th style="font-size:90%">Date of <br/>Cheque</th>
+                               <th style="font-size:90%">Amount</th>  
+                              </tr>
+                          </thead>
+                          <tbody>
+                              <t t-set="loop" t-value="int(6)"/>
+                              <t t-foreach="range(loop)" t-as="l">
+                                <tr>
+                                  <t t-set="loop_1" t-value="int(5)"/>
+                                  <t t-foreach="range(loop_1)" t-as="l_1">
+                                    <td>
+                                        <br/>
+                                    </td>
+                                  </t>
+                                </tr>
+                              </t>
+                          </tbody>
+                      </table>
+
+                      <div>
+                        <h5>CASH SUMMARY</h5>
+                      </div>
+
+
+                      <table class="table table-bordered">
+                          <thead>
+                              <th style="font-size:90%;width:100px">Customer Name</th>
+                              <th style="font-size:90%;width:110px">Bank</th>
+                              <th style="font-size:90%">Cheque <br/> Number</th>
+                              <th style="font-size:90%">Date of <br/>  Cheque</th>
+                              <th style="font-size:90%">Amount</th>
+                          </thead>
+                          <tbody>
+                            <t t-set="loop" t-value="int(6)"/>
+                            <t t-foreach="range(loop)" t-as="l">
+                              <tr>
+                                <t t-set="loop_1" t-value="int(5)"/>
+                                <t t-foreach="range(loop_1)" t-as="l_1">
+                                  <td>
+                                      <br/>
+                                  </td>
+                                </t>
+                              </tr>
+                            </t>                       
+                          </tbody>
+                      </table>
+                   </div>
+                 </div>                 
+              </div>
+-->              
+            </t>
+        </t>
+    </t>
+    </t>
+    </t>
+    </template>
+    </data>
+</odoo>
