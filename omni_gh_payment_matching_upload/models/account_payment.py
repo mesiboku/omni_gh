@@ -10,6 +10,8 @@ import datetime
 import base64
 import os, sys
 
+import odoo.tools as tools
+
 import logging
 
 _logger = logging.getLogger(__name__)
@@ -25,8 +27,21 @@ class AccountPayment(models.Model):
 
 	@api.one
 	def generatePaymentMatching(self, credit_move_line_id):
+		addons_paths = tools.config['addons_path'] 
+		addons_lists = addons_paths.split(',')
+		xls_dir_path = ""
+		if os.path.isdir('/odoo/TemporaryFiles'):
+			xls_dir_path = '/odoo/TemporaryFiles'
+		else:
+			for addons_list in addons_lists:
+				if os.path.isdir(addons_list + '/omni_gh_payment_matching_upload'):
+					xls_dir_path = addons_list + '/omni_gh_payment_matching_upload'
+					break
+
 		uid = self._uid
-		FILENAME = "/odoo/TemporaryFiles/payment_matching_UID"+str(uid) +".xls"
+		FILENAME = xls_dir_path + '/payment_matching_UID'+str(uid) + '.xls'
+
+		#FILENAME = "/odoo/TemporaryFiles/payment_matching_UID"+str(uid) +".xls"
 		with open(FILENAME, "wb") as f:
 			text = self.payment_spreadsheet
 			f.write(base64.b64decode(text))
