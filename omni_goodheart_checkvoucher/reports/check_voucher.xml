@@ -212,7 +212,7 @@
                               <!-- INVOICE -->
                               <tr style="height: 18px;">
                                 <td colspan="3">
-                                  <span style="font-size: 10pt;"> S.I. : <span t-esc="o.getSaleInvoice()"/></span>
+                                  <span style="font-size: 10pt;"> D.R. No. : <span t-esc="o.getSaleInvoice()"/></span>
                                 </td>
                               </tr>                               
                            </tbody>
