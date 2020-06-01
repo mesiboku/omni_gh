@@ -1,0 +1,20 @@
+<odoo>
+  <data>    
+    <record id="account_payment_form_voucher_extend" model="ir.ui.view">
+      <field name="name">account.payment.voucher.extend</field>
+      <field name="model">account.payment</field>
+      <field name="inherit_id" ref="omni_gh_payment_matching_upload.account_payment_form_payment_umnatch"/>
+      <field name="arch" type="xml">
+        <xpath expr="//form[1]/sheet[1]/notebook[1]" position="inside">        
+            <page name="vendor_bills" string="Vendor Bills">
+                <group name="Deliveries Info">
+                    <field name="dr_dates"/>
+                    <field name="dr_number"/>
+                </group>
+            </page>
+        </xpath>
+      </field>
+    </record>
+
+  </data>
+</odoo>    
