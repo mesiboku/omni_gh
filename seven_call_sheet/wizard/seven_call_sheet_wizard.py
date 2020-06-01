@@ -8,7 +8,7 @@ import base64
 import os, sys
 _logger = logging.getLogger(__name__)
 from odoo.addons.base.res.res_partner import WARNING_MESSAGE, WARNING_HELP
-
+import odoo.tools as tools
 try:
     from cStringIO import StringIO
 except ImportError:
@@ -31,8 +31,20 @@ class GHCallSheet(models.TransientModel):
 		self.coll_sheet_export_file_name =  'Call Sheet Template.xls'
 
 	@api.model
-	def _get_default_file(self):		
-		FILENAME = '/odoo/TemporaryFiles/call_sheet_template.xls'	
+	def _get_default_file(self):
+		addons_paths = tools.config['addons_path']
+		addons_lists = addons_paths.split(',')
+		xls_dir_path = ""
+		if os.path.isdir('/odoo/TemporaryFiles'):
+			xls_dir_path = '/odoo/TemporaryFiles'
+		else:
+			for addons_list in addons_lists:
+				if os.path.isdir(addons_list + '/seven_call_sheet'):
+					xls_dir_path = addons_list + '/seven_call_sheet'
+					break
+		FILENAME = xls_dir_path + '/call_sheet_template.xls'
+
+		#FILENAME = '/odoo/TemporaryFiles/call_sheet_template.xls'	
 		with open(FILENAME, "rb") as file:
 			return base64.b64encode(file.read())
 
