@@ -13,8 +13,7 @@ class account_payment_report(models.Model):
     checkvoucher_amount_total = fields.Char('Amount Tax', compute = '_compute_get_amount_total')
     dr_dates = fields.Char('DR Dates')
     dr_number = fields.Char('DR Numbers')
-
-    #particulars_invoices_ids =
+    particulars_invoice_ids = fields.Many2many('account.invoice', 'partic_account_invoice_payment_rel', 'payment_id', 'invoice_id', string="Particulars", copy=False)
 
 
     def _compute_get_amount_total(self):
