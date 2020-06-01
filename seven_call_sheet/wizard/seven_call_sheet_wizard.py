@@ -23,7 +23,7 @@ class GHCallSheet(models.TransientModel):
 	coll_sheet_id  = fields.Many2one('seven_call_sheet.call_sheet', string='Call Sheet')	
 	coll_sheet_file_import = fields.Binary(string='Collection Sheet Excel', required=True)
 	coll_sheet_export_file_name = fields.Char('Call Sheet Template.xls', compute='_getFilename')
-	coll_sheet_file_export = fields.Binary(string='Collection Sheet Excel Template', default=lambda self:self._get_default_file(),attachment=True)
+	coll_sheet_file_export = fields.Binary(string='Collection Sheet Excel Template',attachment=True) #, default=lambda self:self._get_default_file()
 
 	@api.one
 	def _getFilename(self):
