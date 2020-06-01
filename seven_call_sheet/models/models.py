@@ -51,7 +51,7 @@ class GHCallSheet(models.Model):
 
 	filename = fields.Char('file name',compute ='_get_filename')
 	coll_sheet_file_import = fields.Binary(string='Collection Sheet Excel')
-	coll_sheet_file_export = fields.Binary(string='Collection Sheet Excel Template', default=lambda self:self._get_default_file())
+	coll_sheet_file_export = fields.Binary(string='Collection Sheet Excel Template') #, default=lambda self:self._get_default_file()
 	coll_sheet_file_export_with_area = fields.Binary(string='Collection Sheet Excel Template.xls')
 
 
