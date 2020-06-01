@@ -13,6 +13,8 @@ from odoo.exceptions import UserError, AccessError
 
 from odoo.addons.base.res.res_partner import WARNING_MESSAGE, WARNING_HELP
 
+import odoo.tools as tools
+
 try:
     from cStringIO import StringIO
 except ImportError:
@@ -836,7 +838,19 @@ class GHCallSheet(models.Model):
 	@api.one
 	def generateCollSheetRecord(self):
 		uid = self._uid
-		FILENAME = "/odoo/TemporaryFiles/collection_sheet_UID"+str(uid) +".xls"
+		addons_paths = tools.config['addons_path']
+		addons_lists = addons_paths.split(',')
+		xls_dir_path = ""
+		if os.path.isdir('/odoo/TemporaryFiles'):
+			xls_dir_path = '/odoo/TemporaryFiles'
+		else:
+			for addons_list in addons_lists:
+				if os.path.isdir(addons_list + '/seven_call_sheet'):
+					xls_dir_path = addons_list + '/seven_call_sheet'
+					break
+
+		FILENAME = xls_dir_path + '/payment_matching_UID'+str(uid) + '.xls'
+		#FILENAME = "/odoo/TemporaryFiles/collection_sheet_UID"+str(uid) +".xls"
 		with open(FILENAME, "wb") as f:
 			text = self.coll_sheet_file_import
 			f.write(base64.b64decode(text))

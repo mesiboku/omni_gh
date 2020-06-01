@@ -11,6 +11,10 @@ class account_payment_report(models.Model):
     _inherit = 'account.payment'
 
     checkvoucher_amount_total = fields.Char('Amount Tax', compute = '_compute_get_amount_total')
+    dr_dates = fields.Char('DR Dates')
+    dr_number = fields.Char('DR Numbers')
+
+    #particulars_invoices_ids =
 
 
     def _compute_get_amount_total(self):
@@ -43,7 +47,9 @@ class account_payment_report(models.Model):
 
     @api.multi
     def getDeliverDates(self):
+        
         self.ensure_one()
+        return self.dr_dates
         sale_order_names = []
         purchase_order_names = []
         # Get All the Source Document
@@ -85,6 +91,7 @@ class account_payment_report(models.Model):
     @api.multi
     def getSaleInvoice(self):
         self.ensure_one()
+        return self.dr_number
         if self.invoice_ids:
             invoices = ""
             for invoice in self.invoice_ids:
