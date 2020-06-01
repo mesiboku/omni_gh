@@ -8,7 +8,7 @@ import base64
 import os, sys
 _logger = logging.getLogger(__name__)
 from odoo.addons.base.res.res_partner import WARNING_MESSAGE, WARNING_HELP
-
+import odoo.tools as tools
 try:
     from cStringIO import StringIO
 except ImportError:
