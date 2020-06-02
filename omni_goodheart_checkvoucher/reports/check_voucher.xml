@@ -78,7 +78,12 @@
                                 <t t-foreach="invoice_id.invoice_line_ids" t-as="invoice_line_id">
                                     <tr style="height: 18px;">
                                         <td style="width:58%">
-                                          <span style="font-size: 10pt;" t-field="invoice_line_id.product_id"/>
+                                          <t t-if="invoice_line_id.product_id">
+                                              <span style="font-size: 10pt;" t-field="invoice_line_id.product_id"/>
+                                          </t>
+                                          <t t-if="not invoice_line_id.product_id">
+                                              <span style="font-size: 10pt;" t-field="invoice_line_id.name"/>
+                                          </t>
                                         </td>
 
                                         <td style="width:28%">
@@ -114,7 +119,7 @@
                               <!-- INVOICE -->
                               <tr style="height: 18px;">
                                 <td colspan="3">
-                                  <span style="font-size: 10pt;"> S.I. : <span t-esc="o.getSaleInvoice()"/></span>
+                                  <span style="font-size: 10pt;"> D.R. No. : <span t-esc="o.getSaleInvoice()"/></span>
                                 </td>
                               </tr>                               
                            </tbody>
@@ -184,7 +189,12 @@
                                   <t t-foreach="invoice_id.invoice_line_ids" t-as="invoice_line_id">
                                       <tr style="height: 18px;">
                                           <td style="width:58%">
-                                            <span style="font-size: 10pt;" t-field="invoice_line_id.product_id"/>
+                                              <t t-if="invoice_line_id.product_id">
+                                                  <span style="font-size: 10pt;" t-field="invoice_line_id.product_id"/>
+                                              </t>
+                                              <t t-if="not invoice_line_id.product_id">
+                                                  <span style="font-size: 10pt;" t-field="invoice_line_id.name"/>
+                                              </t>
                                           </td>
                                           <!--
                                           <td style="width:58%">
