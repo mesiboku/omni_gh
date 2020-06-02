@@ -7,19 +7,19 @@
       <field name="arch" type="xml">
           <xpath expr="//sheet/group[1]" position="after">
             <notebook>
-              <page string="Uploaded Invoice Discrepancy">
+              <page string="Uploaded Invoice Discrepancy" attrs="{'invisible': [('payment_type', 'not in',['inbound', 'transfer'])]}">
                 <field name="payment_unmatch_ids" mode="tree,kanban"  readonly="1" attrs="{'readonly': [('state', 'in', ('done','cancel'))]}">
                     <form string="Invoice/s">
                         <group>
                             <group string="Uploaded Invoice">
-                              <field name="col_legacy_invoice_number" readonly="1"/>
-                              <field name="col_store_number" readonly="1"/>
-                              <field name="col_amount" readonly="1"/>
+                                <field name="col_legacy_invoice_number" readonly="1"/>
+                                <field name="col_store_number" readonly="1"/>
+                                <field name="col_amount" readonly="1"/>
                             </group>
                             <group string="Match Invoice">
-                              <field name="invoice_id" readonly="1"/>
-                              <field name="store_number" readonly="1"/>
-                              <field name="amount_total" readonly="1"/>
+                                <field name="invoice_id" readonly="1"/>
+                                <field name="store_number" readonly="1"/>
+                                <field name="amount_total" readonly="1"/>
                             </group> 
                         </group>
                         <field name="discrepany_log" class="oe_inline" readonly="1"/>
