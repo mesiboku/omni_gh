@@ -1,0 +1,152 @@
+<odoo>
+    <data>
+    <template id="report_wrr">
+    <t t-name="report_wrr">
+    <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="o">
+            <t t-call="gh_inv_wrr.external_layout_wrr">
+              <div class="page" style="padding-top:50px;font-size:88%;">
+
+                <div class="row" name="customer_address">
+                  <div class="col-xs-8 pull-left" >
+                    Receipt Number:<strong><span t-field="o.name"/></strong>
+                  </div>
+                  <div class="col-xs-offset-4">
+                    Date:<strong><span t-field="o.scheduled_date"/></strong>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xs-8 pull-left">
+                    Supplier Name:<strong><span t-field="o.partner_id"/></strong>
+                  </div>
+                  <div class="col-xs-offset-4">
+                    Order(Origin):<strong><span t-field="o.purchase_id.name"/> - <span t-field="o.purchase_id.create_date"/></strong>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xs-8 pull-left">
+                    Delivery Receipt Number:<strong><span t-field="o.sup_delivery_receipt"/></strong>
+                  </div>
+                </div>
+                <!--
+                 <div class="row" name="customer_address">
+                   <div class="col-xs-8 pull-left">
+                     <h5>Receipt Number:<strong><span t-field="o.name"/></strong></h5>
+                     <h5>Supplier Name:<strong><span t-field="o.partner_id"/></strong></h5>
+                     <h5>Delivery Receipt Number:<strong><span t-field="o.sup_delivery_receipt"/></strong></h5>
+                   </div>
+                     <div class="col-xs-offset-4">
+                       <h5>Date:<strong><span t-field="o.scheduled_date"/></strong></h5>
+                       <h5>Order(Origin):<strong><span t-field="o.purchase_id.name"/> - <span t-field="o.purchase_id.create_date"/></strong></h5>
+                     </div>
+                 </div>
+               -->
+                 <table class="table col-sm-5">
+                      <thead>
+                        <tr>
+                          <th>Product</th>
+                          <th>Quantity</th>
+                          <th>Unit</th>
+                          <th>Unit Price</th>
+                          <th>Discount</th>
+                          <th>Tax</th>
+                          <th>Total</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr t-foreach="o.move_lines" t-as="move_line">
+                        <tr t-foreach="move_line.move_line_ids" t-as="move_line_id">
+                          <td class="text-left">
+                              <span t-field="move_line_id.product_id"/>
+                          </td>
+                          <td class="text-left">
+                              <span t-field="move_line.purchase_quantity_done"/>
+                          </td>
+                          <td class="text-left">
+                              <span t-field="move_line_id.purchase_order_uom_id"/>
+                          </td>
+                          <td class="text-left">
+                                <span t-field="move_line_id.wrr_price_unit"/>
+                          </td>
+                          <td class="text-left">
+                                <span t-field="move_line_id.discount"/>
+                          </td>
+                          <td class="text-left">
+                              <t t-foreach="move_line_id.wrr_taxes_id" t-as="move_line_tax">
+                                  <span t-field="move_line_tax.name"/>
+                              </t>
+                          </td>
+                          <td class="text-left">
+                                <span t-field="move_line_id.wrr_price_subtotal"/>
+                          </td>
+                        </tr>
+                        </tr>
+                      </tbody>
+                  </table>
+                  <div class="clearfix">
+                    <div class="row">
+                      <div class="col-xs-4 pull-left">
+                        <p t-if="o.backorder_id">
+                            This shipment is a backorder of <t t-esc="o.backorder_id.name"/>.
+                        </p>
+                        <p>
+                            <t t-if="o.search([('backorder_id', '=', o.id), ('state', 'not in', ['cancel', 'done'])])">
+                                All items couldn't be shipped, the remaining ones will be shipped as soon as they become available.
+                            </t>
+                        </p>
+                      </div>
+                       <div class="col-xs-4 pull-right">
+                         <table class="table table-condensed" style="min-width: 100px;max-width: 200px;">
+                           <tr class="border-black" style="border-bottom:1px solid #dddddd;">
+                                <td><strong>Untaxed Amount:</strong></td>
+                                <td class="text-right">
+                                    <span t-field="o.wrr_untaxed_amount"/>
+                                </td>
+                           </tr>
+                           <tr>
+                                <td><strong>Tax:</strong></td>
+                                <td class="text-right">
+                                    <span t-field="o.wrr_tax"/>
+                                </td>
+                           </tr>
+                           <tr class="border-black" style="border-bottom:1px solid #dddddd;">
+                                <td><strong>Total:</strong></td>
+                                <td class="text-right">
+                                    <span t-field="o.wrr_total"/>
+                                </td>
+                           </tr>
+                        </table>
+
+                       </div>
+                    </div>
+                  </div>
+<!--
+                      <div class="row">
+                          <div class="col-xs-10 text-right">
+                              <h5>Untaxed Amount:</h5>
+                              <h5>Tax:</h5>
+                              <h5>Total:</h5>
+                          </div>
+                          <div class="col-xs-2 text-left">
+                              <h5><strong><span t-field="o.wrr_untaxed_amount"/></strong></h5>
+                              <h5><strong><span t-field="o.wrr_tax"/></strong></h5>
+                              <h5><strong><span t-field="o.wrr_total"/></strong></h5>
+                          </div>
+                      </div>
+                      <p t-if="o.backorder_id">
+                          This shipment is a backorder of <t t-esc="o.backorder_id.name"/>.
+                      </p>
+                      <p>
+                          <t t-if="o.search([('backorder_id', '=', o.id), ('state', 'not in', ['cancel', 'done'])])">
+                              All items couldn't be shipped, the remaining ones will be shipped as soon as they become available.
+                          </t>
+                      </p>
+-->
+              </div>
+            </t>
+        </t>
+    </t>
+    </t>
+    </template>
+    </data>
+</odoo>

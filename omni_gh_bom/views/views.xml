@@ -1,0 +1,106 @@
+<odoo>
+	<data>
+
+		<record id="mrp_bom_form_view_extend_roundup" model="ir.ui.view">
+			<field name="name">mrp.bom.form.extend.roundup</field>
+			<field name="model">mrp.bom</field>
+			<field name="inherit_id" ref="mrp.mrp_bom_form_view"/>
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='bom_line_ids']/tree/field[@name='product_id']" position="after">
+					<field name="round_up_checkbox"/>
+				</xpath>
+			</field>
+		</record>
+
+
+		<record id="mrp_production_form_view_extend" model="ir.ui.view">
+			<field name="name">mrp.production.form</field>
+			<field name="model">mrp.production</field>
+			<field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+			<field name="arch" type="xml">
+				<xpath expr="//page[1]/field[@name='move_raw_ids']/tree/field[@name='product_id']" position="attributes">
+					<attribute name="attrs">{'readonly': [('parent.is_locked', '=', True)]}</attribute>
+				</xpath>
+				<xpath expr="//page[1]/field[@name='move_raw_ids']/tree/field[@name='name']" position="attributes">
+					<attribute name="attrs">{'readonly': [('parent.is_locked', '=', True)]}</attribute>
+				</xpath>
+				<xpath expr="//page[1]/field[@name='move_raw_ids']/tree/field[@name='unit_factor']" position="attributes">
+					<attribute name="attrs">{'readonly': [('parent.is_locked', '=', True)]}</attribute>
+				</xpath>
+				<xpath expr="//page[1]/field[@name='move_raw_ids']/tree/field[@name='product_uom']" position="attributes">
+					<attribute name="attrs">{'readonly': [('parent.is_locked', '=', True)]}</attribute>
+				</xpath>
+				<xpath expr="//page[1]/field[@name='move_raw_ids']/tree/field[@name='has_tracking']" position="attributes">
+					<attribute name="attrs">{'readonly': [('parent.is_locked', '=', True)]}</attribute>
+				</xpath>
+				<xpath expr="//page[1]/field[@name='move_raw_ids']/tree/field[@name='needs_lots']" position="attributes">
+					<attribute name="attrs">{'readonly': [('parent.is_locked', '=', True)]}</attribute>
+				</xpath>
+				<xpath expr="//page[1]/field[@name='move_raw_ids']/tree/field[@name='is_done']" position="attributes">
+					<attribute name="attrs">{'readonly': [('parent.is_locked', '=', True)]}</attribute>
+				</xpath>
+				<xpath expr="//page[1]/field[@name='move_raw_ids']/tree/field[@name='sequence']" position="attributes">
+					<attribute name="attrs">{'readonly': [('parent.is_locked', '=', True)]}</attribute>
+				</xpath>
+				<xpath expr="//page[1]/field[@name='move_raw_ids']/tree/field[@name='location_id']" position="attributes">
+					<attribute name="attrs">{'readonly': [('parent.is_locked', '=', True)]}</attribute>
+				</xpath>
+				<xpath expr="//page[1]/field[@name='move_raw_ids']/tree/field[@name='location_dest_id']" position="attributes">
+					<attribute name="attrs">{'readonly': [('parent.is_locked', '=', True)]}</attribute>
+				</xpath>
+				<xpath expr="//page[1]/field[@name='move_raw_ids']/tree/field[@name='state']" position="attributes">
+					<attribute name="attrs">{'readonly': [('parent.is_locked', '=', True)]}</attribute>
+				</xpath>
+				<xpath expr="//page[1]/field[@name='move_raw_ids']/tree/field[@name='product_uom_qty']" position="attributes">
+					<attribute name="attrs">{'readonly': [('parent.is_locked', '=', True)]}</attribute>
+				</xpath>
+				<xpath expr="//page[1]/field[@name='move_raw_ids']/tree/field[@name='reserved_availability']" position="attributes">
+					<attribute name="attrs">{'readonly': [('parent.is_locked', '=', True)]}</attribute>
+				</xpath>
+				<xpath expr="//page[1]/field[@name='move_raw_ids']/tree/field[@name='quantity_done']" position="attributes">
+					<attribute name="attrs">{'readonly': [('parent.is_locked', '=', True)]}</attribute>
+				</xpath>
+				<xpath expr="//page[1]/field[@name='move_raw_ids']/tree/field[@name='quantity_done']" position="attributes">
+					<attribute name="attrs">{'readonly': [('parent.is_locked', '=', True)]}</attribute>
+				</xpath>
+
+				<xpath expr="//field[@name='move_raw_ids']" position="attributes">
+						<attribute name="attrs">{}</attribute>
+				</xpath>
+
+				<xpath expr="//field[@name='move_raw_ids']/tree" position="attributes">
+						<attribute name="create">false</attribute>
+						<attribute name="editable">bottom</attribute>
+				</xpath>
+
+				<xpath expr="//page[1]/field[@name='move_raw_ids']/tree/field[@name='product_uom_qty']" position="before">
+					<field name="round_up" widget="checkbox" string="Round Up" type="object"/>
+				</xpath>
+
+				<!-- <xpath expr="//button[@name='action_assign']" position="after">
+						 <button name="round_up_qty" string="ROUND UP QTY" attrs="{'invisible': ['|', ('availability','not in',('assigned', 'none'))]}" type="object" class="oe_highlight"/>
+				 </xpath> -->
+
+				 <xpath expr="//button[@name='action_assign']" position="before">
+						 <button name="round_up_qty" string="ROUND UP QTY" type="object" class="oe_highlight"/>
+				 </xpath>
+
+				 <!--  <xpath expr="//button[@name='button_mark_done']" position="after">
+						 <button name="button_mark_child_as_done" string="Mark children as Done" type="object" class="oe_highlight"/>
+				 </xpath> -->
+
+			</field>
+		</record>
+
+		<!-- <record id="mrp_bom_line_view_form_extend" model="ir.ui.view">
+			<field name="name">mrp_bom_line_view_form_extend</field>
+			<field name="model">mrp.bom.line</field>
+			<field name="inherit_id" ref="mrp.mrp_bom_line_view_form"/>
+			<field name="arch" type="xml">
+				<xpath expr="//form/group/group[1]/div/field[@name='product_qty']" position="before">
+					<field name="round_up_checkbox"/>
+				</xpath>
+			</field>
+		</record> -->
+	</data>
+</odoo>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_new_vendor" model="ir.ui.view">
+            <field name="name">New Vendor</field>
+            <field name="model">purchase.request.add.supplier</field>
+            <field name="arch" type="xml">
+                <form string="Vendor List">
+                    <group>
+                        <field name="vendor_list" nolabel="1" readonly="1"/>
+                    </group>
+                    <footer>
+                        <button name="confirm_create_purchase_quotation" string="Confirm" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-default" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>    

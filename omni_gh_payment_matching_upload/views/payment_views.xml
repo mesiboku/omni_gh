@@ -1,0 +1,47 @@
+<odoo>
+  <data>    
+    <record id="account_payment_form_payment_umnatch" model="ir.ui.view">
+      <field name="name">account.payment.unmatch</field>
+      <field name="model">account.payment</field>
+      <field name="inherit_id" ref="account.view_account_payment_form"/>
+      <field name="arch" type="xml">
+          <xpath expr="//sheet/group[1]" position="after">
+            <notebook>
+              <page string="Uploaded Invoice Discrepancy" attrs="{'invisible': [('payment_type', 'not in',['inbound', 'transfer'])]}">
+                <field name="payment_unmatch_ids" mode="tree,kanban"  readonly="1" attrs="{'readonly': [('state', 'in', ('done','cancel'))]}">
+                    <form string="Invoice/s">
+                        <group>
+                            <group string="Uploaded Invoice">
+                                <field name="col_legacy_invoice_number" readonly="1"/>
+                                <field name="col_store_number" readonly="1"/>
+                                <field name="col_amount" readonly="1"/>
+                            </group>
+                            <group string="Match Invoice">
+                                <field name="invoice_id" readonly="1"/>
+                                <field name="store_number" readonly="1"/>
+                                <field name="amount_total" readonly="1"/>
+                            </group> 
+                        </group>
+                        <field name="discrepany_log" class="oe_inline" readonly="1"/>
+                        <div class="oe_clear"/>                    
+                    </form>
+                    <tree string="Invoice/s">
+                        <field name="invoice_id" readonly="1"/>
+                        <field name="col_legacy_invoice_number" readonly="1"/>
+                        <field name="col_store_number" readonly="1"/>
+                        <field name="col_amount" readonly="1"/>
+                        <field name="discrepany_log" readonly="1"/>
+                    </tree>
+                </field>  
+                <!--
+                <field name="payment_spreadsheet" filename="file_name" readonly="1"/>
+                <field name="file_name" invisible="1"/>            
+              -->
+              </page>
+            </notebook>
+          </xpath>
+      </field>
+    </record>
+
+  </data>
+</odoo>    

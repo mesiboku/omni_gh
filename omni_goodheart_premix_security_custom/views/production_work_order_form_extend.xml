@@ -1,0 +1,18 @@
+<odoo>
+  <data>
+      <!-- <record id="mrp_workorder_view_form_tablet_extend" model="ir.ui.view">
+          <field name="name">mrp.workorder.view.form.inherit.quality.tablet.new</field>
+          <field name="model">mrp.workorder</field>
+           <field name="inherit_id" ref="quality_mrp.mrp_workorder_view_form_tablet"/>
+          <field name="arch" type="xml">
+            <xpath expr="//field[@name='final_lot_id']" position="after">
+              <br/>
+              <br/>
+              <label for="box_number" string="Box Number:" style="display:inline-block;" attrs = "{'invisible': [('categ_id', '=', 19,11,12,13,14,15)]}"/>
+              <field name="box_number" style="width:55%;" attrs = "{'invisible': [('categ_id', '=', 19,11,12,13,14,15)]}"/>
+              <field name="categ_id" invisible="1"/>
+            </xpath>
+          </field>
+        </record> -->
+  </data>
+</odoo>

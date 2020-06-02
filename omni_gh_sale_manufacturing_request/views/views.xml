@@ -1,0 +1,203 @@
+<odoo>
+  <data>
+
+    <!-- Sales Orders Kanban View  -->
+        <record model="ir.ui.view" id="view_sale_manufacturing_kanban">
+            <field name="name">sale.manufacturing.kanban</field>
+            <field name="model">omni.gh.sale.manufacturing</field>
+            <field name="arch" type="xml">
+                <kanban class="o_kanban_mobile">
+                    <field name="name"/>
+                    <field name="date_needed"/>
+                    
+                    <field name="state"/>
+                    <!-- <field name="currency_id"/> -->
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_card oe_kanban_global_click">
+                                <div class="o_kanban_record_top mb16">
+                                    <div class="o_kanban_record_headings mt4">
+                                        <strong class="o_kanban_record_title"><span><t t-esc="record.partner_id.value"/></span></strong>
+                                    </div>
+                                </div>
+                                <div class="o_kanban_record_bottom">
+                                    <div class="oe_kanban_bottom_left text-muted">
+                                        <span><t t-esc="record.name.value"/> <t t-esc="record.date_order.value"/></span>
+                                    </div>                                    
+                                    <div class="oe_kanban_bottom_right">
+                                        <field name="state" widget="label_selection" options="{'classes': {'draft': 'default', 'cancel': 'default', 'done': 'success'}}"/>
+                                    </div>                                
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <record id="view_sale_manufacturing_tree" model="ir.ui.view">
+            <field name="name">sale.manufacturing.tree</field>
+            <field name="model">omni.gh.sale.manufacturing</field>
+            <!--
+            <field name="priority">2</field>-->
+            <field name="arch" type="xml">
+                <tree string="Sale Manufacturing Request">
+                    <field name="name" string="Sale Manufacturing Number"/>
+                    <field name="mr_ref"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_sale_manufacturing_form" model="ir.ui.view">
+            <field name="name">sale.manufacturing.form</field>
+            <field name="model">omni.gh.sale.manufacturing</field>
+            <field name="arch" type="xml">
+                <form string="Sales Manufacturing Request">                    
+                    <header>
+                        <button name="submit_mr" string="Submit MR" type="object" states="draft,modification" class="btn-primary"/>
+                        <button name="modify_mr" string="For MR Modification" type="object" states="sent" class="btn-primary" 
+                            groups="mrp.group_mrp_manager"/>
+                        <button name="approved_mr" string="MR Approved" type="object" states="sent" class="btn-primary" 
+                            groups="mrp.group_mrp_manager"/>
+                        <button name="cancelled_mr" string="MR Cancelled" type="object" states="sent" class="btn-primary" 
+                            groups="mrp.group_mrp_manager"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,modification,sent,cancel,done"/>
+                    </header>                
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_production_schedule"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-calendar-check-o"
+                                attrs="{'invisible': [('production_schedule_count', '=', 0)]}">
+                                <field name="production_schedule_count" widget="statinfo" string="Production Schedule"/>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="date_needed" attrs="{'readonly': [('state', 'in', ('sent','done', 'cancel'))]}"/>
+                                <field name="mr_ref" attrs="{'readonly': [('state', 'in', ('draft','sent', 'cancel'))]}"/>
+                                <field name="remarks" />
+                            </group>
+                            <group>
+                                <field name="start_dt" attrs="{'readonly': [('state', 'in', ('done', 'cancel'))]}"/>
+                                <field name="end_dt" attrs="{'readonly': [('state', 'in', ('done', 'cancel'))]}"/>
+                                <field name="equipments" attrs="{'readonly': [('state', 'in', ('done', 'cancel'))]}"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Product Information">
+                                <field name="sale_manufacturing_line" attrs="{'readonly': [('state', 'in', ('sent','done', 'cancel'))]}">
+                                    <tree string="Sale Manufacturing Lines" editable="bottom">
+                                        <field name="product_id" />
+                                        <field name="product_uom_qty"/>
+                                        <field name="product_uom"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_sale_manufacturing_request_filter" model="ir.ui.view">
+            <field name="name">sale.manufacturing.request</field>
+            <field name="model">omni.gh.sale.manufacturing</field>
+            <field name="arch" type="xml">
+                <search string="Search Sale Manufacturing Request">
+                    <filter name="draft" string="Draft MR or For Modification" domain="[('state','in',['draft','modification'])]"/>
+                    <separator/>
+                    <filter name="sent" string="MR Submitted" domain="[('state','=',('sent'))]"/>
+                    <filter name="modification" string="For MR Modification" domain="[('state','=',('modification'))]"/>
+                    <filter name="done" string="MR Approved" domain="[('state','=',('done'))]"/>
+                    <filter name="cancel" string="MR Cancelled" domain="[('state','=',('cancel'))]"/>
+                </search>
+            </field>
+       </record>
+
+
+       <record id="view_sale_manufacturing_request_filter_2" model="ir.ui.view">
+            <field name="name">sale.manufacturing.request</field>
+            <field name="model">omni.gh.sale.manufacturing</field>
+            <field name="arch" type="xml">
+                <search string="Search Sale Manufacturing Request">
+                    <filter name="sent" string="MR Submitted" domain="[('state','=',('sent'))]"/>
+                    <separator/>
+                    <filter name="draft" string="Draft MR" domain="[('state','=',('draft'))]"/>
+                    <filter name="modification" string="For MR Modification" domain="[('state','=',('modification'))]"/>
+                    <filter name="done" string="MR Approved" domain="[('state','=',('done'))]"/>
+                    <filter name="cancel" string="MR Cancelled" domain="[('state','=',('cancel'))]"/>
+                </search>
+            </field>
+       </record>
+
+        <record id="action_sale_manufacturing" model="ir.actions.act_window">
+            <field name="name">Sale Manufacturing Request</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">omni.gh.sale.manufacturing</field>
+            <!-- <field name="view_type">form</field> -->
+            <field name="view_mode">tree,kanban,form</field>
+            <field name="search_view_id" ref="view_sale_manufacturing_request_filter"/>
+            <field name="context">{'search_default_draft':1}</field>
+             <!-- CHECK THIS DOMAIN -->
+            <!-- <field name="domain">[('state', 'not in', ('draft', 'sent', 'done', 'cancel'))]</field> -->
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Create a Manufacturing Request!
+                </p>
+                <p>
+                    Once the request is submitted, the production will approved or cancelled
+                    the request from <i>Sale Manufacturing Request</i>
+                </p>
+            </field>
+        </record>
+
+        <record id="action_sale_manufacturing_2" model="ir.actions.act_window">
+            <field name="name">Sale Manufacturing Request</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">omni.gh.sale.manufacturing</field>
+            <!-- <field name="view_type">form</field> -->
+            <field name="view_mode">tree,kanban,form</field>
+            <field name="search_view_id" ref="view_sale_manufacturing_request_filter_2"/>
+            <field name="context">{'search_default_sent':1}</field>
+             <!-- CHECK THIS DOMAIN -->
+            <!-- <field name="domain">[('state', 'not in', ('draft', 'sent', 'done', 'cancel'))]</field> -->
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Create a Manufacturing Request!
+                </p>
+                <p>
+                    Once the request is submitted, the production will approved or cancelled
+                    the request from <i>Sale Manufacturing Request</i>
+                </p>
+            </field>
+        </record>
+
+      	
+   
+        <menuitem id="menu_sale_manufacturing_request"
+            name="Manufacturing Request"
+            action="action_sale_manufacturing"
+            parent="sale.sale_order_menu"
+            sequence="2" />
+
+        <menuitem id="menu_mrp_sale_manufacturing_request"
+            name="Manufacturing Request"
+            parent="mrp.menu_mrp_manufacturing"
+            action="action_sale_manufacturing_2"
+            groups="mrp.group_mrp_routings"
+            sequence="11"/>
+  </data>
+</odoo>

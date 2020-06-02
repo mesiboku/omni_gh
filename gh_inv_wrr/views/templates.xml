@@ -1,0 +1,97 @@
+<odoo>
+    <data>
+        <template id="report_wrr_footer" inherit_id="web.external_layout_standard" primary="True">
+            <xpath expr="//div[@class='header']" position="replace">
+                <div class="header" style="font-size:75%">
+                <div class="row">
+                    <div class="col-xs-3 mb4">
+                        <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" style="max-height: 45px;"/>
+                    </div>
+                    <!--
+                    <div class="col-xs-9 text-right" style="margin-top:22px;" t-field="company.report_header" name="moto"/>
+                -->
+                    <div class="col-xs-4-offset pull-right" name="form_name"><h3>Warehouse Receiving Report</h3></div>
+                </div>
+
+                <div t-if="company.logo or company.report_header" class="row zero_min_height">
+                    <div class="col-xs-12">
+                        <div style="border-bottom: 1px solid black;"/>
+                    </div>                    
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-6" name="company_address">
+                        <!--
+                        <span t-field="company.partner_id" t-field-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;,&quot;name&quot;], &quot;no_marker&quot;: true}" style="border-bottom: 1px solid black; display:inline-block;"/>
+                        -->
+                        <!--
+                        <span t-field="company.partner_id" t-field-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;name&quot;], &quot;no_marker&quot;: true}" style="border-bottom: 1px solid black; display:inline-block;"/>
+                        <span t-field="company.partner_id.street"  style="border-bottom: 1px solid black; display:inline-block;"/>
+                        -->
+                        <span t-field="company.partner_id" t-field-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;name&quot;], &quot;no_marker&quot;: true}"/>
+                        
+                        <div style="float:left;border-bottom: 1px solid black;width:790px">
+                            <span t-field="company.partner_id.street"  style="display:inline;"/>    
+                            <span t-field="company.partner_id.city" style=" display:inline;"/>
+                            <span t-field="company.partner_id.country_id" style=" display:inline; "/>                            
+                        </div>                              
+                    </div>
+                    
+                </div>
+                </div>
+            </xpath>
+            <!--
+            <xpath expr="//div[@class='footer']" position="replace">
+                <div class="footer">
+                    <div class="row" name="approvals">
+                        <div class="col-xs-6">
+                            <h5>Checked By:<strong><t t-set="foo" t-value="False"/>
+							<t t-foreach="o.check_ids" t-as="i">
+								<t t-if="foo == False">
+								<span t-field="i.user_id"/>
+								</t>
+								<t t-set="foo" t-value="True"/>
+							</t></strong></h5>
+                            <h5>Encoded By:<strong><span t-field="o.write_uid"/></strong></h5>
+                        </div>
+                        <div class="col-xs-offset-6">
+                            <h5>Received By:<strong><span t-field="o.write_uid"/></strong></h5>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+            -->
+            <xpath expr="//div[@class='footer']" position="replace">
+                <div class="footer" style="font-size:75%;">
+                    <div class="row" name="approvals">
+                        <div class="col-xs-6">
+                            Checked By:<t t-set="foo" t-value="False"/>
+                            <t t-foreach="o.check_ids" t-as="i">
+                                <t t-if="foo == False">
+                                <span t-field="i.user_id"/>
+                                </t>
+                                <t t-set="foo" t-value="True"/>
+                            </t>
+                        </div>
+                        <div class="col-xs-offset-6">
+                            Received By:<span t-field="o.write_uid"/>
+                        </div>
+                    </div>
+                    <div class="row" name="approvals">
+                        <div class="col-xs-6">
+                            Encoded By:<span t-field="o.write_uid"/>
+                        </div>
+                    </div>                    
+                </div>
+            </xpath>            
+         </template>
+
+         <template id="external_layout_wrr" inherit_id="web.external_layout" primary="True">
+
+            <xpath expr="//t[@t-call='web.external_layout_standard']" position="replace">
+                <t t-call="report_wrr_footer"><t t-raw="0"/></t>                
+            </xpath>
+
+        </template>
+    </data>
+</odoo>

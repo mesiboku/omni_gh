@@ -1,0 +1,135 @@
+<odoo>
+	<data>
+	    <record id="mrp_workorder_equipment_tree_view" model="ir.ui.view">
+            <field name="name">omni.gh.manpower.tracking.tree</field>
+            <field name="model">omni.gh.manpower.tracking</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="track_shifts"/>
+                    <field name="track_dt"/>
+                    <field name="start_dt" widget="float_time"/>
+                    <field name="end_dt" widget="float_time"/>
+                </tree>
+            </field>
+        </record>
+
+		<record model="ir.actions.act_window" id="action_mrp_workorder_equipment">
+	        <field name="name">Manpower Tracking</field>
+	        <field name="type">ir.actions.act_window</field>
+	        <field name="res_model">omni.gh.manpower.tracking</field>
+	        <field name="view_type">form</field>
+	        <field name="view_mode">tree,form</field>
+	        <field name="view_id" ref="mrp_workorder_equipment_tree_view"/>
+	        <field name="help" type="html">
+	          <p class="oe_view_nocontent_create">
+	           Manpower Tracking
+	           </p>
+	        </field>
+	    </record>
+
+	    <record id="mrp_manpower_operator_tree_view" model="ir.ui.view">
+            <field name="name">omni.gh.list.operator.tree</field>
+            <field name="model">omni.gh.list.operator</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="status"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_mrp_manpower_operator">
+	        <field name="name">Manpower Tracking Operators</field>
+	        <field name="type">ir.actions.act_window</field>
+	        <field name="res_model">omni.gh.list.operator</field>
+	        <field name="view_type">form</field>
+	        <field name="view_mode">tree,form</field>
+	        <field name="view_id" ref="mrp_manpower_operator_tree_view"/>
+	        <field name="help" type="html">
+	          <p class="oe_view_nocontent_create">
+	           Manpower Tracking Operators
+	           </p>
+	        </field>
+	    </record>
+
+	    <record id="mrp_manpower_role_tree_view" model="ir.ui.view">
+            <field name="name">omni.gh.list.role.tree</field>
+            <field name="model">omni.gh.list.role</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="code"/>
+                </tree>
+            </field>
+        </record>
+
+	    <record model="ir.actions.act_window" id="action_mrp_manpower_role">
+	        <field name="name">Manpower Tracking Roles</field>
+	        <field name="type">ir.actions.act_window</field>
+	        <field name="res_model">omni.gh.list.role</field>
+	        <field name="view_type">form</field>
+	        <field name="view_mode">tree,form</field>
+	        <field name="view_id" ref="mrp_manpower_role_tree_view"/>
+	        <field name="help" type="html">
+	          <p class="oe_view_nocontent_create">
+	           Manpower Tracking Roles
+	           </p>
+	        </field>
+	    </record>
+
+	    <record id="mrp_manpower_shifts_tree_view" model="ir.ui.view">
+            <field name="name">omni.gh.manpower.shifts.tree</field>
+            <field name="model">omni.gh.manpower.shifts</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="start_dt" widget="float_time"/>
+                    <field name="end_dt" widget="float_time"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <record model="ir.actions.act_window" id="action_mrp_manpower_shifts">
+	        <field name="name">Manpower Tracking Shifts Templates</field>
+	        <field name="type">ir.actions.act_window</field>
+	        <field name="res_model">omni.gh.manpower.shifts</field>
+	        <field name="view_type">form</field>
+	        <field name="view_mode">tree,form</field>
+	        <field name="view_id" ref="mrp_manpower_shifts_tree_view"/>
+	        <field name="help" type="html">
+	          <p class="oe_view_nocontent_create">
+	           Manpower Tracking
+	           </p>
+	        </field>
+	    </record>
+
+		<menuitem id="menu_mrp_manpower_tracking"
+			name="Manpower Tracking"
+			parent="mrp.menu_mrp_manufacturing"
+			action="action_mrp_workorder_equipment"
+			groups="mrp.group_mrp_routings"
+			sequence="11"/>	
+	    <menuitem id="mrp_manpower_tracking_menu"
+        name="Manpower Tracking"
+        sequence="100"
+        parent="mrp.menu_mrp_configuration"/>
+
+	    <menuitem id="mrp_manpower_tracking_operator"
+	            name="Operators"
+	            parent="mrp_manpower_tracking_menu"
+	            action="action_mrp_manpower_operator"
+	            sequence="10"/>
+	    <menuitem id="mrp_manpower_tracking_role"
+	            name="Roles"
+	            parent="mrp_manpower_tracking_menu"
+	            action="action_mrp_manpower_role"
+	            sequence="10"/>
+	    <menuitem id="mrp_manpower_tracking_shift"
+	            name="Shift Templates"
+	            parent="mrp_manpower_tracking_menu"
+	            action="action_mrp_manpower_shifts"
+	            sequence="10"/>
+	</data>
+</odoo>

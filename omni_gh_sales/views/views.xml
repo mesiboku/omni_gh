@@ -1,0 +1,37 @@
+<odoo>
+  <data>
+    <record id="view_order_form_extend" model="ir.ui.view">
+        <field name="name">sale.order.form</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+          <xpath expr="//field[@name='product_uom_qty']" position="attributes">
+              <attribute name="attrs">  {'readonly':[('state','in',['sale'])]}  </attribute>
+          </xpath>
+          <xpath expr="//field[@name='price_unit']" position="attributes">
+              <attribute name="attrs">  {'readonly':[('state','in',['sale'])]}  </attribute>
+          </xpath>
+          <xpath expr="//field[@name='discount']" position="attributes">
+              <attribute name="attrs">  {'readonly':[('state','in',['sale'])]}  </attribute>
+          </xpath>
+          <xpath expr="//field[@name='discount']" position="attributes">
+              <attribute name="attrs">  {'readonly':[('state','in',['sale'])]}  </attribute>
+          </xpath>
+          <xpath expr="//button[@type='action'][1]" position="attributes">
+            <attribute name="groups">account.group_account_manager</attribute>
+          </xpath>
+          <xpath expr="//button[@type='action'][2]" position="attributes">
+            <attribute name="groups">account.group_account_manager</attribute>
+          </xpath>
+
+
+          <!-- Added new field to Sale Order Line -->
+          <xpath expr="//notebook/page[1]/field[@name='order_line']/tree/field[@name='qty_delivered']" position="after">
+            <field name="return_count" />
+          </xpath>
+        </field>
+    </record>
+
+
+  </data>
+</odoo>

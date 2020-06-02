@@ -1,0 +1,14 @@
+<odoo>
+  <data>
+    <record id="po_format_goodheart_extend" model="ir.ui.view">
+      <field name="name">po.format.extend.goodheart</field>
+      <field name="model">purchase.order</field>
+      <field name="inherit_id" ref="purchase.purchase_order_form"/>
+      <field name="arch" type="xml">
+          <xpath expr="//form/sheet/notebook/page[1]/field[@name='order_line']/tree/field[@name='price_unit']" position="after">
+              <field name='discount'/>
+          </xpath>
+      </field>
+    </record>
+  </data>
+</odoo>
