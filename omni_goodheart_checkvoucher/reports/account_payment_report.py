@@ -3,6 +3,7 @@
 from odoo import models,fields,api
 from odoo.tools.translate import _
 from odoo.tools.misc import formatLang, format_date
+from odoo.exceptions import UserError
 
 LINE_FILLER = '*'
 INV_LINES_PER_STUB = 9
@@ -13,7 +14,27 @@ class account_payment_report(models.Model):
     checkvoucher_amount_total = fields.Char('Amount Tax', compute = '_compute_get_amount_total')
     dr_dates = fields.Char('DR Dates')
     dr_number = fields.Char('DR Numbers')
-    particulars_invoice_ids = fields.Many2many('account.invoice', 'partic_account_invoice_payment_rel', 'payment_id', 'invoice_id', string="Particulars", copy=False)
+    particulars_invoice_ids = fields.Many2many('account.invoice', 
+                                               'partic_account_invoice_payment_rel', 
+                                               'payment_id', 
+                                               'invoice_id', 
+                                               string="Particulars", 
+                                               copy=False,
+                                            )
+
+
+    @api.onchange('particulars_invoice_ids', 'partner_id')
+    def particulars_invoice_ids_onchange(self):
+        #Check Total Added Invoices
+        total_particulars = 0.00
+        for particular in self.particulars_invoice_ids:
+            total_particulars +=particular.amount_total
+        if total_particulars > self.amount:
+            raise UserError(_('Total Amount of Selected Pariculars is greater than the Payment Amount.'))
+
+        res ={}
+        res['domain'] = {'particulars_invoice_ids': [('type','=','in_invoice'), ('state','=','open'), ('partner_id','=', self.partner_id and self.partner_id.id or False)]}
+        return res
 
 
     def _compute_get_amount_total(self):
