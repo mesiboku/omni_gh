@@ -6,11 +6,23 @@
       <field name="inherit_id" ref="omni_gh_payment_matching_upload.account_payment_form_payment_umnatch"/>
       <field name="arch" type="xml">
         <xpath expr="//form[1]/sheet[1]/notebook[1]" position="inside">        
-            <page name="vendor_bills" string="Vendor Bills">
+            <page name="vendor_bills" string="Vendor Bills" attrs="{'invisible': [('payment_type', 'not in',['outbound', 'transfer'])]}">
                 <group name="Deliveries Info">
-                    <field name="dr_dates"/>
-                    <field name="dr_number"/>
+                    <group>
+                      <field name="dr_dates"/>
+                      <field name="dr_number"/>                    
+                    </group>
                 </group>
+                <field name="particulars_invoice_ids" nolabel="1" domain="[('state','=', 'open'),('type','=','in_invoice')]">
+                    <tree string="Patriculars" editable="bottom">
+                      <field name="number"/>
+                      <field name="date_invoice"/>
+                      <field name="date_due"/>
+                      <field name="amount_total"/>
+                      <field name="state" invisible="1"/>
+                      <field name="type" invisible="1"/>
+                    </tree>
+                </field>                
             </page>
         </xpath>
       </field>
