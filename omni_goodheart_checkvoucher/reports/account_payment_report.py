@@ -27,10 +27,10 @@ class account_payment_report(models.Model):
     def particulars_invoice_ids_onchange(self):
         #Check Total Added Invoices
         total_particulars = 0.00
-        for particular in self.particulars_invoice_ids:
-            total_particulars +=particular.amount_total
-        if total_particulars > self.amount:
-            raise UserError(_('Total Amount of Selected Pariculars is greater than the Payment Amount.'))
+        #for particular in self.particulars_invoice_ids:
+        #    total_particulars +=particular.amount_total
+        #if total_particulars > self.amount:
+        #    raise UserError(_('Total Amount of Selected Pariculars is greater than the Payment Amount.'))
 
         res ={}
         res['domain'] = {'particulars_invoice_ids': [('type','=','in_invoice'), ('state','=','open'), ('partner_id','=', self.partner_id and self.partner_id.id or False)]}
