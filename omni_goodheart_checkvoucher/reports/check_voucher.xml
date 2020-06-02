@@ -74,7 +74,7 @@
                               </td>
                             </tr>
                             <tr/>
-                            <t t-foreach="o.invoice_ids" t-as="invoice_id">
+                            <t t-foreach="o.particulars_invoice_ids" t-as="invoice_id">
                                 <t t-foreach="invoice_id.invoice_line_ids" t-as="invoice_line_id">
                                     <tr style="height: 18px;">
                                         <td style="width:58%">
@@ -180,7 +180,7 @@
                                 </td>
                               </tr>
                               <tr/>
-                              <t t-foreach="o.invoice_ids" t-as="invoice_id">
+                              <t t-foreach="o.particulars_invoice_ids" t-as="invoice_id">
                                   <t t-foreach="invoice_id.invoice_line_ids" t-as="invoice_line_id">
                                       <tr style="height: 18px;">
                                           <td style="width:58%">
