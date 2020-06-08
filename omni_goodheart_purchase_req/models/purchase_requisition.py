@@ -244,9 +244,11 @@ class PurchaseRequestLine(models.Model):
         self.name = product_lang.display_name
         if product_lang.description_purchase:
             self.name += '\n' + product_lang.description_purchase
-        self._suggest_quantity()
-        self._onchange_quantity()
+        self.product_qty = 1.0
+        #self._suggest_quantity()        
+        #self._onchange_quantity()
         return result
+
 
 
 
