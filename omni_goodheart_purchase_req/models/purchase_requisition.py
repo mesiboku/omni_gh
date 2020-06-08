@@ -168,7 +168,7 @@ class PurchaseReques(models.Model):
                             'product_uom':  line and line.product_uom and line.product_uom.id or False,
                             'product_qty':  line and line.product_qty and line.product_qty or 0,
                             'date_planned': fields.Datetime.now(),
-                            #'price_unit': line.price_unit,
+                            'price_unit': 0.00,
                             })
                         purchase_order_lines.append(purchase_order_line)
 
