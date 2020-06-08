@@ -7,7 +7,7 @@
     'website': "http://www.example.com",
     'category': 'Uncategorized',
     'version': '11.0.1.0.0',
-    'depends': ['base','mrp', 'stock','quality_mrp'],
+    'depends': ['base','mrp', 'stock','quality_mrp','omni_goodheart_equipment_selection_field'],
     'data': [#'views/views.xml',
     'views/Omni_premix_custom.xml',
 	'views/production_work_order_form_extend.xml',
