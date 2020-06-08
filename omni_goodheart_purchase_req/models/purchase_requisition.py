@@ -201,43 +201,23 @@ class PurchaseReques(models.Model):
 
 class PurchaseRequestLine(models.Model):
     _name = "purchase.request.line"
-    _inherit = 'purchase.order.line'
     _description = "Purchase Requisition Lines"
-
-
-    @api.depends('product_qty', 'price_unit', 'taxes_id')
-    def _compute_amount(self):
-        pass
-
-    @api.multi
-    def _compute_tax_id(self):
-        pass
-
-    @api.depends('order_id.state', 'move_ids.state', 'move_ids.product_uom_qty')
-    def _compute_qty_received(self):
-        pass
 
     order_id = fields.Many2one('purchase.request', string='Order Reference', index=True, required=True, ondelete='cascade')
     partner_id = fields.Many2one('res.partner', string='Partner')
     supplier_id = fields.Many2one('res.partner', string='Partner')
-
     date_order = fields.Date(related='order_id.date_needed', string='Order Date', readonly=True)
 
+    name = fields.Text(string='Description', required=True)
+    sequence = fields.Integer(string='Sequence', default=10)
+    date_planned = fields.Datetime(string='Scheduled Date', index=True)
+    product_uom = fields.Many2one('product.uom', string='Product Unit of Measure', required=True)
+    product_id = fields.Many2one('product.product', string='Product', domain=[('purchase_ok', '=', True)], change_default=True, required=True)
+    date_order = fields.Date(related='order_id.date_needed', string='Order Date', readonly=True)
+    state = fields.Selection(related='order_id.state', store=True)
+    currency_id = fields.Many2one(related='order_id.currency_id', store=True, string='Currency', readonly=True)    
+    product_qty = fields.Float(string='Quantity', digits=dp.get_precision('Product Unit of Measure'), required=True)
 
-    @api.onchange('product_qty', 'product_uom')
-    def _onchange_quantity(self):
-        pass    
-
-    @api.multi
-    def _get_stock_move_price_unit(self):
-        pass
-
-    @api.multi
-    def _prepare_stock_moves(self, picking):
-        pass
-
-    def _suggest_quantity(self):
-        self.product_qty = 1.0
 
     @api.onchange('product_id')
     def onchange_product_id(self):
@@ -251,17 +231,11 @@ class PurchaseRequestLine(models.Model):
 
         product_supplier_info_obj = product_supplier_info.search([('product_tmpl_id', '=', self.product_id.product_tmpl_id.id)], order="sequence asc", limit=1)
 
-        #raise Warning(product_supplier_info_obj.name.id)
-
         # Reset date, price and quantity since _onchange_quantity will provide default values
         self.date_planned = datetime.today().strftime(DEFAULT_SERVER_DATETIME_FORMAT)
         #self.price_unit = self.product_qty = 0.0
         self.product_uom = self.product_id.uom_po_id or self.product_id.uom_id
-
         self.supplier_id = product_supplier_info_obj and product_supplier_info_obj.name or False
-
-        #raise Warning(self.partner_id)
-
         result['domain'] = {'product_uom': [('category_id', '=', self.product_id.uom_id.category_id.id)]}
 
         product_lang = self.product_id.with_context(
