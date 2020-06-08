@@ -23,4 +23,12 @@ class WorkOrderProduct(models.Model):
                     raise UserError(_('Cannot Create Work Order Stock Incomplete!'))
 
         res = super(WorkOrderProduct, self).button_plan()
+        # Check if Successfully Saved the Records
+        # Update the Work Orders Equipments
+        if res:
+            for mrp_prod in self:
+                mrp_workorder_obj = self.env['mrp.workorder'].search([('production_id','=', mrp_prod.id)])
+                if mrp_workorder_obj:
+                    for workorder in mrp_workorder_obj:
+                        workorder.equips_id = mrp_prod.equips.id
         return res 
