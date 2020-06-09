@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<templates id="template" xml:space="preserve">
+
+	<t t-extend="reconciliation.manual.line">
+		<t t-jquery=".accounting_view thead tr" t-operation="replace">
+	        <tr>
+	            <td class="cell_action"><span class="toggle_match fa fa-cog"></span></td>
+	            <td colspan="4"><span/><span t-if="state.last_time_entries_checked">Last Reconciliation: <t t-esc="state.last_time_entries_checked"/></span></td>
+	            <td colspan="2"><t t-esc="state.st_line.account_code"/></td>
+	            <td class="cell_info_popover"></td>
+	        </tr>
+    	</t>
+	</t>
+
+	<t t-extend="reconciliation.line.balance">
+		<t t-jquery=".cell_label" t-operation="after">
+			<td class="cell_label"></td>
+		</t>
+	</t>
+
+	<t t-extend="reconciliation.line.mv_line">
+		<t t-jquery=".cell_label" t-operation="after">
+			<td class="cell_label"><t t-esc="line.store_number or ''"/></td>
+		</t>
+	</t>
+
+	<t t-extend="reconciliation.line.mv_line.details">
+		<t t-jquery=".details" t-operation="append">
+			<tr t-if="line.store_number">
+				<td>Store No.</td>
+				<td><t t-esc="line.store_number"/></td>
+			</tr>
+		</t>
+	</t>
+
+</templates>

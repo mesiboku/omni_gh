@@ -1,0 +1,129 @@
+<odoo>
+  <data>
+    <record id="account_invoice_form_goodheart" model="ir.ui.view">
+      <field name="name">account.invoice.goodheart</field>
+      <field name="model">account.invoice</field>
+      <field name="inherit_id" ref="account.invoice_form"/>
+      <field name="arch" type="xml">      
+        <!--
+        <xpath expr="//h1[@class='mt0']/div[1]/field[@name='number']" position="replace">
+          <label string="Legacy Invoice" attrs="{'invisible': ['|',('state','in',('draft',)), ('type','!=','out_invoice')]}"/>
+          <br/>
+          <field name="legacy_invoice"  class="oe_inline" placeholder="Legacy Invoice..."/>
+        </xpath>
+
+
+        <xpath expr="//h1[@class='mt0']/div[2]" position="attributes">
+          <attribute name="invisible">1</attribute>
+        </xpath>
+
+        <xpath expr="//field[@name='partner_id']" position="before">
+            <field name="number" readonly="1"/>
+        </xpath>
+        -->
+        
+          <xpath expr="//field[@name='partner_id']" position="before">
+              <field name="legacy_invoice"/>
+          </xpath>
+        
+          <xpath expr="//field[@name='partner_shipping_id']" position="after">
+              <field name="business_style"/>
+              <field name="tin_number"/>
+              <field name="store_number"/>
+              <field name="store_name"/>
+          </xpath>
+          <xpath expr="//field[@name='team_id']" position="after">
+              <field name="received_by"/>
+              <field name="po_number"/>
+              <field name="date_received"/>
+          </xpath>
+      </field>
+    </record>
+
+    <record id="account_invoice_supplier_goodheart" model="ir.ui.view">
+      <field name="name">account.invoice.supplier.goodheart</field>
+      <field name="model">account.invoice</field>
+      <field name="inherit_id" ref="account.invoice_supplier_form"/>
+      <field name="arch" type="xml">
+          <xpath expr="//field[@name='date_due']" position="after">
+              <field name="delivery_date"/>
+              <field name="received_payment_by"/>
+              <field name="date_received"/>
+          </xpath>
+          <xpath expr="//field[@name='purchase_id']" position="after">
+              <field name="dr_number"/>
+              <field name="bank"/>
+              <field name="check_number"/>
+          </xpath>
+          <xpath expr="//field[@name='comment']" position="before">
+              <group>
+                  <group>
+                      <field name="approved_by"/>
+                      <field name="recommended_by"/>
+                      <field name="prepared_by"/>
+                      <field name="certified_correct_by"/>
+                  </group>
+              </group>
+          </xpath>
+      </field>
+    </record>
+
+    <record id="account_payment_form_goodheart" model="ir.ui.view">
+      <field name="name">account.payment.goodheart</field>
+      <field name="model">account.payment</field>
+      <field name="inherit_id" ref="account.view_account_payment_form"/>
+      <field name="arch" type="xml">
+          <xpath expr="//field[@name='payment_transaction_id']" position="after">
+              <field name="bank"/>
+              <field name="branch"/>
+              <field name="check_number"/>
+          </xpath>
+      </field>
+    </record>
+
+    <record id="po_states_goodheart" model="ir.ui.view">
+      <field name="name">purchase.order.goodheart</field>
+      <field name="model">purchase.order</field>
+      <field name="inherit_id" ref="purchase.purchase_order_form"/>
+      <field name="arch" type="xml">
+          <xpath expr="//button[@name='action_view_picking']" position="after">
+            <button name="action_to_approve" type="object" string="Approve Quotation" states="to approve"/>
+          </xpath>
+          <xpath expr="//field[@name='state']" position="replace">
+            <field name="state" widget="statusbar" statusbar_visible="draft,to approve,sent,purchase"/>
+          </xpath>
+
+          <xpath expr="//field[@name='company_id']" position="after">
+            <field name="remarks"/>
+            <field name="del_instructions"/>
+          </xpath>
+          <xpath expr="//field[@name='currency_id']" position="after">
+            <field name="attention"/>
+          </xpath>
+      </field>
+    </record>
+<!--
+    <record id="invoice_tree_extend" model="ir.ui.view">
+        <field name="name">account.invoice.tree.extend</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="account.invoice_tree"/>
+        <field name="arch" type="xml">
+          <field name="number" position="before">
+            <field name="legacy_invoice" string="Legacy Invoice"/>
+          </field>
+        </field>
+    </record>  
+-->
+    <record id="view_account_invoice_filter_extend" model="ir.ui.view">
+        <field name="name">account.invoice.select.extend</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="account.view_account_invoice_filter"/>
+        <field name="arch" type="xml">
+          <field name="date" position="after">
+            <field name="legacy_invoice" string="Legacy Invoice Number"/>
+          </field>
+        </field>
+    </record>      
+    
+  </data>
+</odoo>

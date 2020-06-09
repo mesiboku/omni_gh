@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <record id="view_payment_sheet_upload" model="ir.ui.view">
+            <field name="name">Invoice Payment Matching Upload</field>
+            <field name="model">account.payment.upload</field>
+            <field name="arch" type="xml">
+                <form string="Invoice Payment Matching Upload">
+                    <group>
+                        <field name="file_name" invisible="1"/>
+                        <field name="payment_spreadsheet" filename="file_name"/>
+                        
+                    </group>
+                    <footer>
+                        
+                        <button name="paymentMatching" string="Confirm" type="object" class="btn-primary"/>                        
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_view_payment_sheet_upload" model="ir.actions.act_window">
+            <field name="name">Upload Invoice</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.payment.upload</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="binding_model_id" ref="model_account_payment" />        
+        </record>
+
+</odoo>

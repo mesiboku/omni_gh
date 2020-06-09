@@ -1,0 +1,18 @@
+[Unit]
+Description=Odoo
+Documentation=http://www.odoo.com/
+
+[Service]
+# Ubuntu/Debian convention:
+Type=simple
+User=odoo
+ExecStart=/odoo/odoo-server/odoo-bin -c /etc/odoo-server.conf
+TimeoutStartSec=0
+KillMode=process
+Restart=always
+RestartSec=2
+LimitNOFILE=5555
+
+[Install]
+WantedBy=default.target
+

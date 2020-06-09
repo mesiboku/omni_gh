@@ -1,0 +1,94 @@
+<odoo>
+  <data>
+    <record id="paperformat_full" model="report.paperformat">
+      <field name="name">Full</field>
+      <field name="default" eval="True"/>
+      <field name="format">custom</field>
+      <field name="page_height">280</field>
+      <field name="page_width">215</field>
+      <field name="orientation">Portrait</field>
+      <field name="margin_top">20</field>
+      <field name="margin_bottom">20</field>
+      <field name="margin_left">3</field>
+      <field name="margin_right">3</field>
+      <field name="header_line" eval="False"/>
+      <field name="header_spacing">8</field>
+      <field name="dpi">85</field>
+    </record>
+    <record id="paperformat_half" model="report.paperformat">
+      <field name="name">Half</field>
+      <field name="default" eval="True"/>
+      <field name="format">custom</field>
+      <field name="page_height">140</field>
+      <field name="page_width">215</field>
+      <field name="orientation">Portrait</field>
+      <field name="margin_top">20</field>
+      <field name="margin_bottom">20</field>
+      <field name="margin_left">3</field>
+      <field name="margin_right">3</field>
+      <field name="header_line" eval="False"/>
+      <field name="header_spacing">8</field>
+      <field name="dpi">85</field>
+    </record>
+    <!-- <report
+    id="goodheart_wrr_full"
+    model="stock.picking"
+    string="Warehouse Receiving Report (Full)"
+    report_type="qweb-pdf"
+    name="gh_inv_wrr.report_wrr_full"
+    file="gh_inv_wrr.report_wrr_full"
+    attachment_use="False"
+    paperformat="paperformat_full"
+    /> -->
+    <report
+    id="goodheart_wrr_half"
+    model="stock.picking"
+    string="Warehouse Receiving Report (Half)"
+    report_type="qweb-pdf"
+    name="report_wrr_half"
+    file="report_wrr_half"
+    attachment_use="False"
+    paperformat="paperformat_half"
+    />
+
+
+    <record id="goodheart_wrr_half" model="ir.actions.report">
+      <field name="binding_model_id" eval="False"/>
+      <field name="attachment_use" eval="False"/>
+    </record>    
+
+    <template id="report_wrr_half" inherit_id="report_wrr" primary="True"/>
+    <!-- <template id="report_wrr_full" inherit_id="gh_inv_wrr.report_wrr" primary="True"/> -->
+
+
+    <record id="wrr_goodheart_extend" model="ir.ui.view">
+      <field name="name">wrr.goodheart.extend</field>
+      <field name="model">stock.move.line</field>
+      <field name="inherit_id" ref="stock.view_move_line_form"/>
+      <field name="arch" type="xml">
+          <xpath expr="//field[@name='qty_done']" position="after">
+              <field name='wrr_taxes_id' invisible="True"/>
+              <field name='wrr_price_unit' invisible="True"/>
+              <field name='discount' invisible="True"/>
+              <field name='wrr_price_subtotal' options="{'currency_field':'wrr_currency_id'}" invisible="True"/>
+          </xpath>
+      </field>
+    </record>
+    <record id="wrr_goodheart_extend_stock" model="ir.ui.view">
+      <field name="name">wrr.goodheart.extend.stock</field>
+      <field name="model">stock.picking</field>
+      <field name="inherit_id" ref="stock.view_picking_form"/>
+      <field name="arch" type="xml">
+          <xpath expr="//field[@name='partner_id']" position="after">
+              <field name='wrr_total' invisible='True'/>
+              <field name='wrr_tax' invisible='True'/>
+              <field name='wrr_untaxed_amount' invisible='True'/>
+          </xpath>
+
+          <field name='location_id' position="after">
+            <field name='sup_delivery_receipt'/>
+          </field>
+      </field>
+    </record>
+  </data>
+</odoo>

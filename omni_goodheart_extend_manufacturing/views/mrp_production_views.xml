@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="mrp_production_form_view_extend" model="ir.ui.view">
+        <field name="name">mrp.production.form.extend</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook/page[1]/field[@name='move_raw_ids']/tree[1]/field[@name='product_uom_qty']" position="before">
+                <!--<field name="product_manu_qty"/>-->
+                <field name="product_manu_allowance_qty" readonly="1"/>
+                <field name="allow_alter_info" invisible="1"/>
+            </xpath>
+
+            <xpath expr="//notebook/page[1]/field[@name='move_raw_ids']" position="attributes">
+                <attribute name="context">{'final_lots': show_final_lots, 'form_view_ref': 'mrp.view_stock_move_lots', 'default_location_id': location_src_id, 'default_location_dest_id': production_location_id, 'default_state': 'confirmed', 'default_raw_material_production_id': id, 'default_allow_alter_info':False}</attribute>
+            </xpath>
+
+
+            <!--
+            <xpath expr="//notebook/page[1]/field[@name='move_raw_ids']" position="attributes">
+                <attribute name="domain">[('scrapped', '=', False), ('allow_alter_info', '!=', True)]</attribute>
+            </xpath>
+
+            -->
+        </field>
+
+
+    </record>
+</odoo>
