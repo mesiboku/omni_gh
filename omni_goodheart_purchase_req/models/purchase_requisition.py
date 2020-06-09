@@ -168,7 +168,7 @@ class PurchaseReques(models.Model):
                             'product_uom':  line and line.product_uom and line.product_uom.id or False,
                             'product_qty':  line and line.product_qty and line.product_qty or 0,
                             'date_planned': fields.Datetime.now(),
-                            'price_unit': line.price_unit,
+                            'price_unit': 0.00,
                             })
                         purchase_order_lines.append(purchase_order_line)
 
@@ -244,9 +244,11 @@ class PurchaseRequestLine(models.Model):
         self.name = product_lang.display_name
         if product_lang.description_purchase:
             self.name += '\n' + product_lang.description_purchase
-        self._suggest_quantity()
-        self._onchange_quantity()
+        self.product_qty = 1.0
+        #self._suggest_quantity()        
+        #self._onchange_quantity()
         return result
+
 
 
 
