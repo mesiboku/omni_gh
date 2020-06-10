@@ -213,3 +213,4 @@ class AccountPaymentUnmatch(models.Model):
 							rec.is_error_jl = False
 						else:
 							raise UserError(_('Invoices Status is not Open'))
+		return True
