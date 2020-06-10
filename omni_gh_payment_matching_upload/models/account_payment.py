@@ -154,10 +154,12 @@ class AccountPayment(models.Model):
 					payment_message_id = payment.message_post(body=message_header, attachments=attachment)
 		return res
 
+	@api.one
 	def generateAllJLEDisc(self):
 		for payment_u in self.payment_unmatch_ids.search([('is_error_jl','=', True)]):
 			if payment_u.is_error_jl == True:
 				payment_u.realignedJLEntries()
+		return True
 
 class AccountPaymentUnmatch(models.Model):
 	_name = 'account.payment.unmatch'
