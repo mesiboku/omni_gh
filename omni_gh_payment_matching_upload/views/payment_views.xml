@@ -31,8 +31,11 @@
                         <field name="col_store_number" readonly="1"/>
                         <field name="col_amount" readonly="1"/>
                         <field name="discrepany_log" readonly="1"/>
-                    </tree>
+                        <field name="is_error_jl" readonly="1"/>
+                        <button name="realignedJLEntries" string="Realigned Entry" class="oe_highlight" type="object"/>
+                    </tree>                    
                 </field>  
+                <button name="generateAllJLEDisc" string="Realigned All Disc Entry" class="oe_highlight" type="object"/>
                 <!--
                 <field name="payment_spreadsheet" filename="file_name" readonly="1"/>
                 <field name="file_name" invisible="1"/>            
