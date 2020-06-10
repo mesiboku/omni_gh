@@ -82,7 +82,6 @@ class AccountPayment(models.Model):
 				if account_invoice_obj.partner_id != self.partner_id:
 					log_info += "* Payment Customer info is %s but the Uploaded Invoice Customer info is %s. \n " %(self.partner_id.name, account_invoice_obj.partner_id.name)
 				
-
 				if not account_invoice_obj.store_number:
 					#Check if Store Number has No Value
 					log_info += "* Invoice Number %s but no Store Number info. \n " %(account_invoice_obj.number)
@@ -94,7 +93,7 @@ class AccountPayment(models.Model):
 					else:
 						if account_invoice_obj.store_number[0:account_invoice_obj.store_number.find(' ')] != col_store_number:
 							log_info += "* Invoice Store Number info is %s but the Uploaded Invoice Store Number info is %s. \n " %(account_invoice_obj.store_number[0:account_invoice_obj.store_number.find(' ')], 
-																															col_store_number)
+																									col_store_number)
 
 				if account_invoice_obj.amount_total != col_amount:
 					log_info += "* Invoice Amount to be paid is %.2f but the Uploaded Invoice Amount is is %.2f. \n " %(account_invoice_obj.amount_total, 
@@ -159,7 +158,7 @@ class AccountPayment(models.Model):
 		for payment_u in self.payment_unmatch_ids.search([('is_error_jl','=', True)]):
 			if payment_u.is_error_jl == True:
 				payment_u.realignedJLEntries()
-			
+
 class AccountPaymentUnmatch(models.Model):
 	_name = 'account.payment.unmatch'
 
@@ -212,5 +211,3 @@ class AccountPaymentUnmatch(models.Model):
 							rec.is_error_jl = False
 						else:
 							raise UserError(_('Invoices Status is not Open'))
-
-	
