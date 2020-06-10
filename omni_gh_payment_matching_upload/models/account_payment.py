@@ -58,6 +58,7 @@ class AccountPayment(models.Model):
 		for row in range(1, xl_sheet.nrows):
 			col_date = ''
 			log_info =""
+			is_jl_err = False
 			col_legacy_invoice_number = str(int(xl_sheet.cell(row, 1).value or 0))
 			col_store_number = str(int(xl_sheet.cell(row, 2).value or 0))
 			col_amount  = float(xl_sheet.cell(row, 3).value or 0.00)
@@ -80,9 +81,19 @@ class AccountPayment(models.Model):
 
 				if account_invoice_obj.partner_id != self.partner_id:
 					log_info += "* Payment Customer info is %s but the Uploaded Invoice Customer info is %s. \n " %(self.partner_id.name, account_invoice_obj.partner_id.name)
+				
 
-				if account_invoice_obj.store_number[0:account_invoice_obj.store_number.find(' ')] != col_store_number:
-					log_info += "* Invoice Store Number info is %s but the Uploaded Invoice Store Number info is %s. \n " %(account_invoice_obj.store_number[0:account_invoice_obj.store_number.find(' ')], 
+				if not account_invoice_obj.store_number:
+					#Check if Store Number has No Value
+					log_info += "* Invoice Number %s but no Store Number info. \n " %(account_invoice_obj.number)
+				else:
+					#if isinstance(account_invoice_obj.store_number, bool):
+					#	log_info += "* Legacy Invoice Number %s has no Store Number info. \n " %(account_invoice_obj.name)
+					if len(account_invoice_obj.store_number) == 0:
+						log_info += "* Legacy Invoice Number %s has no Store Number info. \n " %(account_invoice_obj.name)
+					else:
+						if account_invoice_obj.store_number[0:account_invoice_obj.store_number.find(' ')] != col_store_number:
+							log_info += "* Invoice Store Number info is %s but the Uploaded Invoice Store Number info is %s. \n " %(account_invoice_obj.store_number[0:account_invoice_obj.store_number.find(' ')], 
 																															col_store_number)
 
 				if account_invoice_obj.amount_total != col_amount:
@@ -111,29 +122,44 @@ class AccountPayment(models.Model):
 							if account_invoice_obj.amount_total == col_amount:
 								#If All Qualify then Start Invoice Payment
 								_logger.info('HERE------------4')
-								account_invoice_obj.assign_outstanding_credit(credit_move_line_id)
-
+								if account_invoice_obj.account_id.company_id.id != self.env.user.company_id.id:
+									_logger.info(account_invoice_obj.number)
+									_logger.info(account_invoice_obj.company_id.name)
+									_logger.info(account_invoice_obj.account_id.name)
+									_logger.info(account_invoice_obj.account_id.company_id.name)
+									log_info += "* Legacy Invoice Number %s Discrepancy in Account Receivable COA. \n " %(account_invoice_obj.name)
+									is_jl_err = True
+								else:
+									account_invoice_obj.assign_outstanding_credit(credit_move_line_id)
 			if log_info:
-				log_info += "** In Spreadsheet Row %d" %(row)					
-				account_payment_matching_model.create({
+				log_info += "** In Spreadsheet Row %d" %(row)
+				val = {
 					'payment_id': self.id,
 					'col_legacy_invoice_number': col_legacy_invoice_number,
 					'col_store_number': col_store_number,
 					'col_amount': col_amount,
 					'discrepany_log': log_info,
-					'invoice_id': account_invoice_obj.id or False,})
+					'invoice_id': account_invoice_obj.id or False,}
+				if is_jl_err:
+					val['is_error_jl'] = True
+				account_payment_matching_model.create(val)
 
 	@api.multi
 	def write(self, vals):
 		res = super(AccountPayment, self).write(vals)
-
 		if res:
 			for payment in self:
 				if payment.payment_spreadsheet:
 					message_header = "<strong>Uploaded File</strong> <br/>"
 					attachment = [(payment.file_name, payment.payment_spreadsheet)]
 					payment_message_id = payment.message_post(body=message_header, attachments=attachment)
+		return res
 
+	def generateAllJLEDisc(self):
+		for payment_u in self.payment_unmatch_ids.search([('is_error_jl','=', True)]):
+			if payment_u.is_error_jl == True:
+				payment_u.realignedJLEntries()
+			
 class AccountPaymentUnmatch(models.Model):
 	_name = 'account.payment.unmatch'
 
@@ -148,3 +174,43 @@ class AccountPaymentUnmatch(models.Model):
 	#For Invoice Info
 	store_number = fields.Char(related='invoice_id.legacy_invoice', readonly=True, copy=False)
 	amount_total = fields.Monetary(related='invoice_id.amount_total', readonly=True, copy=False)
+	is_error_jl = fields.Boolean(string='Error in  JL Entries', default=False)
+
+	def realignedJLEntries(self):
+		for rec in self:
+			if rec.invoice_id:
+				invoice_company_id = rec.invoice_id.company_id.id
+				acct_journal = self.env['account.journal'].search([('name', '=','Customer Invoices'),
+																  ('type', '=','sale'),
+																  ('company_id', '=',invoice_company_id)])
+				acct_acct = self.env['account.account'].search([('name', '=','Account Receivable'),
+																  ('code', '=','101200'),
+																  ('company_id', '=',invoice_company_id)])
+				acct_acct_prod_sale = self.env['account.account'].search([('name', '=','Product Sales'),
+																  ('code', '=','200000'),
+																  ('company_id', '=',invoice_company_id)])
+
+				if acct_journal:
+					if rec.invoice_id.state == 'open':
+						#Cancel First the JL Entries
+						if rec.invoice_id.move_id:
+							rec.invoice_id.move_id.button_cancel()
+							#After Cancellation Start Cancel Invoice
+							rec.invoice_id.action_invoice_cancel()
+							#After Cancellation of Invoice Back To Draft
+							rec.invoice_id.action_invoice_draft()						
+							rec.invoice_id.account_id = acct_acct.id
+							rec.invoice_id.journal_id = acct_journal.id
+
+							#Change the Account for Invoice Lines and  Tax
+							for line in  rec.invoice_id.invoice_line_ids:
+								line.account_id = acct_acct_prod_sale.id
+							#Change the Tax
+							for tax_id in  rec.invoice_id.tax_line_ids:
+								tax_id.account_id = acct_acct_prod_sale.id							
+							rec.invoice_id.action_invoice_open()
+							rec.is_error_jl = False
+						else:
+							raise UserError(_('Invoices Status is not Open'))
+
+	
