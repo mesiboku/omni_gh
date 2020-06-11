@@ -37,7 +37,7 @@ class AccountInvoice(models.Model):
             for y in x.invoice_line_tax_ids:
                 if y.amount < 0:
                     # (y.amount/100) * (l.price_unit - (l.price_unit * (l.discount/100)))
-                    data = (y.amount/100) * (x.price_unit - (x.discount/100))
+                    data = (y.amount/100) * (x.price_unit - (x.price_unit * (x.discount/100)))
                     total_tax += data
         return total_tax
 

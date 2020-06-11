@@ -156,6 +156,17 @@
                                                 t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
                                         </td>
                                     </tr>
+                                    <tr>
+                                        <td><strong>Total</strong></td>
+                                        <td class="text-right">
+                                            <!-- <t t-set="increment" t-value="0"/> -->
+                                            <!-- <t t-foreach="o.invoice_line_ids" t-as="loop">
+                                              <t t-esc="increment" t-value="increment + loop.discount"/>
+                                            </t> -->
+                                            <span t-esc="o._getTotalDiscount() + o._getTotalTaxes()"
+                                                t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                        </td>
+                                    </tr>
                                     <!-- <tr class="border-black" style="border-bottom:1px solid #dddddd;">
                                         <td><strong>Subtotal</strong></td>
                                         <td class="text-right">
