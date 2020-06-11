@@ -28,3 +28,16 @@ class AccountInvoice(models.Model):
             total_discount += inv.price_unit * (inv.discount/100)
             
         return total_discount
+
+
+    @api.multi
+    def _getTotalTaxes(self):
+        total_tax = 0
+        for x in self.invoice_line_ids:
+            for y in x.invoice_line_tax_ids:
+                if y.amount < 0:
+                    # (y.amount/100) * (l.price_unit - (l.price_unit * (l.discount/100)))
+                    data = (y.amount/100) * (x.price_unit - (x.discount/100))
+                    total_tax += data
+        return total_tax
+
