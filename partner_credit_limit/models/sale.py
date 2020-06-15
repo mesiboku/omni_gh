@@ -16,14 +16,22 @@ class SaleOrder(models.Model):
 		if partner:
 			for info in partner:
 				if info.one_in_one_terms:
-					sales = self.env['sale.order'].search([('partner_id', '=', vals['partner_id']), ('invoice_status', 'not in', [('invoiced')])])
-					
+					sales = self.env['sale.order'].search([
+						('partner_id', '=', vals['partner_id']), 
+						('invoice_status', 'not in', [('invoiced')]),
+						('state','in',['sale','done'])
+						])
+					findInvoice = self.env['account.invoice'].search([('partner_id', '=', vals['partner_id']),('state', 'not in', [('paid')])])
+
 					total_unpaid = 0
+
 					for sale in sales:
 						total_unpaid = total_unpaid + sale.amount_total
-					# raise Warning(total_unpaid)
-					if total_unpaid != 0:
-						raise UserError(_('The Partner has still unpaid invoiced!'))
+						# raise Warning(sale.invoice_status)
+					if len(findInvoice) > 1:
+						raise UserError(_('Partner still has pending Sales Order or unpaid Invoice .'))
+					elif total_unpaid != 0:
+						raise UserError(_('Partner still has pending Sales Order or unpaid Invoice .' ))
 
 
 		result = super(SaleOrder, self).create(vals)
