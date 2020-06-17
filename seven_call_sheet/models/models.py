@@ -501,6 +501,7 @@ class GHCallSheet(models.Model):
 		return [qty_cone, unit_price_cone]
 
 
+	@api.multi
 	def submit_approval(self):
 		#for every line item check if with order
 		for rec in self:
@@ -518,7 +519,7 @@ class GHCallSheet(models.Model):
 				if partner:
 					partner.write({'store_status_note': line.store_status_note})
 
-				total_boxes = line.cone_1 + line.cone_2 + line.cone_3
+				total_boxes = line.cone_1 + line.cone_2 + line.cone_3 + line.cone_4 + line.cone_5 + line.cone_6 + line.cone_7 + line.cone_8 + line.cone_9 + line.cone_10
 
 				if (total_boxes > 0):
 					if not line.legacy_invoice_number:
@@ -554,72 +555,6 @@ class GHCallSheet(models.Model):
 						qty_cone_number = 'qty_cone_' + str(number)
 						unit_price_number  =  'unit_price_cone_' + str(number)
 						record_list[qty_cone_number], record_list[unit_price_number] = rec.getConeQty(line, number)
-
-					#record_list['qty_cone_1'], record_list['unit_price_cone_1'] = rec.getConeQty(line, 1)
-
-					#qty_cone_1, unit_price_cone_1 = rec.getConeQty(line, 1)
-					#qty_cone_2, unit_price_cone_2 = rec.getConeQty(line, 2)
-					#qty_cone_3, unit_price_cone_3 = rec.getConeQty(line, 3)
-					#qty_cone_4, unit_price_cone_4  = rec.getConeQty(line, 4)
-					#qty_cone_5, unit_price_cone_5 = rec.getConeQty(line, 5)
-					#qty_cone_6, unit_price_cone_6 = rec.getConeQty(line, 6)
-					#qty_cone_7, unit_price_cone_7 = rec.getConeQty(line, 7)
-					#qty_cone_8, unit_price_cone_8 = rec.getConeQty(line, 8)
-					#qty_cone_9, unit_price_cone_9 = rec.getConeQty(line, 9)
-					#qty_cone_10, unit_price_cone_10 = rec.getConeQty(line,10)
-
-					# #Check for BOM
-					# #If No BOM as of Now continue to the Old Function of Callsheets
-					# bom_obj = self.env['mrp.bom']
-					# bom_obj_cone_1 = bom_obj.search([('product_tmpl_id','=', rec.cone_1_id.product_tmpl_id.id),
-					# 								 ('company_id','=', rec.company_id.id) ], limit=1)
-					# if bom_obj_cone_1:
-					# 	unit_price_cone_1 = rec.price_box / bom_obj_cone_1.product_qty
-					# 	qty_cone_1 = line.cone_1 * bom_obj_cone_1.product_qty
-					# else:
-					# 	#Unit Price per Piece
-					# 	if rec.cone_1_product_uom.uom_type == 'bigger':
-					# 		unit_price_cone_1 = rec.price_box / rec.cone_1_product_uom.factor_inv
-					# 		qty_cone_1 = line.cone_1 * rec.cone_1_product_uom.factor_inv
-
-					# 	elif rec.cone_1_product_uom.uom_type == 'smaller':
-					# 		unit_price_cone_1 = rec.price_box * rec.cone_1_product_uom.factor
-					# 		qty_cone_1 = line.cone_1 / rec.cone_1_product_uom.factor
-					# 	else:
-					# 		unit_price_cone_1 = rec.price_box * 1
-					# 		qty_cone_1 = line.cone_1 * 1
-
-					# bom_obj_cone_2 = bom_obj.search([('product_tmpl_id','=', rec.cone_2_id.product_tmpl_id.id)], limit=1)
-					# if bom_obj_cone_2:
-					# 	unit_price_cone_2 = rec.price_box_2 / bom_obj_cone_2.product_qty
-					# 	qty_cone_2 = line.cone_2 * bom_obj_cone_2.product_qty
-					# else:
-					# 	if rec.cone_2_product_uom.uom_type == 'bigger':
-					# 		unit_price_cone_2 = rec.price_box_2 / rec.cone_2_product_uom.factor_inv
-					# 		qty_cone_2 = line.cone_2 * rec.cone_2_product_uom.factor_inv
-					# 	elif rec.cone_2_product_uom.uom_type == 'smaller':
-					# 		unit_price_cone_2 = rec.price_box_2 * rec.cone_2_product_uom.factor
-					# 		qty_cone_2 = line.cone_2 / rec.cone_2_product_uom.factor
-					# 	else:
-					# 		unit_price_cone_2 = rec.price_box_2 * 1
-					# 		qty_cone_2 = line.cone_2 * 1
-
-					# bom_obj_cone_3 = bom_obj.search([('product_tmpl_id','=', rec.cone_3_id.product_tmpl_id.id),
-					# 								 ('company_id','=', rec.company_id.id)], limit=1)
-					# if bom_obj_cone_3:
-					# 	unit_price_cone_3 = rec.price_box_3 / bom_obj_cone_3.product_qty
-					# 	qty_cone_3 = line.cone_3 * bom_obj_cone_3.product_qty
-					# else:
-					# 	if rec.cone_3_product_uom.uom_type == 'bigger':
-					# 		unit_price_cone_3 = rec.price_box_3 / rec.cone_3_product_uom.factor_inv
-					# 		qty_cone_3 = line.cone_3 * rec.cone_3_product_uom.factor_inv
-					# 	elif rec.cone_3_product_uom.uom_type == 'smaller':
-					# 		unit_price_cone_3 = rec.price_box_3 * rec.cone_3_product_uom.factor
-					# 		qty_cone_3 = line.cone_3 / rec.cone_3_product_uom.factor
-					# 	else:
-					# 		unit_price_cone_3 = rec.price_box_3 * 1
-					# 		qty_cone_3 = line.cone_3 * 1
-
 					
 					#Create Sales Order
 					seven_eleven_id = self.env['res.partner'].search([('name','=','Philippine Seven Corporation')])[0]					
@@ -638,35 +573,6 @@ class GHCallSheet(models.Model):
 							'price_unit': record_list[unit_price_number],
 							'tax_id': [(6, 0, rec[rec_cone].taxes_id.ids)],
 							}))
-
-					# #Create Sales Order
-					# seven_eleven_id = self.env['res.partner'].search([('name','=','Philippine Seven Corporation')])[0]
-					# #prepare order lines
-					# mylist =[]
-					# if line.cone_1:
-					# 	mylist.append((0,0,{
-					# 		'product_id': rec.cone_1_id.id,
-					# 		'product_uom_qty': qty_cone_1,
-					# 		'price_unit': unit_price_cone_1,
-					# 		'tax_id': [(6, 0, rec.cone_1_id.taxes_id.ids)],
-					# 		#'price_unit': (rec.price_box - (rec.price_box * .12))
-					# 		}))
-					# if line.cone_2:
-					# 	mylist.append((0,0,{
-					# 		'product_id': rec.cone_2_id.id,
-					# 		'product_uom_qty': qty_cone_2,
-					# 		'price_unit': unit_price_cone_2,
-					# 		'tax_id': [(6, 0, rec.cone_2_id.taxes_id.ids)],
-					# 		#'price_unit': (rec.price_box - (rec.price_box * .12))
-					# 		}))
-					# if line.cone_3:
-					# 	mylist.append((0,0,{
-					# 		'product_id': rec.cone_3_id.id,
-					# 		'product_uom_qty': qty_cone_3,
-					# 		'price_unit': unit_price_cone_3,
-					# 		'tax_id': [(6, 0, rec.cone_3_id.taxes_id.ids)],
-					# 		#'price_unit': (rec.price_box - (rec.price_box * .12))
-					# 		}))
 
 					if seven_eleven_id:
 						so = self.env['sale.order'].sudo().create({
@@ -805,6 +711,7 @@ class GHCallSheet(models.Model):
 			rec.sale_ids = sale_ids
 			rec.picking_ids = picking_ids
 			rec.invoice_ids = invoice_ids
+		return True
 		
 	@api.multi
 	def action_view_sale(self):
@@ -860,7 +767,7 @@ class GHCallSheet(models.Model):
 					xls_dir_path = addons_list + '/seven_call_sheet'
 					break
 
-		FILENAME = xls_dir_path + '/payment_matching_UID'+str(uid) + '.xls'
+		FILENAME = xls_dir_path + '/collection_sheet_UID'+str(uid) + '.xls'
 		#FILENAME = "/odoo/TemporaryFiles/collection_sheet_UID"+str(uid) +".xls"
 		with open(FILENAME, "wb") as f:
 			text = self.coll_sheet_file_import
@@ -1154,7 +1061,7 @@ class AccountInvoice(models.Model):
 
 	@api.multi
 	def write(self, vals):
-		_logger.info(vals)
+		#_logger.info(vals)
 		if 'legacy_invoice' in vals:
 			#Check if Legacvy Invoice Exists
 			account_invoice = self.env['account.invoice'].search([('legacy_invoice', '=', vals['legacy_invoice'])])
@@ -1165,19 +1072,3 @@ class AccountInvoice(models.Model):
 				account_move.write({'name': vals['legacy_invoice'].zfill(5)})
 		res = super(AccountInvoice, self).write(vals)
 		return res
-
-
-
-
-
-# class seven_call_sheet(models.Model):
-#     _name = 'seven_call_sheet.seven_call_sheet'
-
-#     name = fields.Char()
-#     value = fields.Integer()
-#     value2 = fields.Float(compute="_value_pc", store=True)
-#     description = fields.Text()
-#
-#     @api.depends('value')
-#     def _value_pc(self):
-#         self.value2 = float(self.value) / 100
