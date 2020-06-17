@@ -20,7 +20,7 @@ class SaleOrder(models.Model):
 						('partner_id', '=', vals['partner_id']), 
 						('invoice_status', 'not in', [('invoiced')])
 						])
-					findInvoice = self.env['account.invoice'].search([('partner_id', '=', vals['partner_id']),('state', 'not in', [('paid','cancel')])])
+					findInvoice = self.env['account.invoice'].search([('partner_id', '=', vals['partner_id']),('state', 'not in', ['paid','cancel'])])
 
 					total_unpaid = 0
 
