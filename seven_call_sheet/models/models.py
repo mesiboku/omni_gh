@@ -515,7 +515,6 @@ class GHCallSheet(models.Model):
 	
 	@api.multi
 	def submit_approval(self):
-		api.s
 		_logger.info('START SUBMITTT-----------')
 		#for every line item check if with order
 		#_logger.info(self)
