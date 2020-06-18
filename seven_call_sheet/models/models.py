@@ -523,13 +523,19 @@ class GHCallSheet(models.Model):
 			picking_ids = []
 			invoice_ids= []
 
+			#Multiple Instance Update has Occured
+			#Error in Log
+			#odoo.sql_db: bad query: UPDATE "res_partner" SET "store_status_note"=NULL,"write_uid"=1,"write_date"=(now() at time zone 'UTC') WHERE id IN (3928)
+			#ERROR: could not serialize access due to concurrent update			
+
 			for line in rec.call_sheet_line_ids:
 				_logger.info('Start Legacy Invoice ' + line.legacy_invoice_number)
 				# UPDATE STORE STATUS NOTE IN PARTNER RECORD
 				partner = self.env['res.partner'].search([('id','=',line.partner_id.id)])
 				call_sheet_line_obj = self.env['seven_call_sheet.call_sheet_line'].search([('id', '=', line.id)])
 				if partner:
-					partner.write({'store_status_note': line.store_status_note})
+					if line.store_status_note:
+						partner.write({'store_status_note': line.store_status_note})
 
 				total_boxes = line.cone_1 + line.cone_2 + line.cone_3 + line.cone_4 + line.cone_5 + line.cone_6 + line.cone_7 + line.cone_8 + line.cone_9 + line.cone_10
 
