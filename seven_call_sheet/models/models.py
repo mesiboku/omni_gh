@@ -518,7 +518,7 @@ class GHCallSheet(models.Model):
 		_logger.info('START SUBMITTT-----------')
 		#for every line item check if with order
 		#_logger.info(self)
-		self.ensure_one()
+		#self.ensure_one()
 		for rec in self:
 			#_logger.info(rec.name)
 			_logger.info('Start Now')
