@@ -518,7 +518,7 @@ class GHCallSheet(models.Model):
 		_logger.info('START SUBMITTT-----------')
 		#for every line item check if with order
 		#_logger.info(self)
-		#self.ensure_one()
+		self.ensure_one()
 		for rec in self:
 			#_logger.info(rec.name)
 			_logger.info('Start Now')
@@ -628,7 +628,10 @@ class GHCallSheet(models.Model):
 						_logger.info('SO Legacy Invoice ' + line.legacy_invoice_number + ' STAR CONFIRM.' )
 						so = line.sales_id
 						_logger.info(so)
-						if (so.pending_ra <= 2):
+						#Check Pending RA
+						cnt = self.env['sale.order'].search_count([('partner_shipping_id','=',line.partner_shipping_id.id),
+																   ('state','=','sale'), ('received_ra','=',False)])
+						if (cnt <= 2):
 							so.sudo().action_confirm()
 							_logger.info('SO Legacy Invoice ' + line.legacy_invoice_number + ' CONFIRMED.' )
 						else:
