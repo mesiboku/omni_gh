@@ -517,8 +517,9 @@ class GHCallSheet(models.Model):
 	def submit_approval(self):
 		_logger.info('START SUBMITTT-----------')
 		#for every line item check if with order
-		#_logger.info(self)
+
 		self.ensure_one()
+		_logger.info(self)
 		for rec in self:
 			#_logger.info(rec.name)
 			_logger.info('Start Now')
