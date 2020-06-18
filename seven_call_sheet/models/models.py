@@ -515,9 +515,13 @@ class GHCallSheet(models.Model):
 	
 	@api.multi
 	def submit_approval(self):
+		api.s
 		_logger.info('START SUBMITTT-----------')
 		#for every line item check if with order
+		#_logger.info(self)
+		self.ensure_one()
 		for rec in self:
+			#_logger.info(rec.name)
 			_logger.info('Start Now')
 			sale_ids = []
 			picking_ids = []
