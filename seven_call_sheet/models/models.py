@@ -503,19 +503,12 @@ class GHCallSheet(models.Model):
 
 
 	def submit_approval(self):
-		_logger.info('START SUBMITTT-----------')
-		res = self.submit_approval_1()
-		if res:
-			_logger.info('END SUBMITTT---------')
-			return True
-
-
-		return False
-		#threaded_calculation = threading.Thread(target=self.submit_approval_1())
-		#threaded_calculation.start()
+		threaded_calculation = threading.Thread(target=self.submit_approval_1())
+		threaded_calculation.start()
 
 	
 	def submit_approval_1(self):
+		_logger.info('START SUBMITTT-----------')
 		#for every line item check if with order
 		for rec in self:
 			_logger.info('Start Now')
@@ -732,7 +725,8 @@ class GHCallSheet(models.Model):
 			rec.sale_ids = sale_ids
 			rec.picking_ids = picking_ids
 			rec.invoice_ids = invoice_ids
-		return True
+		_logger.info('END SUBMITTT-----------')
+		return {'type': 'ir.actions.client', 'tag': 'reload' }
 
 
 	@api.multi
