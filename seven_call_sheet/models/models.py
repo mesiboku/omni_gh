@@ -629,7 +629,7 @@ class GHCallSheet(models.Model):
 						so = line.sales_id
 						_logger.info(so)
 						#Check Pending RA
-						cnt = self.env['sale.order'].search_count([('partner_shipping_id','=',line.partner_shipping_id.id),
+						cnt = self.env['sale.order'].search_count([('partner_shipping_id','=',so.partner_shipping_id.id),
 																   ('state','=','sale'), ('received_ra','=',False)])
 						if (cnt <= 2):
 							so.sudo().action_confirm()
