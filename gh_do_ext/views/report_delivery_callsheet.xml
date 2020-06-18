@@ -391,7 +391,13 @@
 
 
         <template id="report_delivery_callsheet_header" inherit_id="web.external_layout_standard" primary="True">
-            <xpath expr="//div[@class='header']" position="replace"/>
+            <!--
+              <xpath expr="//div[@class='header']" position="replace"/>
+
+            -->
+            <xpath expr="//div[hasclass('header')]" position="replace"/>
+            
+            
          </template>
 
          <template id="external_layout_do_report" inherit_id="web.external_layout" primary="True">
