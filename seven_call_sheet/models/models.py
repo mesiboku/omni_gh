@@ -502,19 +502,23 @@ class GHCallSheet(models.Model):
 		return [qty_cone, unit_price_cone]
 
 
-	def submit_approval(self):
-		threaded_calculation = threading.Thread(target=self.submit_approval_1())
-		threaded_calculation.start()
+	#def submit_approval(self):
+	#	_logger.info('STARTTT!!!!!!')
+	#	res = self.submit_approval_1()
+	#	if res:
+		#threaded_calculation = threading.Thread(target=self.submit_approval_1())
+		#threaded_calculation.start()
+	#		return {'type': 'ir.actions.client', 'tag': 'reload' }
+	#	_logger.info('STARTTT!!!!!!')
+	#	return False
 
 	
-	def submit_approval_1(self):
+	@api.multi
+	def submit_approval(self):
 		_logger.info('START SUBMITTT-----------')
 		#for every line item check if with order
 		for rec in self:
 			_logger.info('Start Now')
-			rec.state = 'submitted'
-			rec.call_date_submitted = fields.Datetime.now()
-
 			sale_ids = []
 			picking_ids = []
 			invoice_ids= []
@@ -722,11 +726,22 @@ class GHCallSheet(models.Model):
 							if number and line.legacy_invoice_number:
 								current_invoice.move_id.sudo().write({'name': line.legacy_invoice_number.zfill(5)})
 			
-			rec.sale_ids = sale_ids
-			rec.picking_ids = picking_ids
-			rec.invoice_ids = invoice_ids
+			#rec.sale_ids = sale_ids
+			#rec.picking_ids = picking_ids
+			#rec.invoice_ids = invoice_ids
+			#rec.state = 'submitted'
+			#rec.call_date_submitted = fields.Datetime.now()
+
+			rec.write({
+				'state' : 'submitted',
+				'call_date_submitted' : fields.Datetime.now(),
+				'sale_ids' : sale_ids,
+				'picking_ids' : picking_ids,
+				'invoice_ids' : invoice_ids,
+			})			
 		_logger.info('END SUBMITTT-----------')
-		return {'type': 'ir.actions.client', 'tag': 'reload' }
+		return True
+		
 
 
 	@api.multi
