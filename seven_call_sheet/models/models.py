@@ -735,9 +735,9 @@ class GHCallSheet(models.Model):
 			rec.write({
 				'state' : 'submitted',
 				'call_date_submitted' : fields.Datetime.now(),
-				'sale_ids' : sale_ids,
-				'picking_ids' : picking_ids,
-				'invoice_ids' : invoice_ids,
+				'sale_ids' : [(6,0, sale_ids)],
+				'picking_ids' : [(6,0, picking_ids)],
+				'invoice_ids' : [(6,0, invoice_ids)],
 			})			
 		_logger.info('END SUBMITTT-----------')
 		return True
