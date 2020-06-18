@@ -503,7 +503,14 @@ class GHCallSheet(models.Model):
 
 
 	def submit_approval(self):
-		return self.submit_approval_1()
+		_logger.info('START SUBMITTT-----------')
+		res = self.submit_approval_1()
+		if res:
+			_logger.info('END SUBMITTT---------')
+			return True
+
+
+		return False
 		#threaded_calculation = threading.Thread(target=self.submit_approval_1())
 		#threaded_calculation.start()
 
