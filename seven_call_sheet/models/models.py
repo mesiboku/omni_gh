@@ -627,6 +627,7 @@ class GHCallSheet(models.Model):
 					if line.sales_id.state != 'sale':
 						_logger.info('SO Legacy Invoice ' + line.legacy_invoice_number + ' STAR CONFIRM.' )
 						so = line.sales_id
+						_logger.info(so)
 						if (so.pending_ra <= 2):
 							so.sudo().action_confirm()
 							_logger.info('SO Legacy Invoice ' + line.legacy_invoice_number + ' CONFIRMED.' )
