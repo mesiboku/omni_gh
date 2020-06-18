@@ -535,7 +535,7 @@ class GHCallSheet(models.Model):
 				_logger.info('Start Legacy Invoice ' + line.legacy_invoice_number)
 				# UPDATE STORE STATUS NOTE IN PARTNER RECORD
 				partner = self.env['res.partner'].search([('id','=',line.partner_id.id)])
-				call_sheet_line_obj = self.env['seven_call_sheet.call_sheet_line'].search([('id', '=', line.id)])
+				#call_sheet_line_obj = self.env['seven_call_sheet.call_sheet_line'].search([('id', '=', line.id)])
 				if partner:
 					if line.store_status_note:
 						partner.write({'store_status_note': line.store_status_note})
@@ -608,22 +608,31 @@ class GHCallSheet(models.Model):
 
 						# LINK SO
 						if so:
-							_logger.info('SO Legacy Invoice ' + line.legacy_invoice_number + ' CREATED.' )
-                            
+							_logger.info('SO Legacy Invoice ' + line.legacy_invoice_number + ' CREATED.' )                            
 							sale_ids.append(so.id)
 							#Update the Link Sales Order
-							call_sheet_line_obj.write(
-								{
-									'sales_id': so.id
-								})
+							line.write({'sales_id': so.id})
 
 						#Check if it can be confirmed, then confirm
+						#if (so.pending_ra <= 2):
+						#	so.sudo().action_confirm()
+						#	_logger.info('SO Legacy Invoice ' + line.legacy_invoice_number + ' CONFIRM.' )
+						#else:
+						#	_logger.info('SO Legacy Invoice ' + line.legacy_invoice_number + ' ON HOLD.' )
+						#	so.state = "hold"
+			
+			#Start Confirmation of Sales
+			for line in rec.call_sheet_line_ids:
+				if line.sales_id:
+					if line.sales_id.state != 'sale':
+						_logger.info('SO Legacy Invoice ' + line.legacy_invoice_number + ' STAR CONFIRM.' )
+						so = line.sales_id
 						if (so.pending_ra <= 2):
 							so.sudo().action_confirm()
-							_logger.info('SO Legacy Invoice ' + line.legacy_invoice_number + ' CONFIRM.' )
+							_logger.info('SO Legacy Invoice ' + line.legacy_invoice_number + ' CONFIRMED.' )
 						else:
-							_logger.info('SO Legacy Invoice ' + line.legacy_invoice_number + ' ON HOLD.' )
 							so.state = "hold"
+							_logger.info('SO Legacy Invoice ' + line.legacy_invoice_number + ' ON HOLD.' )
 			
 			# Update Pickings
 			_logger.info('Start Update Picking')
@@ -638,11 +647,10 @@ class GHCallSheet(models.Model):
 						picking.with_context(force_company=force_company_id).write({'company_id': self.env.user.company_id.id})
 						picking_ids.append(picking.id)
 						#Update the Delivery Order
-						call_sheet_line_obj.write({'stock_picking_id': picking.id})
+						line.write({'stock_picking_id': picking.id})
 
 						for move_line in picking.move_lines:
 							#Check Move lines sale_line_id
-
 							bom_obj =self.env['mrp.bom'] 							
 							bom_product = bom_obj.search([('product_tmpl_id','=', move_line.sale_line_id.product_id.product_tmpl_id.id)], limit=1)
 							if not bom_product:
@@ -723,7 +731,7 @@ class GHCallSheet(models.Model):
 						
 						invcs = so.sudo().action_invoice_create()
 						invoice_ids.append(invcs[0])
-						call_sheet_line_obj.write({'invoice_id': invcs[0]})
+						line.write({'invoice_id': invcs[0]})
 
 						current_invoice = self.env['account.invoice'].sudo().search([('id', '=', invcs[0])])
 
@@ -735,12 +743,6 @@ class GHCallSheet(models.Model):
 							if number and line.legacy_invoice_number:
 								current_invoice.move_id.sudo().write({'name': line.legacy_invoice_number.zfill(5)})
 			
-			#rec.sale_ids = sale_ids
-			#rec.picking_ids = picking_ids
-			#rec.invoice_ids = invoice_ids
-			#rec.state = 'submitted'
-			#rec.call_date_submitted = fields.Datetime.now()
-
 			rec.write({
 				'state' : 'submitted',
 				'call_date_submitted' : fields.Datetime.now(),
