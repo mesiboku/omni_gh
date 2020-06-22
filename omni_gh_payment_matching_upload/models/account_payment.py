@@ -121,12 +121,12 @@ class AccountPayment(models.Model):
 							if account_invoice_obj.amount_total == col_amount:
 								#If All Qualify then Start Invoice Payment
 								_logger.info('HERE------------4')
-								if account_invoice_obj.account_id.company_id.id != self.env.user.company_id.id:
-									_logger.info(account_invoice_obj.number)
-									_logger.info(account_invoice_obj.company_id.name)
-									_logger.info(account_invoice_obj.account_id.name)
-									_logger.info(account_invoice_obj.account_id.company_id.name)
-									log_info += "* Legacy Invoice Number %s Discrepancy in Account Receivable COA. \n " %(account_invoice_obj.name)
+								if account_invoice_obj.sudo().account_id.company_id.id != self.env.user.company_id.id:
+									_logger.info(account_invoice_obj.sudo().number)
+									_logger.info(account_invoice_obj.sudo().company_id.name)
+									_logger.info(account_invoice_obj.sudo().account_id.name)
+									_logger.info(account_invoice_obj.sudo().account_id.company_id.name)
+									log_info += "* Legacy Invoice Number %s Discrepancy in Account Receivable COA. \n " %(account_invoice_obj.sudo().name)
 									is_jl_err = True
 								else:
 									account_invoice_obj.assign_outstanding_credit(credit_move_line_id)
