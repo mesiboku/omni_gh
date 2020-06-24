@@ -5,6 +5,10 @@
       <field name="model">account.payment</field>
       <field name="inherit_id" ref="account.view_account_payment_form"/>
       <field name="arch" type="xml">
+          <field name ="payment_date" position="after">
+            <field name="check_received_date"/>
+          </field>
+          
           <xpath expr="//sheet/group[1]" position="after">
             <notebook>
               <page string="Uploaded Invoice Discrepancy" attrs="{'invisible': [('payment_type', 'not in',['inbound', 'transfer'])]}">
