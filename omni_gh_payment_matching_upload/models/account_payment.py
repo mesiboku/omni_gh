@@ -24,6 +24,7 @@ class AccountPayment(models.Model):
 	file_name = fields.Char("File Name")
 
 	payment_unmatch_ids = fields.One2many('account.payment.unmatch', 'payment_id', string='Invoice Discrepancy')
+	check_received_date = fields.Date(string='Check Received Date')
 
 	@api.one
 	def generatePaymentMatching(self, credit_move_line_id):
