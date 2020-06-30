@@ -8,4 +8,21 @@
             <field name="company_id" eval="False"/>
         </record>
     </data>
+
+    <data noupdate="0">
+        <record forcecreate="True" id="ir_cron_pend_callsheet_scheduler_action" model="ir.cron">
+            <field name="name">Process Pending CallSheet</field>
+            <field name="model_id" ref="model_seven_call_sheet_call_sheet"/>
+            <field name="state">code</field>
+            <field name="code">model.process_pending_callsheet()</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">6</field>
+            <field name="interval_type">hours</field>
+            <field name="numbercall">-1</field>
+            <field eval="False" name="doall"/>
+    	</record>
+    </data>
+
+
+
 </odoo>
