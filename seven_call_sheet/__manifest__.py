@@ -19,7 +19,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','base_setup','sales_team','resource','sale','stock','account','product','partner_seven_extension','gh_receiving_advice',],
+    'depends': ['base','base_setup','sales_team','resource','sale','stock','account','product','partner_seven_extension','gh_receiving_advice', 'partner_credit_limit'],
 
     # always loaded
     'data': [

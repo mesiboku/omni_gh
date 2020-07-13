@@ -35,11 +35,12 @@
             <button string="Upload Orders from Excel" type="action" name="%(action_view_call_sheet_upload)d" class="oe_highlight" attrs="{'invisible': [('state', 'not in', ['draft'])]}"/>            
             <button string="Load stores in area" type="object" name="area_changed" class="oe_highlight"
               attrs="{'invisible': [('state', 'not in', ['draft'])]}"/>
+            <!--
             <button string="Submit for Approval" type="object" name="pending_approval" class="oe_highlight"
-              attrs="{'invisible': [('state', 'not in', ['draft'])]}"/>
+              attrs="{'invisible': [('state', 'not in', ['draft'])]}"/> -->
 
             <button string="Submit to Approve" type="object" name="submit_approval" class="oe_highlight"
-              attrs="{'invisible': [('state', 'not in', ['draft'])]}" groups="base.group_system"/>
+              attrs="{'invisible': [('state', 'not in', ['draft'])]}" /> <!-- groups="base.group_system"-->
             <field name="state" widget="statusbar"/>
           </header>
           <sheet>

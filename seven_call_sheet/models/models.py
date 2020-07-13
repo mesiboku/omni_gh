@@ -506,26 +506,52 @@ class GHCallSheet(models.Model):
 
 	@api.model
 	def process_pending_callsheet(self):
+		# #_logger.info('START!!!')
+		# seven_call_sheet_obj = self.env['seven_call_sheet.call_sheet'].search([('state','=', 'pending')])
+		# if seven_call_sheet_obj:
+		# 	for seven_call_sheet in seven_call_sheet_obj:
+		# 		#_logger.info('START CREATING SO FOR ' + seven_call_sheet.name )
+		# 		res_so = seven_call_sheet.create_salesorder()
+		# 		#_logger.info('END CREATED SO FOR ' + seven_call_sheet.name )
+		# 		if res_so:
+		# 			#_logger.info('START APPROVING SO FOR ' + seven_call_sheet.name )
+		# 			res_so_approved = seven_call_sheet.approve_salesorder()			
+		# 			#_logger.info('APPROVED SO FOR ' + seven_call_sheet.name )
+		# 			if res_so_approved:
+		# 				#_logger.info('START CHECK TRANSFOR FOR ' + seven_call_sheet.name )
+		# 				res_transfer_info = seven_call_sheet.check_transferinfo()
+		# 				#_logger.info('END CHECK SO FOR ' + seven_call_sheet.name )
+		# 				if res_transfer_info:
+		# 					#_logger.info('START SI FOR ' + seven_call_sheet.name )
+		# 					res_so_invoice = seven_call_sheet.sales_invoice()
+		# 					#_logger.info('END SI FOR ' + seven_call_sheet.name )
+		# 					seven_call_sheet.write({'state':'submitted'})
+		# #_logger.info('END!!!')
+		# return True
+
 		#_logger.info('START!!!')
 		seven_call_sheet_obj = self.env['seven_call_sheet.call_sheet'].search([('state','=', 'pending')])
 		if seven_call_sheet_obj:
 			for seven_call_sheet in seven_call_sheet_obj:
-				#_logger.info('START CREATING SO FOR ' + seven_call_sheet.name )
-				res_so = seven_call_sheet.create_salesorder()
-				#_logger.info('END CREATED SO FOR ' + seven_call_sheet.name )
-				if res_so:
-					#_logger.info('START APPROVING SO FOR ' + seven_call_sheet.name )
-					res_so_approved = seven_call_sheet.approve_salesorder()			
-					#_logger.info('APPROVED SO FOR ' + seven_call_sheet.name )
-					if res_so_approved:
-						#_logger.info('START CHECK TRANSFOR FOR ' + seven_call_sheet.name )
-						res_transfer_info = seven_call_sheet.check_transferinfo()
-						#_logger.info('END CHECK SO FOR ' + seven_call_sheet.name )
-						if res_transfer_info:
-							#_logger.info('START SI FOR ' + seven_call_sheet.name )
-							res_so_invoice = seven_call_sheet.sales_invoice()
-							#_logger.info('END SI FOR ' + seven_call_sheet.name )
-							seven_call_sheet.write({'state':'submitted'})
+				for line in seven_call_sheet.call_sheet_line_ids:
+					_logger.info('START CREATING SO FOR ' + seven_call_sheet.name )
+					line.create_salesorder()
+					_logger.info('END CREATED SO FOR ' + seven_call_sheet.name )
+					
+				for line in seven_call_sheet.call_sheet_line_ids:
+					seven_call_sheet.approve_salesorder()			
+					_logger.info('APPROVED SO FOR ' + seven_call_sheet.name )
+						
+				for line in seven_call_sheet.call_sheet_line_ids:
+					seven_call_sheet.check_transferinfo()
+					_logger.info('END CHECK SO FOR ' + seven_call_sheet.name )
+
+				for line in seven_call_sheet.call_sheet_line_ids:
+					_logger.info('START SI FOR ' + seven_call_sheet.name )
+					seven_call_sheet.sales_invoice()
+					_logger.info('END SI FOR ' + seven_call_sheet.name )
+					
+				seven_call_sheet.write({'state':'submitted'})
 		#_logger.info('END!!!')
 		return True
 
@@ -609,6 +635,7 @@ class GHCallSheet(models.Model):
 						'partner_shipping_id': line.partner_id.id,
 						'warehouse_id': rec.warehouse_id.id,
 						'company_id': rec.company_id.id,
+						'override_check_limit': True,
 						'order_line': mylist
 						})
 					# LINK SO
@@ -839,6 +866,7 @@ class GHCallSheet(models.Model):
 							'partner_shipping_id': line.partner_id.id,
 							'warehouse_id': rec.warehouse_id.id,
 							'company_id': rec.company_id.id,
+							'override_check_limit': True,
 							'order_line': mylist
 							})
 
@@ -1322,6 +1350,219 @@ class CallSheetLine(models.Model):
 		string='Amount',
 		compute="_value_amount"
 	)
+
+
+	@api.multi
+	def create_salesorder(self):
+		for line in self:
+			sale_ids = []
+			call_sheet_id = line.call_sheet_id
+			# UPDATE STORE STATUS NOTE IN PARTNER RECORD
+			partner = self.env['res.partner'].search([('id','=',line.partner_id.id)])
+			#call_sheet_line_obj = self.env['seven_call_sheet.call_sheet_line'].search([('id', '=', line.id)])
+			if partner:
+				if line.store_status_note:
+					partner.write({'store_status_note': line.store_status_note})
+
+			total_boxes = line.cone_1 + line.cone_2 + line.cone_3 + line.cone_4 + line.cone_5 + line.cone_6 + line.cone_7 + line.cone_8 + line.cone_9 + line.cone_10
+
+			if (total_boxes > 0):
+				if not line.legacy_invoice_number:
+				# 	raise UserError(_('Store %s has no Legacy Invoice Number. Please populate the Legacy Invoice Number.' % line.partner_id.name))
+					continue
+
+				#Convertion of Quantity
+				unit_price_cone_1 = 0
+				unit_price_cone_2 = 0
+				unit_price_cone_3 = 0
+				unit_price_cone_4 = 0
+				unit_price_cone_5 = 0
+				unit_price_cone_6 = 0
+				unit_price_cone_7 = 0
+				unit_price_cone_8 = 0
+				unit_price_cone_9 = 0
+				unit_price_cone_10 = 0
+
+				qty_cone_1 = 0
+				qty_cone_2 = 0
+				qty_cone_3 = 0
+				qty_cone_4 = 0
+				qty_cone_5 = 0
+				qty_cone_6 = 0
+				qty_cone_7 = 0
+				qty_cone_8 = 0
+				qty_cone_9 = 0
+				qty_cone_10 = 0
+
+				record_list = {}
+				numbers =  [1,2,3,4,5,6,7,8,9,10]
+				for number in numbers:
+					qty_cone_number = 'qty_cone_' + str(number)
+					unit_price_number  =  'unit_price_cone_' + str(number)
+					record_list[qty_cone_number], record_list[unit_price_number] = call_sheet_id.getConeQty(line, number)
+				
+				#Create Sales Order
+				seven_eleven_id = self.env['res.partner'].search([('name','=','Philippine Seven Corporation')])[0]					
+				#prepare order lines
+				mylist =[]
+
+				for number in numbers:
+					cone = 'cone_' + str(number)
+					rec_cone = 'cone_' + str(number) + '_id'
+					qty_cone_number = 'qty_cone_' + str(number)
+					unit_price_number  =  'unit_price_cone_' + str(number)
+					if line[cone]:
+						mylist.append((0,0,{
+						'product_id': rec[rec_cone].id,
+						'product_uom_qty': record_list[qty_cone_number],
+						'price_unit': record_list[unit_price_number],
+						'tax_id': [(6, 0, rec[rec_cone].taxes_id.ids)],
+						}))
+
+				if seven_eleven_id:
+					so = self.env['sale.order'].sudo().create({
+						'partner_id': seven_eleven_id.id,
+						'partner_invoice_id': seven_eleven_id.id,
+						'partner_shipping_id': line.partner_id.id,
+						'warehouse_id': call_sheet_id.warehouse_id.id,
+						'company_id': call_sheet_id.company_id.id,
+						'order_line': mylist
+						})
+					# LINK SO
+					if so:
+						sale_ids.append(so.id)
+						#Update the Link Sales Order
+						line.write({'sales_id': so.id})
+
+			call_sheet_id.write({'sale_ids' : [(6,0, sale_ids)],})
+		return True
+
+
+	@api.multi
+	def approve_salesorder(self):
+		for line in self:
+			if line.sales_id:
+				if line.sales_id.state != 'sale':
+					so = line.sales_id
+					force_company_id = line.sales_id.company_id.id
+					#Check Pending RA
+					cnt = self.env['sale.order'].search_count([('partner_shipping_id','=',so.partner_shipping_id.id),
+															   ('state','=','sale'), ('received_ra','=',False)])
+					if (cnt <= 2):
+						so.sudo().with_context(force_company=force_company_id).action_confirm()
+					else:
+						so.state = "hold"
+		return True
+
+	@api.multi
+	def check_transferinfo(self):
+		for line in self:
+			picking_ids = []
+			call_sheet_id = line.call_sheet_id
+			if line.sales_id.state == 'sale':
+				so = line.sales_id
+				force_company_id = call_sheet_id.warehouse_id.company_id.id
+				picking = self.env['stock.picking'].sudo().with_context(force_company=force_company_id).search([('origin','=', so.name)], limit=1)
+				if picking:					
+					#picking.with_context(force_company=force_company_id).write({'company_id': self.env.user.company_id.id})
+					picking.with_context(force_company=force_company_id).write({'company_id': force_company_id})
+					picking_ids.append(picking.id)
+					#Update the Delivery Order
+					line.write({'stock_picking_id': picking.id})
+
+					for move_line in picking.move_lines:
+						#Check Move lines sale_line_id
+						bom_obj =self.env['mrp.bom'] 							
+						bom_product = bom_obj.search([('product_tmpl_id','=', move_line.sale_line_id.product_id.product_tmpl_id.id)], limit=1)
+						if not bom_product:
+							#Check Cone 1
+							if call_sheet_id.cone_1_id.id == move_line.product_id.id:
+								move_line.write({
+									'product_uom_qty': line.cone_1,
+									'product_uom': call_sheet_id.cone_1_product_uom.id})
+							#Check Cone 2
+							elif call_sheet_id.cone_2_id.id == move_line.product_id.id:
+								move_line.write({
+									'product_uom_qty': line.cone_2,
+									'product_uom': call_sheet_id.cone_2_product_uom.id})
+							#Check Cone 3
+							elif call_sheet_id.cone_3_id.id == move_line.product_id.id:
+								move_line.write({
+									'product_uom_qty': line.cone_3,
+									'product_uom': call_sheet_id.cone_3_product_uom.id})
+							#Check Cone 4
+							elif call_sheet_id.cone_4_id.id == move_line.product_id.id:
+								move_line.write({
+									'product_uom_qty': line.cone_4,
+									'product_uom': call_sheet_id.cone_4_product_uom.id})
+							#Check Cone 5
+							elif call_sheet_id.cone_5_id.id == move_line.product_id.id:
+								move_line.write({
+									'product_uom_qty': line.cone_5,
+									'product_uom': call_sheet_id.cone_5_product_uom.id})
+							#Check Cone 6
+							elif call_sheet_id.cone_6_id.id == move_line.product_id.id:
+								move_line.write({
+									'product_uom_qty': line.cone_6,
+									'product_uom': call_sheet_id.cone_6_product_uom.id})
+							#Check Cone 7
+							elif call_sheet_id.cone_7_id.id == move_line.product_id.id:
+								move_line.write({
+									'product_uom_qty': line.cone_7,
+									'product_uom': call_sheet_id.cone_7_product_uom.id})
+							#Check Cone 8
+							elif call_sheet_id.cone_8_id.id == move_line.product_id.id:
+								move_line.write({
+									'product_uom_qty': line.cone_8,
+									'product_uom': call_sheet_id.cone_8_product_uom.id})
+							#Check Cone 9
+							elif call_sheet_id.cone_9_id.id == move_line.product_id.id:
+								move_line.write({
+									'product_uom_qty': line.cone_9,
+									'product_uom': call_sheet_id.cone_9_product_uom.id})
+							#Check Cone 10
+							else:
+								move_line.write({
+									'product_uom_qty': line.cone_10,
+									'product_uom': call_sheet_id.cone_10_product_uom.id})
+
+			call_sheet_id.write({'picking_ids' : [(6,0, picking_ids)],})
+		return True
+
+	@api.multi 
+	def sales_invoice(self):
+		for line in self:
+			invoice_ids= []
+			call_sheet_id = line.call_sheet_id
+			if line.sales_id.state == 'sale':
+				so = line.sales_id
+				#Check if Invoice Number already Exist
+				if line.legacy_invoice_number:
+					#Changes By Me Today
+					force_company_id = call_sheet_id.company_id.id
+					journal_id = self.env['account.journal'].search([('type','=', 'sale'), ('company_id','=', force_company_id)])
+					current_invoice_check = self.env['account.invoice'].with_context(force_company=force_company_id).search([('number', '=', line.legacy_invoice_number.zfill(5))])
+					if current_invoice_check:
+						# raise UserError(_('Legacy Invoice Number %s already exists. Please Change the Invoice Number.' % line.legacy_invoice_number.zfill(5)))
+						continue
+					
+					invcs = so.sudo().with_context(force_company=force_company_id).action_invoice_create()
+					invoice_ids.append(invcs[0])
+					line.write({'invoice_id': invcs[0]})
+					current_invoice = self.env['account.invoice'].sudo().search([('id', '=', invcs[0])])					
+					if current_invoice:
+						if current_invoice.journal_id.company_id.id != force_company_id:
+							current_invoice.sudo().write({'journal_id': journal_id.id})
+						#current_invoice.sudo().with_context(force_company=force_company_id).action_invoice_open_for_callsheet()
+						current_invoice.sudo().with_context(force_company=force_company_id).action_invoice_open()
+						current_invoice.sudo().write({'legacy_invoice': line.legacy_invoice_number})
+						number = current_invoice.move_id.name
+						if number and line.legacy_invoice_number:
+							current_invoice.move_id.sudo().write({'name': line.legacy_invoice_number.zfill(5)})
+
+
+			call_sheet_id.write({'invoice_ids' : [(6,0, invoice_ids)],})
+		return True
 
 
 
