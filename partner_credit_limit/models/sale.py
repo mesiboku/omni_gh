@@ -2,13 +2,15 @@
 
 from datetime import datetime
 
-from odoo import api, models, _
+from odoo import api, models,fields, _
 from odoo.exceptions import UserError
 from odoo.tools import DEFAULT_SERVER_DATE_FORMAT as DF
 
 
 class SaleOrder(models.Model):
 	_inherit = "sale.order"
+
+	override_check_limit = fields.Boolean('Override Credit Limit', default=False)
 
 	@api.model
 	def create(self, vals):
@@ -99,6 +101,6 @@ class SaleOrder(models.Model):
 	def action_confirm(self):
 		res = super(SaleOrder, self).action_confirm()
 		for order in self:
-			order.check_limit()
-
+			if not order.override_check_limit:
+				order.check_limit()
 		return res

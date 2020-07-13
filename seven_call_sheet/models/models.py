@@ -548,7 +548,7 @@ class GHCallSheet(models.Model):
 
 				for line in seven_call_sheet.call_sheet_line_ids:
 					_logger.info('START SI FOR ' + seven_call_sheet.name )
-					 seven_call_sheet.sales_invoice()
+					seven_call_sheet.sales_invoice()
 					_logger.info('END SI FOR ' + seven_call_sheet.name )
 					
 				seven_call_sheet.write({'state':'submitted'})
@@ -635,6 +635,7 @@ class GHCallSheet(models.Model):
 						'partner_shipping_id': line.partner_id.id,
 						'warehouse_id': rec.warehouse_id.id,
 						'company_id': rec.company_id.id,
+						'override_check_limit': True,
 						'order_line': mylist
 						})
 					# LINK SO
@@ -865,6 +866,7 @@ class GHCallSheet(models.Model):
 							'partner_shipping_id': line.partner_id.id,
 							'warehouse_id': rec.warehouse_id.id,
 							'company_id': rec.company_id.id,
+							'override_check_limit': True,
 							'order_line': mylist
 							})
 
