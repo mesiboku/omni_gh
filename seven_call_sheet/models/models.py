@@ -530,24 +530,18 @@ class GHCallSheet(models.Model):
 		# return True
 
 		_logger.info('START!!!')
-		
-		
 		seven_call_sheet_obj = self.env['seven_call_sheet.call_sheet'].search([('state','=', 'pending')])
 		if seven_call_sheet_obj:
 			for seven_call_sheet in seven_call_sheet_obj:
-				sale_ids = []
-				picking_ids = []
-				invoice_ids = []
 				for line in seven_call_sheet.call_sheet_line_ids:
 					_logger.info('START CREATING SO FOR ' + seven_call_sheet.name )
 					line.create_salesorder()
 					_logger.info('END CREATED SO FOR ' + seven_call_sheet.name )
-					
+
 				for line in seven_call_sheet.call_sheet_line_ids:
 					seven_call_sheet.approve_salesorder()					
 					_logger.info('APPROVED SO FOR ' + seven_call_sheet.name )
 
-						
 				for line in seven_call_sheet.call_sheet_line_ids:
 					seven_call_sheet.check_transferinfo()
 					_logger.info('END CHECK SO FOR ' + seven_call_sheet.name )
