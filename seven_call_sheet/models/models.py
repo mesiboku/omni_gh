@@ -529,7 +529,7 @@ class GHCallSheet(models.Model):
 		# #_logger.info('END!!!')
 		# return True
 
-		#_logger.info('START!!!')
+		_logger.info('START!!!')
 		seven_call_sheet_obj = self.env['seven_call_sheet.call_sheet'].search([('state','=', 'pending')])
 		if seven_call_sheet_obj:
 			for seven_call_sheet in seven_call_sheet_obj:
@@ -552,7 +552,7 @@ class GHCallSheet(models.Model):
 					_logger.info('END SI FOR ' + seven_call_sheet.name )
 					
 				seven_call_sheet.write({'state':'submitted'})
-		#_logger.info('END!!!')
+		_logger.info('END!!!')
 		return True
 
 
@@ -1412,11 +1412,19 @@ class CallSheetLine(models.Model):
 					qty_cone_number = 'qty_cone_' + str(number)
 					unit_price_number  =  'unit_price_cone_' + str(number)
 					if line[cone]:
+						
+						# mylist.append((0,0,{
+						# 'product_id': rec[rec_cone].id,
+						# 'product_uom_qty': record_list[qty_cone_number],
+						# 'price_unit': record_list[unit_price_number],
+						# 'tax_id': [(6, 0, rec[rec_cone].taxes_id.ids)],
+						# }))
+
 						mylist.append((0,0,{
-						'product_id': rec[rec_cone].id,
+						'product_id': call_sheet_id[rec_cone].id,
 						'product_uom_qty': record_list[qty_cone_number],
 						'price_unit': record_list[unit_price_number],
-						'tax_id': [(6, 0, rec[rec_cone].taxes_id.ids)],
+						'tax_id': [(6, 0, call_sheet_id[rec_cone].taxes_id.ids)],
 						}))
 
 				if seven_eleven_id:
