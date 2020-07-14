@@ -530,17 +530,23 @@ class GHCallSheet(models.Model):
 		# return True
 
 		_logger.info('START!!!')
+		
+		
 		seven_call_sheet_obj = self.env['seven_call_sheet.call_sheet'].search([('state','=', 'pending')])
 		if seven_call_sheet_obj:
 			for seven_call_sheet in seven_call_sheet_obj:
+				sale_ids = []
+				picking_ids = []
+				invoice_ids = []
 				for line in seven_call_sheet.call_sheet_line_ids:
 					_logger.info('START CREATING SO FOR ' + seven_call_sheet.name )
 					line.create_salesorder()
 					_logger.info('END CREATED SO FOR ' + seven_call_sheet.name )
 					
 				for line in seven_call_sheet.call_sheet_line_ids:
-					seven_call_sheet.approve_salesorder()			
+					seven_call_sheet.approve_salesorder()					
 					_logger.info('APPROVED SO FOR ' + seven_call_sheet.name )
+
 						
 				for line in seven_call_sheet.call_sheet_line_ids:
 					seven_call_sheet.check_transferinfo()
@@ -551,7 +557,7 @@ class GHCallSheet(models.Model):
 					seven_call_sheet.sales_invoice()
 					_logger.info('END SI FOR ' + seven_call_sheet.name )
 					
-				seven_call_sheet.write({'state':'submitted'})
+				seven_call_sheet.write({'state':'submitted',})
 		_logger.info('END!!!')
 		return True
 
@@ -1356,10 +1362,13 @@ class CallSheetLine(models.Model):
 	def create_salesorder(self):
 		for line in self:
 			sale_ids = []
+			sale_id = False
 			call_sheet_id = line.call_sheet_id
 			# UPDATE STORE STATUS NOTE IN PARTNER RECORD
 			partner = self.env['res.partner'].search([('id','=',line.partner_id.id)])
 			#call_sheet_line_obj = self.env['seven_call_sheet.call_sheet_line'].search([('id', '=', line.id)])
+			if line.sales_id:
+				continue
 			if partner:
 				if line.store_status_note:
 					partner.write({'store_status_note': line.store_status_note})
@@ -1428,7 +1437,6 @@ class CallSheetLine(models.Model):
 						}))
 
 				if seven_eleven_id:
-					_logger.info('CCCCC')
 					so = self.env['sale.order'].sudo().create({
 						'partner_id': seven_eleven_id.id,
 						'partner_invoice_id': seven_eleven_id.id,
@@ -1442,9 +1450,12 @@ class CallSheetLine(models.Model):
 					if so:
 						sale_ids.append(so.id)
 						#Update the Link Sales Order
+						sale_id = so.id
 						line.write({'sales_id': so.id})
 
-			call_sheet_id.write({'sale_ids' : [(6,0, sale_ids)],})
+			#call_sheet_id.write({'sale_ids' : [(6,0, sale_ids)],})
+			if sale_id:
+				call_sheet_id.write({'sale_ids' : [(4, sale_id)],})
 		return True
 
 
@@ -1467,7 +1478,10 @@ class CallSheetLine(models.Model):
 	@api.multi
 	def check_transferinfo(self):
 		for line in self:
+			if line.stock_picking_id:
+				continue
 			picking_ids = []
+			picking_id = False
 			call_sheet_id = line.call_sheet_id
 			if line.sales_id.state == 'sale':
 				so = line.sales_id
@@ -1477,6 +1491,7 @@ class CallSheetLine(models.Model):
 					#picking.with_context(force_company=force_company_id).write({'company_id': self.env.user.company_id.id})
 					picking.with_context(force_company=force_company_id).write({'company_id': force_company_id})
 					picking_ids.append(picking.id)
+					picking_id = picking.id
 					#Update the Delivery Order
 					line.write({'stock_picking_id': picking.id})
 
@@ -1536,14 +1551,19 @@ class CallSheetLine(models.Model):
 									'product_uom_qty': line.cone_10,
 									'product_uom': call_sheet_id.cone_10_product_uom.id})
 
-			call_sheet_id.write({'picking_ids' : [(6,0, picking_ids)],})
+			#call_sheet_id.write({'picking_ids' : [(6,0, picking_ids)],})
+			if picking_id:
+				call_sheet_id.write({'picking_ids' : [(4, picking_id)],})
 		return True
 
 	@api.multi 
 	def sales_invoice(self):
 		for line in self:
 			invoice_ids= []
+			invoice_id = False
 			call_sheet_id = line.call_sheet_id
+			if line.invoice_id:
+				continue
 			if line.sales_id.state == 'sale':
 				so = line.sales_id
 				#Check if Invoice Number already Exist
@@ -1559,6 +1579,7 @@ class CallSheetLine(models.Model):
 					invcs = so.sudo().with_context(force_company=force_company_id).action_invoice_create()
 					invoice_ids.append(invcs[0])
 					line.write({'invoice_id': invcs[0]})
+					invoice_id=  invcs[0]
 					current_invoice = self.env['account.invoice'].sudo().search([('id', '=', invcs[0])])					
 					if current_invoice:
 						if current_invoice.journal_id.company_id.id != force_company_id:
@@ -1571,7 +1592,9 @@ class CallSheetLine(models.Model):
 							current_invoice.move_id.sudo().write({'name': line.legacy_invoice_number.zfill(5)})
 
 
-			call_sheet_id.write({'invoice_ids' : [(6,0, invoice_ids)],})
+			#call_sheet_id.write({'invoice_ids' : [(6,0, invoice_ids)],})
+			if invoice_id:
+				call_sheet_id.write({'invoice_ids' : [(4, invoice_id)],})
 		return True
 
 
