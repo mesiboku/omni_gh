@@ -1428,12 +1428,14 @@ class CallSheetLine(models.Model):
 						}))
 
 				if seven_eleven_id:
+					_logger.info('CCCCC')
 					so = self.env['sale.order'].sudo().create({
 						'partner_id': seven_eleven_id.id,
 						'partner_invoice_id': seven_eleven_id.id,
 						'partner_shipping_id': line.partner_id.id,
 						'warehouse_id': call_sheet_id.warehouse_id.id,
 						'company_id': call_sheet_id.company_id.id,
+						'override_check_limit': True,
 						'order_line': mylist
 						})
 					# LINK SO
