@@ -67,66 +67,66 @@ def process_callsheet():
 				# CREATE SALES ORDER
 				count_update = 0
 				for line in callsheet_lines:
-					line_fields = ['id', 'store_name', 'sales_id']
+					line_fields = ['id', 'store_number', 'sales_id']
 					line_data = dest_models.execute(dest_DB, dest_uid, dest_PASS, 'seven_call_sheet.call_sheet_line', 'read', line, line_fields)
 					
 					if line_data:
 						line_sales_id = line_data[0]['sales_id']
-						line_store_name = line_data[0]['store_name']
+						line_store_number = line_data[0]['store_number']
 
 						if not line_sales_id:
 							calesheet_create_salesorder = dest_models.execute_kw(dest_DB, dest_uid, dest_PASS, 'seven_call_sheet.call_sheet_line', 'create_salesorder', [line])
 							if calesheet_create_salesorder:
 								count_update += 1
-								print "[%s] %s - CREATED SALES ORDER FOR STORE: %s" % (str(count_update), str(callsheet_name), str(line_store_name))
+								print "[%s] %s - CREATED SALES ORDER FOR STORE: %s" % (str(count_update), str(callsheet_name), str(line_store_number))
 
 				# APPROVE SALES ORDER
 				count_update = 0
 				for line in callsheet_lines:
-					line_fields = ['id', 'store_name', 'sales_id']
+					line_fields = ['id', 'store_number', 'sales_id']
 					line_data = dest_models.execute(dest_DB, dest_uid, dest_PASS, 'seven_call_sheet.call_sheet_line', 'read', line, line_fields)
 					
 					if line_data:
 						line_sales_id = line_data[0]['sales_id']
-						line_store_name = line_data[0]['store_name']
+						line_store_number = line_data[0]['store_number']
 
 						if line_sales_id:
 							calesheet_approve_salesorder = dest_models.execute_kw(dest_DB, dest_uid, dest_PASS, 'seven_call_sheet.call_sheet_line', 'approve_salesorder', [line])
 							if calesheet_approve_salesorder:
 								count_update += 1
-								print "[%s] %s - APPROVED SALES ORDER FOR STORE: %s" % (str(count_update), str(callsheet_name), str(line_store_name))
+								print "[%s] %s - APPROVED SALES ORDER FOR STORE: %s" % (str(count_update), str(callsheet_name), str(line_store_number))
 
 				# CHECKED TRANSFER INFO
 				count_update = 0
 				for line in callsheet_lines:
-					line_fields = ['id', 'store_name', 'sales_id']
+					line_fields = ['id', 'store_number', 'sales_id']
 					line_data = dest_models.execute(dest_DB, dest_uid, dest_PASS, 'seven_call_sheet.call_sheet_line', 'read', line, line_fields)
 					
 					if line_data:
 						line_sales_id = line_data[0]['sales_id']
-						line_store_name = line_data[0]['store_name']
+						line_store_number = line_data[0]['store_number']
 
 						if line_sales_id:
 							calesheet_check_transferinfo = dest_models.execute_kw(dest_DB, dest_uid, dest_PASS, 'seven_call_sheet.call_sheet_line', 'check_transferinfo', [line])
 							if calesheet_check_transferinfo:
 								count_update += 1
-								print "[%s] %s - CHECKED TRANSFER INFO FOR STORE: %s" % (str(count_update), str(callsheet_name), str(line_store_name))
+								print "[%s] %s - CHECKED TRANSFER INFO FOR STORE: %s" % (str(count_update), str(callsheet_name), str(line_store_number))
 
 				# GENERATE INVOICE
 				count_update = 0
 				for line in callsheet_lines:
-					line_fields = ['id', 'store_name', 'invoice_id']
+					line_fields = ['id', 'store_number', 'invoice_id']
 					line_data = dest_models.execute(dest_DB, dest_uid, dest_PASS, 'seven_call_sheet.call_sheet_line', 'read', line, line_fields)
 					
 					if line_data:
 						line_invoice_id = line_data[0]['invoice_id']
-						line_store_name = line_data[0]['store_name']
+						line_store_number = line_data[0]['store_number']
 
 						if not line_invoice_id:
 							calesheet_sales_invoice = dest_models.execute_kw(dest_DB, dest_uid, dest_PASS, 'seven_call_sheet.call_sheet_line', 'sales_invoice', [line])
 							if calesheet_sales_invoice:
 								count_update += 1
-								print "[%s] %s - INVOICE GENERATED FOR STORE: %s" % (str(count_update), str(callsheet_name), str(line_store_name))
+								print "[%s] %s - INVOICE GENERATED FOR STORE: %s" % (str(count_update), str(callsheet_name), str(line_store_number))
 
 				# UPDATE CALLSHEET STATUS
 				update_status = False
