@@ -178,6 +178,64 @@ class AccountPaymentUnmatch(models.Model):
 	amount_total = fields.Monetary(related='invoice_id.amount_total', readonly=True, copy=False)
 	is_error_jl = fields.Boolean(string='Error in  JL Entries', default=False)
 
+	@api.model
+	def realignedSalesInvoiceJLEntries(self, invoice_id):
+		total_sales_invoice_discrepancy = 0
+		account_invoice_obj = self.env['account.invoice'].search([('id','=', invoice_id),('type','=','out_invoice')])
+		if account_invoice_obj:
+			invoice_company_id = account_invoice_obj.company_id.id
+
+			acct_journal = self.env['account.journal'].search([('name', '=','Customer Invoices'),
+																  ('type', '=','sale'),
+																  ('company_id', '=',invoice_company_id)])
+			acct_acct = self.env['account.account'].search([('name', '=','Account Receivable'),
+																  ('code', '=','101200'),
+																  ('company_id', '=',invoice_company_id)])
+			acct_acct_prod_sale = self.env['account.account'].search([('name', '=','Product Sales'),
+																  ('code', '=','200000'),
+																  ('company_id', '=',invoice_company_id)])
+
+			if acct_journal:
+				if account_invoice_obj.move_id:
+					account_invoice_obj.move_id.button_cancel()
+					#After Cancellation Start Cancel Invoice
+					account_invoice_obj.action_invoice_cancel()
+					#After Cancellation of Invoice Back To Draft
+					account_invoice_obj.action_invoice_draft()
+					account_invoice_obj.account_id = acct_acct.id
+					account_invoice_obj.journal_id = acct_journal.id
+
+					#Change the Account for Invoice Lines and  Tax
+					for line in  account_invoice_obj.invoice_line_ids:
+						line.account_id = acct_acct_prod_sale.id
+
+					#Change the Tax
+					for tax_id in  account_invoice_obj.tax_line_ids:
+						tax_id.account_id = acct_acct_prod_sale.id
+					account_invoice_obj.action_invoice_open()
+			else:
+				return 'NO ACCOUNT JOURNAL FOUND'
+
+
+			return 'SUCCESS'
+
+
+
+
+
+
+		for inv in account_invoice_obj:
+			if inv.sudo().account_id.company_id.id != inv.company_id.id:
+				print('Invoice Number has Discrepancy ' +  inv.number)
+				_logger.info('Invoice Number has Discrepancy ' +  str(inv.number))
+
+
+				total_sales_invoice_discrepancy +=1
+
+		print('Total Open Sales Invoice: ' +  str(total_sales_invoice_discrepancy))
+		return True	
+
+
 	def realignedJLEntries(self):
 		for rec in self:
 			if rec.invoice_id:
@@ -209,7 +267,7 @@ class AccountPaymentUnmatch(models.Model):
 								line.account_id = acct_acct_prod_sale.id
 							#Change the Tax
 							for tax_id in  rec.invoice_id.tax_line_ids:
-								tax_id.account_id = acct_acct_prod_sale.id							
+								tax_id.account_id = acct_acct_prod_sale.id
 							rec.invoice_id.action_invoice_open()
 							rec.is_error_jl = False
 						else:
