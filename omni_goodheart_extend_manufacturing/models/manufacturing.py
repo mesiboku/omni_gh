@@ -10,6 +10,9 @@ from odoo.exceptions import UserError, ValidationError
 
 from odoo import api, fields, models, _, SUPERUSER_ID
 
+import logging
+_logger = logging.getLogger(__name__)
+
 class BillOfMaterialsLines(models.Model):
 	_inherit= 'mrp.bom.line'
 
@@ -134,6 +137,7 @@ class MrpProduction(models.Model):
 				if res_sc:
 					res_sc.action_validate()
 		return res
+	
 	@api.multi
 	def _update_raw_move(self, bom_line, line_data):
 		quantity = line_data['qty']
@@ -169,6 +173,7 @@ class MrpProduction(models.Model):
 		quantity = line_data['qty']
 		# alt_op needed for the case when you explode phantom bom and all the lines will be consumed in the operation given by the parent bom line
 		alt_op = line_data['parent_line'] and line_data['parent_line'].operation_id.id or False
+
 		if bom_line.child_bom_id and bom_line.child_bom_id.type == 'phantom':
 		    return self.env['stock.move']
 		if bom_line.product_id.type not in ['product', 'consu']:
@@ -183,13 +188,33 @@ class MrpProduction(models.Model):
 		    source_location = self.location_src_id
 		original_quantity = (self.product_qty - self.qty_produced) or 1.0
 
+
+		#Check the BOM if Generic
+		BRAND ='BRAND'
+		GENERIC = 'GENERIC'
+		stock_quant_model = self.env['stock.quant']
+
+		product_id = bom_line.product_id
+		if bom_line.product_id.product_tmpl_id.attribute_line_ids:
+			if bom_line.product_id.attribute_value_ids:
+				if bom_line.product_id.attribute_value_ids.name.upper() == GENERIC:
+					if bom_line.product_id.product_tmpl_id.product_variant_ids:
+						for variant in bom_line.product_id.product_tmpl_id.product_variant_ids:
+							if variant.attribute_value_ids.name != GENERIC:
+								#Check if Variant has available Qty to the source Location
+								stock_quant_obj = stock_quant_model.search([('product_id', '=', variant.id),('location_id', '=', source_location.id)])
+								if stock_quant_obj:
+									total_qty_stq = stock_quant_obj.quantity - stock_quant_obj.reserved_quantity
+									if total_qty_stq >= quantity:
+										product_id = variant
+										break
 		data = {
 			'sequence': bom_line.sequence,
 			'name': self.name,
 			'date': self.date_planned_start,
 			'date_expected': self.date_planned_start,
 			'bom_line_id': bom_line.id,
-			'product_id': bom_line.product_id.id,
+			'product_id': product_id.id, #bom_line.product_id.id,
 			'product_uom_qty': quantity , #+ bom_line.product_allowance_qty or 0.0,
 			'product_uom': bom_line.product_uom_id.id,
 			'location_id': source_location.id,
@@ -197,7 +222,7 @@ class MrpProduction(models.Model):
 			'raw_material_production_id': self.id,
 			'company_id': self.company_id.id,
 			'operation_id': bom_line.operation_id.id or alt_op,
-			'price_unit': bom_line.product_id.standard_price,
+			'price_unit': product_id.standard_price, #bom_line.product_id.standard_price,
 			'procure_method': 'make_to_stock',
 			'origin': self.name,
 			'warehouse_id': source_location.get_warehouse().id,
