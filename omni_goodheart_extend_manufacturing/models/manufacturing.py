@@ -194,20 +194,27 @@ class MrpProduction(models.Model):
 		GENERIC = 'GENERIC'
 		stock_quant_model = self.env['stock.quant']
 
+		bln_no_stock_found=True
+
 		product_id = bom_line.product_id
 		if bom_line.product_id.product_tmpl_id.attribute_line_ids:
 			if bom_line.product_id.attribute_value_ids:
 				if bom_line.product_id.attribute_value_ids.name.upper() == GENERIC:
 					if bom_line.product_id.product_tmpl_id.product_variant_ids:
 						for variant in bom_line.product_id.product_tmpl_id.product_variant_ids:
-							if variant.attribute_value_ids.name != GENERIC:
+							if variant.attribute_value_ids.name.upper() != GENERIC:
 								#Check if Variant has available Qty to the source Location
-								stock_quant_obj = stock_quant_model.search([('product_id', '=', variant.id),('location_id', '=', source_location.id)])
+								stock_quant_obj = stock_quant_model.search([('product_id', '=', variant.id),('location_id', '=', source_location.id)], order='in_date, id')
 								if stock_quant_obj:
 									total_qty_stq = stock_quant_obj.quantity - stock_quant_obj.reserved_quantity
 									if total_qty_stq >= quantity:
 										product_id = variant
+										bln_no_stock_found = False
 										break
+
+					if bln_no_stock_found:
+						raise UserError(_('BOM Line Item %s and its variants has no stock. Please check the Quantity.' %(product_id.name))) 
+
 		data = {
 			'sequence': bom_line.sequence,
 			'name': self.name,
