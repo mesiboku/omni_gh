@@ -75,51 +75,52 @@ class mrpProduction(models.Model):
 
 	@api.model
 	def create(self, vals):
-		# raise Warning(vals['bom_id'])
-		product_id = vals['product_id']
-		findBOM = self.env['mrp.bom'].search([('product_tmpl_id.product_variant_ids','=', product_id)])
-		# raise Warning(findBOM)
-		# timezone = pytz.timezone('UTC')
-		if len(findBOM) > 1:
-			a = []
-			b = 0
-			if findBOM:
-				for c in findBOM:
-					a.append([c.id, []]) 
-					if c.bom_line_ids:
-						for d in c.bom_line_ids:
+		# # raise Warning(vals['bom_id'])
+		# product_id = vals['product_id']
+		# findBOM = self.env['mrp.bom'].search([('product_tmpl_id.product_variant_ids','=', product_id)])
+		# # raise Warning(findBOM)
+		# # timezone = pytz.timezone('UTC')
+		# if len(findBOM) > 1:
+		# 	a = []
+		# 	b = 0
+		# 	if findBOM:
+		# 		for c in findBOM:
+		# 			a.append([c.id, []]) 
+		# 			if c.bom_line_ids:
+		# 				for d in c.bom_line_ids:
 
-							findserial = self.env['stock.production.lot'].search([('product_id','=',d.product_id.id)])
-							if findserial:
-								for y in findserial:
-									# _logger.info(y.name)
-									a[b][1].append(y.id) 
-					b = b + 1
-			if a:
-				bom_id = []
-				# [[bom_id, [lot_id, lot_id]], [bom_id, [lot_id, lot_id]], [bom_id, [lot_id, lot_id]]]
-				old_bom = []
-				last_bom = 0
-				last_create_date = datetime.today()
-				for data in a:
-					if data:
-						# bom_id = data[0]
-						findserial = self.env['stock.production.lot'].search([('id','in', data[1]),('product_qty','>',0)], order='create_date asc', limit=1)
-						if findserial:
-							if last_bom == 0:
-								last_bom = data[0]
-								last_create_date = findserial.create_date
-							else:
-								dt_1 = fields.Datetime.from_string(findserial.create_date)
-								dt_2 = fields.Datetime.from_string(last_create_date)
-								if dt_2.date() > dt_1.date():
-									last_bom = data[0]
-									last_create_date = findserial.create_date
-				vals['bom_id'] = last_bom
-				production = super(mrpProduction, self).create(vals)
+		# 					findserial = self.env['stock.production.lot'].search([('product_id','=',d.product_id.id)])
+		# 					if findserial:
+		# 						for y in findserial:
+		# 							# _logger.info(y.name)
+		# 							a[b][1].append(y.id) 
+		# 			b = b + 1
+		# 	if a:
+		# 		bom_id = []
+		# 		# [[bom_id, [lot_id, lot_id]], [bom_id, [lot_id, lot_id]], [bom_id, [lot_id, lot_id]]]
+		# 		old_bom = []
+		# 		last_bom = 0
+		# 		last_create_date = datetime.today()
+		# 		for data in a:
+		# 			if data:
+		# 				# bom_id = data[0]
+		# 				findserial = self.env['stock.production.lot'].search([('id','in', data[1]),('product_qty','>',0)], order='create_date asc', limit=1)
+		# 				if findserial:
+		# 					if last_bom == 0:
+		# 						last_bom = data[0]
+		# 						last_create_date = findserial.create_date
+		# 					else:
+		# 						dt_1 = fields.Datetime.from_string(findserial.create_date)
+		# 						dt_2 = fields.Datetime.from_string(last_create_date)
+		# 						if dt_2.date() > dt_1.date():
+		# 							last_bom = data[0]
+		# 							last_create_date = findserial.create_date
+		# 		vals['bom_id'] = last_bom
+		# 		production = super(mrpProduction, self).create(vals)
 
-		else:
-			production = super(mrpProduction, self).create(vals)
+		# else:
+		# 	production = super(mrpProduction, self).create(vals)
+		production = super(mrpProduction, self).create(vals)
 		return production
 
 
