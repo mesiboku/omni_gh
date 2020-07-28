@@ -193,27 +193,106 @@ class MrpProduction(models.Model):
 		BRAND ='BRAND'
 		GENERIC = 'GENERIC'
 		stock_quant_model = self.env['stock.quant']
+		stock_move_model = self.env['stock.move']
 
-		bln_no_stock_found=True
+		bln_no_stock_found = True
+		check_bom_lines = True
 
 		product_id = bom_line.product_id
+		_logger.info('START' +  bom_line.product_id.name + '(' +  bom_line.product_id.attribute_value_ids.name  + ')')
 		if bom_line.product_id.product_tmpl_id.attribute_line_ids:
+			_logger.info('START BOM' +  bom_line.product_id.name + '(' +  bom_line.product_id.attribute_value_ids.name  + ')')
+
+			_logger.info(1)
 			if bom_line.product_id.attribute_value_ids:
+				_logger.info(2)
 				if bom_line.product_id.attribute_value_ids.name.upper() == GENERIC:
-					if bom_line.product_id.product_tmpl_id.product_variant_ids:
-						for variant in bom_line.product_id.product_tmpl_id.product_variant_ids:
-							if variant.attribute_value_ids.name.upper() != GENERIC:
-								#Check if Variant has available Qty to the source Location
-								stock_quant_obj = stock_quant_model.search([('product_id', '=', variant.id),('location_id', '=', source_location.id)], order='in_date, id')
-								if stock_quant_obj:
-									total_qty_stq = stock_quant_obj.quantity - stock_quant_obj.reserved_quantity
-									if total_qty_stq >= quantity:
-										product_id = variant
-										bln_no_stock_found = False
-										break
+					_logger.info(3)
+					#Validate if Product has a related Product
+					if bom_line.product_id.is_check_related_product:
+						#Product with Generic Name and the Product will check if has a Related Product
+						#If Related Product is Generic then Get all the Variants of the said Related Product
+						_logger.info('Related')
+						_logger.info(4)
+						related_product_id = bom_line.product_id.related_product_id
+						related_product_id_variant = bom_line.product_id.related_product_id.attribute_value_ids
+						if related_product_id_variant.name.upper() == GENERIC:
+							_logger.info(5)
+							if related_product_id.product_tmpl_id.product_variant_ids:
+								_logger.info(6)
+								for variant in related_product_id.product_tmpl_id.product_variant_ids:
+									if variant.attribute_value_ids.name.upper() != GENERIC:
+										# Check first if Product already reserved in this MO
+										# And This will Assume the Product has Quantity and will have no Exemption Occur
+										stock_model_obj = stock_move_model.search([('product_id','=', variant.id),('production_id','=', self.id)])
+										if stock_model_obj:
+											product_id = stock_model_obj.related_product_id
+											bln_no_stock_found = False
+											check_bom_lines = False
+											break
+
+							# If no Reserved in this MO then Check BOM	
+							if check_bom_lines:
+								_logger.info(7)
+								for lp_bom_line in self.bom_id.bom_line_ids:
+									#if Exist in BOM then Check for Again for Generic Value
+									if lp_bom_line.product_id.id == related_product_id.id:
+										related_bom_line_product = lp_bom_line.product_id
+										if related_bom_line_product.attribute_value_ids.name.upper() == GENERIC:
+											_logger.info(7.1)
+											# Loop Again to Check the Variant List and FIFO Sequence
+											for variant in related_bom_line_product.product_tmpl_id.product_variant_ids:
+												_logger.info(7.2)
+												if variant.attribute_value_ids.name.upper() != GENERIC:
+													_logger.info(7.3)
+													stock_quant_obj = stock_quant_model.search([('product_id', '=', variant.related_product_id.id),('location_id', '=', source_location.id)], order='in_date, id')
+													if stock_quant_obj:
+														_logger.info(7.4)
+														total_qty_stq = stock_quant_obj.quantity - stock_quant_obj.reserved_quantity
+														_logger.info('Name ' + product_id.name + '(' + variant.attribute_value_ids.name + ')' + ' T QTY :' + str(total_qty_stq) + ' QTY ' + str(stock_quant_obj.quantity) + ' RES ' + str(stock_quant_obj.reserved_quantity))
+														if total_qty_stq >= quantity:
+															_logger.info(7.5)
+															product_id = variant.related_product_id
+															bln_no_stock_found = False
+															check_bom_lines = False
+															break
+										else:
+											_logger.info(8)
+											bln_no_stock_found = False
+											product_id =  related_bom_line_product
+
+						else:
+							_logger.info(9)
+							bln_no_stock_found = False
+							product_id =  bom_line.product_id
+					else:
+						#Product with Only Generic and its Variants Value and No Link Related Product
+						_logger.info(10)
+						product_id = bom_line.product_id
+						if bom_line.product_id.product_tmpl_id.product_variant_ids:
+							_logger.info(11)
+							for variant in bom_line.product_id.product_tmpl_id.product_variant_ids:
+								if variant.attribute_value_ids.name.upper() != GENERIC:
+									#Check if Variant has available Qty to the source Location
+									stock_quant_obj = stock_quant_model.search([('product_id', '=', variant.id),('location_id', '=', source_location.id)], order='in_date, id')
+									if stock_quant_obj:
+										_logger.info(12)
+
+										total_qty_stq = stock_quant_obj.quantity - stock_quant_obj.reserved_quantity
+										_logger.info('Name ' + product_id.name + '(' + variant.attribute_value_ids.name + ')' + ' T QTY :' + str(total_qty_stq) + ' QTY ' + str(stock_quant_obj.quantity) + ' RES ' + str(stock_quant_obj.reserved_quantity))
+										if total_qty_stq >= quantity:
+											product_id = variant
+											bln_no_stock_found = False
+											_logger.info('YES')
+											break
+										_logger.info(13)
 
 					if bln_no_stock_found:
-						raise UserError(_('BOM Line Item %s and its variants has no stock. Please check the Quantity.' %(product_id.name))) 
+						#raise UserError(_('BOM Line Item %s and its variants has no stock. Please check the Quantity.' %(product_id.name))) 
+						raise UserError(_('BOM Line Item %s (%s) and its variants has no stock. Please check the Quantity.' %(product_id.name, product_id.attribute_value_ids and product_id.attribute_value_ids.name or 'None'))) 
+
+		_logger.info(bom_line.product_uom_id.name)
+		_logger.info(bom_line.product_id.name)
 
 		data = {
 			'sequence': bom_line.sequence,
