@@ -1,0 +1,136 @@
+<!--<odoo>-->
+<!--    <data>-->
+<!--        <template id="goodheart_po_ext" inherit_id="purchase.report_purchaseorder_document" primary="True">-->
+<!--            <xpath expr="//div[@class='page']" position="replace">-->
+<!--            <div class="page" style="padding-top:90px">-->
+<!--               <div class="row" name="customer_address">-->
+<!--                 <div class="col-xs-8 pull-left">-->
+<!--                   <h5>Vendor:<strong><span t-field="o.partner_id"/></strong></h5>-->
+<!--                   <h5>P.O. Number:<strong><span t-field="o.name"/></strong></h5>-->
+<!--                   <h5>P.R. Number:<strong><span t-field="o.purchase_request_id"/></strong></h5>-->
+<!--                   <h5>Date:<strong></strong></h5>-->
+<!--                 </div>-->
+<!--                   <div class="col-xs-offset-4">-->
+<!--                     <h5>Ship To:<strong><span t-field="o.name"/> - <span t-field="o.create_date"/></strong></h5>-->
+<!--                     <h5>Terms:<strong><span t-field="o.partner_id"/></strong></h5>-->
+<!--                     <h5>Due Date:<strong><span t-field="o.partner_id"/></strong></h5>-->
+<!--                   </div>-->
+<!--               </div>-->
+<!--               <table class="table col-sm-5">-->
+<!--                    <thead>-->
+<!--                      <tr>-->
+<!--                        <th>Item</th>-->
+<!--                        <th>Description</th>-->
+<!--                        <th>Quantity</th>-->
+<!--                        <th>Unit</th>-->
+<!--                        <th>Discount</th>-->
+<!--                        <th>VAT Amount</th>-->
+<!--                        <th>Amount</th>-->
+<!--                      </tr>-->
+<!--                    </thead>-->
+<!--                    <tbody>-->
+<!--                      <tr t-foreach="o.order_line" t-as="order_line">-->
+<!--                        <td class="text-left">-->
+<!--                            <t t-if="order_line.product_id">-->
+<!--                              <span t-field="order_line.product_id"/>-->
+<!--                            </t>-->
+<!--                        </td>-->
+<!--                        <td class="text-left">-->
+<!--                            <t t-if="order_line.name">-->
+<!--                              <span t-field="order_line.name"/>-->
+<!--                            </t>-->
+<!--                        </td>-->
+<!--                        <td class="text-left">-->
+<!--                            <t t-if="order_line.product_qty">-->
+<!--                              <span t-field="order_line.product_qty"/>-->
+<!--                            </t>-->
+<!--                        </td>-->
+<!--                        <td class="text-left">-->
+<!--                            <t t-if="order_line.product_qty">-->
+<!--                              <span t-field="order_line.product_uom"/>-->
+<!--                            </t>-->
+<!--                        </td>-->
+<!--                        <td class="text-left">-->
+<!--                            <t t-if="order_line.price_unit">-->
+<!--                              <span t-field="order_line.discount"/>-->
+<!--                            </t>-->
+<!--                        </td>-->
+<!--                        <td class="text-left">-->
+<!--                            <t t-if="order_line.price_unit">-->
+<!--                              <span t-field="order_line.price_unit"/>-->
+<!--                            </t>-->
+<!--                        </td>-->
+<!--                        <td class="text-left">-->
+<!--                            <t t-if="order_line.price_subtotal">-->
+<!--                              <span t-field="order_line.price_subtotal"/>-->
+<!--                            </t>-->
+<!--                        </td>-->
+<!--                      </tr>-->
+<!--                    </tbody>-->
+<!--                </table>-->
+<!--                    <div class="row">-->
+<!--                        <div class="col-xs-10 text-right">-->
+<!--                            <h5>Untaxed Amount:</h5>-->
+<!--                            <h5>Tax:</h5>-->
+<!--                            <h5>Total:</h5>-->
+<!--                        </div>-->
+<!--                        <div class="col-xs-2-offset text-left">-->
+<!--                            <h5><strong><span t-field="o.amount_untaxed"/></strong></h5>-->
+<!--                            <h5><strong><span t-field="o.amount_tax"/></strong></h5>-->
+<!--                            <h5><strong><span t-field="o.amount_total"/></strong></h5>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--            </div>-->
+<!--            </xpath>-->
+<!--        </template>-->
+<!--        <template id="report_po_ext_footer" inherit_id="web.external_layout_standard" primary="True">-->
+<!--            <xpath expr="//div[@class='header']" position="replace">-->
+<!--                <div class="header">-->
+<!--                <div class="row">-->
+<!--                    <div class="col-xs-3 mb4">-->
+<!--                        <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" style="max-height: 45px;"/>-->
+<!--                    </div>-->
+<!--                    <div class="col-xs-6-offset pull-right" name="company_address">-->
+<!--                        <span t-field="company.partner_id" t-field-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: true}" style="border-bottom: 1px solid black; display:inline-block;"/>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div t-if="company.logo or company.report_header" class="row zero_min_height">-->
+<!--                    <div class="col-xs-12">-->
+<!--                        <div style="border-bottom: 1px solid black;"/>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="row">-->
+<!--                    <div class="col-xs-4" name="form_name"><h3>Purchase Order</h3></div>-->
+<!--                </div>-->
+<!--                </div>-->
+<!--            </xpath>-->
+<!--            <xpath expr="//div[@class='footer']" position="replace">-->
+<!--                <div class="footer">-->
+<!--                    <div class="row" name="approvals">-->
+<!--                        <div class="col-xs-6 text-left" >-->
+<!--                                <h5>Delivery Instructions:</h5>-->
+<!--                               <p t-field="o.del_instructions"/>-->
+<!--                        </div>-->
+<!--                        <div class="col-xs-6">-->
+<!--                            <h5>Requested By:</h5>-->
+<!--                            <h5>Approved By:<strong><span t-field="o.create_uid"/></strong></h5>-->
+<!--                        </div>-->
+<!--                        <div class="col-xs-offset-6">-->
+<!--                            <h5>Verified By:<strong><span t-field="o.write_uid"/></strong></h5>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </xpath>-->
+<!--         </template>-->
+<!--         <template id="external_layout_po_ext" inherit_id="web.external_layout" primary="True">-->
+<!--            <xpath expr="//t[@t-call='web.external_layout_standard']" position="replace">-->
+<!--                <t t-call="gh_po_ext.report_po_ext_footer"><t t-raw="0"/></t>-->
+<!--            </xpath>-->
+<!--         </template>-->
+<!--            <template id="report_goodheart_po_ext" inherit_id="purchase.report_purchaseorder">-->
+<!--                <xpath expr="//t[@t-call='purchase.report_purchaseorder_document']" position="replace">-->
+<!--                    <t t-call="gh_po_ext.goodheart_po_ext" t-lang="o.partner_id.lang"></t>-->
+<!--                </xpath>-->
+<!--            </template>-->
+<!--    </data>-->
+<!--</odoo>-->

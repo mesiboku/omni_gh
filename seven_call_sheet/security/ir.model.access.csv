@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_seven_call_sheet_sale_manager,seven_call_sheet.seven_call_sheet_sale_manager,model_seven_call_sheet_call_sheet,sales_team.group_sale_manager,1,1,1,1
+access_seven_call_sheet_line_sale_manager,seven_call_sheet.seven_call_sheet_line_sale_manager,model_seven_call_sheet_call_sheet_line,sales_team.group_sale_manager,1,1,1,1

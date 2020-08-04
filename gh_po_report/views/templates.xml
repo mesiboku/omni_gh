@@ -1,0 +1,426 @@
+<odoo>
+    <data>
+        <template id="goodheart_po_report" inherit_id="purchase.report_purchaseorder_document" primary="True">
+            <xpath expr="//t[@t-call='web.external_layout']" position="attributes">
+                <attribute name="t-call">gh_po_report.external_layout_po_report</attribute>
+            </xpath>
+            <xpath expr="//div[@class='page']" position="replace">
+              <div class="page" style="padding-top:-100px">
+                <div class="container">
+                    <div class="row" style="margin-left:-1px;width:100%">
+                      <div class="col-xs-7">
+                          <!--
+                          <div>
+                            <span style="display:inline-block; width: 200px;"></span>
+                          </div>
+                        -->
+                          
+                      </div>
+                       <div class="col-xs-5">
+                          <div>
+                            Date:<strong><span t-field="o.create_date" t-field-options='{"format": "MM/dd/yyyy"}'/></strong>
+                          </div>                      
+                       </div>
+                    </div>
+                    <div class="row" style="margin-left:-1px;width:100%">
+                      <div class="col-xs-6">
+
+                          <div>
+                            <span style="display:inline-block; width: 200px;"></span>
+                            <h3>Purchase Order</h3>
+                          </div>
+
+                      </div>
+                       <div class="col-xs-1" style="width:3.333333%">
+                          <span style="display:inline-block; width: 200px;"></span>
+                       </div>                      
+
+                       <div class="col-xs-5" style="border: 1px solid black;width:46.666667%">
+                          <div>
+                            <h5>P.O. Number:<strong><span t-field="o.name"/></strong></h5>
+                            <h5>P.R. Number:<strong><span t-field="o.purchase_request_id"/></strong></h5>
+                          </div>                      
+
+                       </div>                           
+                    </div>
+
+                   <div class="row" style="margin-top:6px;margin-left:-1px;width:100%">
+                       <div class="col-xs-6" style="border: 1px solid black;">
+                         <h5><strong>Vendor</strong></h5>
+                         <strong><span t-field="o.partner_id"/></strong><br/>
+                         <span t-field="o.partner_id.street"/>,<span t-field="o.partner_id.street2"/><br/>
+                         <span t-field="o.partner_id.city"/>,<span t-field="o.partner_id.country_id"/>,<span t-field="o.partner_id.zip"/>
+                         <!--
+                         <span t-field="o.partner_id.street"/>-->
+                         <br/>
+                         <br/>
+
+                         Attn: <span t-field="o.attention"/>
+                         
+                       </div>
+                       <div class="col-xs-1" style="width:3.333333%">
+                          <span style="display:inline-block; width: 200px;"></span>
+                       </div>
+
+                       <div class="col-xs-5" style="border: 1px solid black;width:46.666667%">
+                          <h5><strong>Ship To</strong></h5>                    
+                          <h5><span t-field="o.company_id.street"/>,<span t-field="o.company_id.state_id"/>,<span t-field="o.company_id.country_id"/>,<span t-field="o.company_id.zip"/></h5>
+
+                          <div class="container">
+                            <div class="row">
+                              <div class="col-xs-6">
+                                Tel No: <span t-field="o.company_id.phone"/>
+                              </div>
+                              <div class="col-xs-6">
+                                Fax No:
+                              </div>                              
+                            </div>
+                          </div>
+                          <br/>
+                          <br/>
+
+                       </div>
+                   </div>
+                   <div class="row" style="margin-top:6px;margin-left:-1px;width:100%">
+                     <div class="col-xs-6" style="border: 1px solid black;">
+                         <h5><strong>Notes</strong></h5> 
+                         <t t-if="o.notes">
+                            <p t-field="o.notes"/>
+                            <br/>
+                            <br/>
+                         </t>
+                         <t t-if="not o.notes">
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                         </t>                         
+                     </div>
+                     <div class="col-xs-1" style="width:3.333333%">
+                        <span style="display:inline-block; width: 200px;"></span>
+                     </div>                     
+                     <div class="col-xs-5" style="border: 1px solid black;width:46.666667%">
+                        <h5><strong>Invoice To</strong></h5>
+                          <h5><span t-field="o.company_id.name"/></h5>
+                          <h5><span t-field="o.company_id.street"/>,<span t-field="o.company_id.state_id"/>,<span t-field="o.company_id.country_id"/>,<span t-field="o.company_id.zip"/></h5>
+
+                          <div class="container">
+                            <div class="row">
+                              <div class="col-xs-6">
+                                Tel No: <span t-field="o.company_id.phone"/>
+                              </div>
+                              <div class="col-xs-6">
+                                Fax No:
+                              </div>                              
+                            </div>
+                          </div>
+<!--                                                  
+                        <h5><strong><span t-field="o.partner_id"/></strong></h5>
+                      -->
+                     </div>
+                   </div>                       
+
+                   <t t-if="o.del_instructions">
+                      <div class="row" style="border: 1px solid black;margin-top:6px;margin-bottom:11px;margin-left:-1px;width:100%">
+                        <h5><strong>Delivery Instructions</strong></h5>                        
+                        <p t-field="o.del_instructions"/>
+                      </div>
+                   </t>
+
+                   <div class="row" style="border: 1px solid black;margin-top:6px;margin-bottom:11px;margin-left:-1px;width:100%">
+                     <div class="col-xs-5">
+                        <span style="display:inline-block; width: 200px;"></span>
+                     </div>
+                     <div class="col-xs-4">
+                        <h5>Payment Term:<strong><span t-field="o.payment_term_id"/></strong></h5>
+                     </div>
+                     <div class="col-xs-3">
+                        <h5>Currency:<strong><span t-field="o.currency_id"/></strong></h5>
+                     </div>
+                   </div>                                          
+                </div>
+                 <table class="table col-sm-5" style="width:100%">
+                      <thead style="border: 1px solid black;">
+                        <tr>
+                          <th style="border: 1px solid black;">Item</th>
+                          <th style="border: 1px solid black;">Description</th>
+                          <th style="border: 1px solid black;">Quantity</th>
+                          <th style="border: 1px solid black;">UOM</th>
+                          <th style="border: 1px solid black;">Discount</th>
+                          <th style="border: 1px solid black;">Unit Price</th>
+                          <th style="border: 1px solid black;">Amount</th>
+                        </tr>
+                      </thead>
+                      <tbody style="border: 1px solid black;">
+                        <t t-set="i" t-value="1"/>
+                        <t t-foreach="o.order_line" t-as="order_line">                            
+                            <tr>
+                              <td class="text-center"> <span t-esc="i"/> </td>
+                              <td class="text-left">
+                                  <t t-if="order_line.name">
+                                    <span t-field="order_line.name"/>
+                                  </t>
+                              </td>
+                              <td class="text-left">
+                                  <t t-if="order_line.product_qty">
+                                    <span t-field="order_line.product_qty"/>
+                                  </t>
+                              </td>
+                              <td class="text-left">
+                                  <t t-if="order_line.product_qty">
+                                    <span t-field="order_line.product_uom"/>
+                                  </t>
+                              </td>
+                              <td class="text-right">
+                                  <t t-if="order_line.price_unit">
+                                    <span t-field="order_line.discount"/>
+                                  </t>
+                              </td>
+                              <td class="text-right">
+                                  <t t-if="order_line.price_unit">
+                                    <span t-esc="'{0:,.2f}'.format(order_line.price_unit)"/>
+                                  </t>
+                              </td>
+                              <td class="text-right">
+                                  <t t-if="order_line.price_subtotal">
+                                    <span t-esc="'{0:,.2f}'.format(order_line.price_subtotal)"/>
+                                  </t>
+                              </td>                              
+                            </tr>
+                            <t t-set="i" t-value="i+1"/>
+                            <t t-foreach="order_line.get_product_bom_details()" t-as="bom_details">
+                                <tr>
+                                   <td/>
+                                    <td class="text-left">
+                                      <t t-if="bom_details.product_id.description_sale">
+                                         <span t-field="bom_details.product_id.description_sale"/>
+                                      </t>
+                                      <t t-if="not bom_details.product_id.description_sale">
+                                         <span t-field="bom_details.product_id"/>
+                                      </t>                                        
+                                    </td>    
+
+                                    <t t-set="quantity_converted" t-value="(order_line.product_qty/ bom_details.bom_id.product_qty)*bom_details.product_qty"/>
+
+                                    <td class="text-left">
+                                        <t t-if="quantity_converted">
+                                        <span t-esc="int(quantity_converted)"/>
+                                        </t>
+                                    </td>
+                                    <td class="text-left">
+                                        <t t-if="bom_details.product_uom_id">
+                                            <span t-field="bom_details.product_uom_id"/>
+                                        </t>
+                                    </td>
+
+                                    <td class="text-right">
+                                        <t t-if="order_line.price_unit">
+                                            <span t-esc="'{0:,.2f}'.format(0)" />
+                                        </t>
+                                    </td>   
+                                    <td class="text-right">
+                                        <t t-if="order_line.price_unit">
+                                            <span t-esc="'{0:,.2f}'.format(0)" />
+                                        </t>
+                                    </td>   
+                                    
+                                    <td class="text-right">
+                                        <t t-if="order_line.price_subtotal">
+                                            <span t-esc="'{0:,.2f}'.format(0)" />
+                                        </t>
+                                    </td>                                                                         
+                                </tr>
+                            </t>                       
+                        </t>
+                        <t t-set="bom_summary" t-value="o.get_bom_details_summary()"/>
+                        <t t-foreach="bom_summary" t-as="bom_name">
+                            <t t-set="bom_name_fields" t-value="bom_summary[bom_name]"/>
+                            <tr>
+                                <td/>
+                                <td class="text-left">
+                                     <span t-esc="bom_name_fields[0]"/>
+                                </td> 
+
+                                                                
+
+                                <td class="text-left">
+                                        <span t-esc="int(bom_name_fields[2])"/>
+                                </td>
+
+                                <td class="text-left">
+                                        <span t-esc="bom_name_fields[1].name"/>
+                                </td>
+
+
+
+                                <td class="text-right">
+                                    <span t-esc="'{0:,.2f}'.format(0)" />
+                                </td>   
+                                <td class="text-right">
+                                    <span t-esc="'{0:,.2f}'.format(0)" />
+                                </td>   
+                                
+                                <td class="text-right">
+                                    <span t-esc="'{0:,.2f}'.format(0)" />
+                                </td>  
+                            </tr>
+                        </t>
+
+
+                        <!--
+                            <tr t-foreach="o.order_line" t-as="order_line">
+                              <td class="text-center"> <span t-esc="i"/> </td>
+                              <td class="text-left">
+                                  <t t-if="order_line.name">
+                                    <span t-field="order_line.name"/>
+                                  </t>
+                              </td>
+                              <td class="text-left">
+                                  <t t-if="order_line.product_qty">
+                                    <span t-field="order_line.product_qty"/>
+                                  </t>
+                              </td>
+                              <td class="text-left">
+                                  <t t-if="order_line.product_qty">
+                                    <span t-field="order_line.product_uom"/>
+                                  </t>
+                              </td>
+                              <td class="text-left">
+                                  <t t-if="order_line.price_unit">
+                                    <span t-field="order_line.discount"/>
+                                  </t>
+                              </td>
+                              <td class="text-right">
+                                  <t t-if="order_line.price_unit">
+                                    <span t-esc="'{0:,.2f}'.format(order_line.price_unit)"/>
+                                  </t>
+                              </td>
+                              <td class="text-right">
+                                  <t t-if="order_line.price_subtotal">
+                                    <span t-esc="'{0:,.2f}'.format(order_line.price_subtotal)"/>
+                                  </t>
+                              </td>
+                              <t t-set="i" t-value="i+1"/>
+                            </tr>
+                        -->
+                      </tbody>
+                  </table>
+                  <div class="clearfix">
+                      <div class="row" name="total">
+                          <div class="col-xs-4 pull-right">
+                              <table class="table" style="min-width: 100%;max-width: 100%;border: 1px solid black;">
+                                  <tr class="border-black">
+                                      <td><strong>Untaxed Amount:</strong></td>
+                                      <td class="text-right">
+                                          <span t-esc="'{0:,.2f}'.format(o.amount_untaxed)"/>
+                                      </td>
+                                  </tr>
+                                  <tr class="border-black">
+                                      <td><strong>Tax:</strong></td>
+                                      <td class="text-right">
+                                          <span t-esc="'{0:,.2f}'.format(o.amount_tax)"/>                                          
+                                      </td>
+                                  </tr>
+                                  <tr class="border-black">
+                                      <td><strong>Total:</strong></td>
+                                      <td class="text-right">
+                                          <span t-esc="'{0:,.2f}'.format(o.amount_total)"/>
+                                      </td>
+                                  </tr>                                  
+                              </table>
+                          </div>
+                      </div>
+                  </div>
+<!--
+                  <div class="row" >
+                      <div class="col-xs-10 text-right">
+                          <h5>Untaxed Amount:</h5>
+                          <h5>Tax:</h5>
+                          <h5>Total:</h5>
+                      </div>
+                      <div class="col-xs-2-offset text-left" style="border: 1px solid black;">
+                          <h5><strong><span t-field="o.amount_untaxed"/></strong></h5>
+                          <h5><strong><span t-field="o.amount_tax"/></strong></h5>
+                          <h5><strong><span t-field="o.amount_total"/></strong></h5>
+                      </div>
+                  </div>
+-->
+                  <!--<p t-field="o.notes"/>-->
+                  <br/>
+                  <p style="font-size:95%">**Please indicate PO number in Delivery Order, Invoices and all other correspondences. Please supply in accordance with the order given above subject to contract and Purchase Order’s standard General Terms and Conditions.</p>
+                  <div class="oe_structure"/>  
+
+              </div>
+            </xpath>
+        </template>
+        <template id="report_po_report_footer" inherit_id="web.external_layout_standard" primary="True">
+            <xpath expr="//div[@class='header']" position="replace">
+            <!--<xpath expr="//t[@t-name='web.external_layout_standard']" position="replace">-->
+                <div class="header">
+                <div class="row">
+                    <div class="col-xs-3 mb4">
+                        <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" style="max-height: 45px;"/>
+                    </div>
+                    <div class="col-xs-6-offset pull-right" name="company_address">
+                        <span t-field="company.partner_id" t-field-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: true}" style="border-bottom: 1px solid black; display:inline-block;"/>
+                    </div>
+                </div>
+                <div t-if="company.logo or company.report_header" class="row zero_min_height">
+                    <div class="col-xs-12">
+                        <div style="border-bottom: 1px solid black;"/>
+                    </div>
+                </div>
+                <!--
+                <div class="row">
+                    <div class="col-xs-4" name="form_name"><h3>Purchase Order</h3></div>
+                </div>
+              -->
+                </div>
+                <div class="footer">
+                    <table style="height: 50px;" width="100%">
+                        <tbody>
+                        <tr>
+                        <td style="width: 342px; text-align: center;"><h4>Requested by:</h4> 
+                        <p><h4><strong><span t-field="o.purchase_request_id.create_uid"/></strong></h4></p></td>
+                        <td style="width: 342px; text-align: center;"><h4>Verified by:</h4> 
+                        <p><h4><strong><span t-field="o.verified_by"/></strong></h4></p></td>
+                        <td style="width: 342px; text-align: center;"><h4>Approved by:</h4> 
+                        <p><h4><strong><span t-field="o.approved_by"/></strong></h4></p></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="row text-center" name="verbage" style="width:100%;margin-left:0px;">
+                        <p>**This Purchase Order is a computer generated document. No signature is required</p>
+                    </div>
+
+                    <div class="text-center" style="border-top: 1px solid black;width:100%">
+                        <ul class="list-inline mb4">
+                            <li t-if="company.phone">Phone: <span t-field="company.phone"/></li>
+                            <li t-if="company.email">Email: <span t-field="company.email"/></li>
+                            <li t-if="company.website">Web: <span t-field="company.website"/></li>
+                            <li t-if="company.vat"><t t-esc="company.country_id.vat_label or 'TIN'"/>: <span t-field="company.vat"/></li>
+                        </ul>
+
+                        <div name="financial_infos">
+                            <span t-field="company.report_footer"/>
+                        </div>
+
+                        <div class="text-muted">
+                            Page: <span class="page"/> / <span class="topage"/>
+                        </div>
+                    </div>              
+                </div>
+            </xpath>
+         </template>
+         <template id="external_layout_po_report" inherit_id="web.external_layout" primary="True">
+            <xpath expr="//t[@t-call='web.external_layout_standard']" position="replace">
+                <t t-call="gh_po_report.report_po_report_footer"><t t-raw="0"/></t>
+            </xpath>
+         </template>
+            <template id="report_goodheart_po_ext" inherit_id="purchase.report_purchaseorder">
+                <xpath expr="//t[@t-call='purchase.report_purchaseorder_document']" position="replace">
+                    <t t-call="gh_po_report.goodheart_po_report" t-lang="o.partner_id.lang"></t>
+                </xpath>
+            </template>
+    </data>
+</odoo>

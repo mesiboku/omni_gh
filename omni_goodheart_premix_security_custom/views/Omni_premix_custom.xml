@@ -1,0 +1,140 @@
+<odoo>
+  <data>
+    <!--NEW PREMIX CUSTOMIZATION-->
+    <!--Dashboard Hide Pigment Data-->
+    <!-- <record model="ir.ui.menu" id="mrp.menu_mrp_dashboard">
+          <field name="groups_id" eval="[(6, False, [ref('confidential')])]"/>
+    </record>
+    <record model="ir.ui.menu" id="menu_mrp_dashboard_extend">
+          <field name="groups_id" eval="[(6, False, [ref('do_not_allow')])]"/>
+    </record> -->
+    <!--Routing Menu
+    <record model="ir.ui.menu" id="mrp.menu_mrp_routing_action">
+          <field name="groups_id" eval="[(6, False, [ref('mrp.group_mrp_manager')])]"/>
+    </record>-->
+    <!--Work Center
+    <record model="ir.ui.menu" id="mrp.menu_view_resource_search_mrp">
+          <field name="groups_id" eval="[(6, False, [ref('mrp.group_mrp_user'), ref('stock.group_stock_user')])]"/>
+    </record>-->
+    <!--Bills Of Material
+    <record model="ir.ui.menu" id="mrp.menu_mrp_bom_form_action">
+          <field name="groups_id" eval="[(6, False, [ref('mrp.group_mrp_manager')])]"/>
+    </record>-->
+
+
+
+    <!--Manufacturing Dashboard Hide Pigment Room-->
+  <record id="mrp.mrp_workcenter_kanban_action_extend" model="ir.actions.act_window">
+        <field name="name">Work Centers Dashboard</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">mrp.workcenter</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">kanban,form</field>
+        <field name="view_id" ref="mrp.mrp_workcenter_kanban"/>
+        <field name="inherit_id" ref="mrp.mrp_workcenter_kanban_action"/>
+        <field name="search_view_id" ref="mrp.view_mrp_workcenter_search"/>
+        <field name="domain">[('id', '!=', 2)]</field>
+
+        <field name="help" type="html">
+          <p>
+            <a type="action" name="%(mrp.mrp_workcenter_action)">Click here
+            </a>
+          </p><p>
+            Manufacturing operations are processed at Work Centers. A Work Center can be composed of
+            workers and/or machines, they are used for costing, scheduling, capacity planning, etc.
+            The Work Centers are defined on the Routing's operations.
+          </p>
+        </field>
+    </record>
+
+    <!-- <menuitem id="menu_mrp_dashboard_extend"
+        name="Dashboard"
+        action="mrp.mrp_workcenter_kanban_action_extend"
+        groups="do_not_allow"
+        parent="mrp.menu_mrp_root"
+        sequence="5"/> -->
+
+
+    <!--Work Centers-->
+    <!-- <record model="ir.ui.menu" id="mrp.menu_view_resource_search_mrp">
+          <field name="groups_id" eval="[(6, False, [ref('confidential')])]"/>
+    </record>
+    <record model="ir.ui.menu" id="menu_view_resource_search_mrp_extend">
+          <field name="groups_id" eval="[(6, False, [ref('do_not_allow')])]"/>
+    </record> -->
+
+    <!--Work Center Dashboard User-->
+    <record id="mrp.mrp_workcenter_action_extend" model="ir.actions.act_window">
+        <field name="name">Work Centers</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">mrp.workcenter</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="view_type">form</field>
+        <field name="view_id" ref="mrp.mrp_workcenter_tree_view"/>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'tree', 'view_id': ref('mrp.mrp_workcenter_tree_view')}),
+            (0, 0, {'view_mode': 'kanban', 'view_id': ref('mrp.mrp_workcenter_view_kanban')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('mrp.mrp_workcenter_view')})]"/>
+        <field name="search_view_id" ref="mrp.view_mrp_workcenter_search"/>
+        <field name="inherit_id" ref="mrp.mrp_workcenter_action"/>
+        <field name="domain">[('id', '!=', 2)]</field>
+        <field name="help" type="html">
+          <p class="oe_view_nocontent_create">
+            Click here to create a new Work Center
+          </p><p>
+            Manufacturing operations are processed at Work Centers. A Work Center can be composed
+            of workers and/or machines, they are used for costing, scheduling, capacity planning, etc.
+            The Work Centers are defined on the Routing's operations.
+          </p>
+        </field>
+    </record>
+
+    <!-- <menuitem id="menu_view_resource_search_mrp_extend"
+        name="Work Center"
+        action="mrp.mrp_workcenter_action_extend"
+        groups="do_not_allow"
+        parent="mrp.menu_mrp_bom"
+        sequence="90"/> -->
+
+
+
+  <!--Inventory Products-->
+  <!-- <record model="ir.ui.menu" id="stock.menu_product_variant_config_stock">
+        <field name="groups_id" eval="[(6, False, [ref('confidential')])]"/>
+  </record>
+  <record model="ir.ui.menu" id="menu_product_variant_config_stock_extend">
+        <field name="groups_id" eval="[(6, False, [ref('do_not_allow')])]"/>
+  </record> -->
+<!--Product Filtering Premix-->
+<record id="product.product_template_action_extend" model="ir.actions.act_window">
+    <field name="name">Products</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">product.template</field>
+    <field name="view_mode">kanban,tree,form</field>
+    <field name="view_type">form</field>
+    <field name="view_id" ref="product.product_template_kanban_view"/>
+    <field name="context">{"search_default_filter_to_sell":1}</field>
+    <field name="inherit_id" ref="product.product_template_action"/>
+    <field name="domain">[('categ_id.parent_id', '!=', 6)]</field>
+    <field name="help" type="html">
+        <p class="oe_view_nocontent_create">
+            Click to define a new product.
+        </p><p>
+            You must define a product for everything you sell, whether it's a physical product, a consumable or a service you offer to customers.
+        </p><p>
+            The product form contains information to simplify the sale process: price, notes in the quotation, accounting data, procurement methods, etc.
+        </p>
+    </field>
+</record>
+
+<!-- <menuitem id="menu_product_variant_config_stock_extend"
+  name="Product User"
+  action="product.product_template_action_extend"
+  groups="do_not_allow"
+  parent="stock.menu_stock_inventory_control"
+  sequence="1"/> -->
+
+
+
+  </data>
+</odoo>

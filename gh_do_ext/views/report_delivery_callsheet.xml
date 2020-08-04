@@ -1,0 +1,427 @@
+<odoo>
+    <data>
+        <template id="report_delivery_callsheet">
+            <!--<t t-name="gh_do_ext.report_delivery_callsheet">-->
+          <t t-name="gh_do_ext.report_delivery_callsheet">
+              <t t-call="web.html_container">
+                  <t t-foreach="docs" t-as="o">
+                      <t t-call="gh_do_ext.external_layout_do_report">
+                          <div class="page">
+                              <div class="oe_structure"/>
+                              <div class="row">
+                                  <div class="col-xs-1">
+                                    <h5>Area:</h5>
+                                    <h5>Delivery Van:</h5>
+                                  </div>
+                                  <div class="col-xs-2">
+                                    <h5><span t-field="o.sales_area_id"/></h5>
+                                  </div>
+                                  <div class="col-xs-1">
+                                    <h5>Driver:</h5>
+                                    <h5>Helper:</h5>
+                                  </div>
+                                  <div class="col-xs-2">
+                        
+                                  </div>
+                                  <div class="col-xs-1">
+                                    <h5>Gate Pass No.:</h5>
+                                    <h5>R.S No.:</h5>
+                                  </div>
+                                  <div class="col-xs-2">
+                        
+                                  </div>
+                                  <div class="col-xs-1">
+                                    <h5>Date:</h5>
+                                    <h5>Fuel Used:</h5>
+                                  </div>
+                                  <div class="col-xs-2">
+                        
+                                  </div>
+                              </div>
+                              <table class="table table-bordered" style="table-layout: auto;">
+                                  <thead>
+                                      <tr>
+                                          <!--
+                                          <th class="text-center" style="font-size:90%">S.O. No.</th>
+                                          -->
+                                          <th class="text-center" style="font-size:90%">S.I. No.</th>
+                                          <th class="text-center" style="font-size:90%">Store No.</th>
+                                          <th class="text-center" style="font-size:90%;">Store Name</th>
+                                          <th class="text-center" style="font-size:90%;">Store Address</th>
+                                          <th class="text-center" style="font-size:90%;;" t-if="o.total_cone_1 &gt; 0">
+                                            <t t-if="not o.cone_1_label">
+                                                [<span t-field="o.cone_1_id.default_code"/>]
+                                                <br/>
+                                                <span t-field="o.cone_1_id.name"/>
+                                            </t>
+                                            <t t-if="o.cone_1_label">
+                                                <span t-field="o.cone_1_label"/>
+                                            </t>                                
+                    
+                    
+                                          </th>
+                                          <th class="text-center" style="font-size:90%;" t-if="o.total_cone_2 &gt; 0">
+                                            <t t-if="not o.cone_2_label">
+                                                [<span t-field="o.cone_2_id.default_code"/>]
+                                                <br/>
+                                                <span t-field="o.cone_2_id.name"/>
+                                            </t>
+                                            <t t-if="o.cone_2_label">
+                                                <span t-field="o.cone_2_label"/>
+                                            </t>
+                                          </th>
+                                          <th class="text-center" style="font-size:90%;" t-if="o.total_cone_3 &gt; 0">
+                                            <t t-if="not o.cone_3_label">
+                                                [<span t-field="o.cone_3_id.default_code"/>]
+                                                <br/>
+                                                <span t-field="o.cone_3_id.name"/>
+                                            </t>
+                                            <t t-if="o.cone_3_label">
+                                                <span t-field="o.cone_3_label"/>
+                                            </t>
+                                          </th>
+
+
+                                          <th class="text-center" style="font-size:90%;" t-if="o.total_cone_4 &gt; 0">
+                                            <t t-if="not o.cone_4_label">
+                                                [<span t-field="o.cone_4_id.default_code"/>]
+                                                <br/>
+                                                <span t-field="o.cone_4_id.name"/>
+                                            </t>
+                                            <t t-if="o.cone_4_label">
+                                                <span t-field="o.cone_4_label"/>
+                                            </t>
+                                          </th>
+
+                                          <th class="text-center" style="font-size:90%;" t-if="o.total_cone_5 &gt; 0">
+                                            <t t-if="not o.cone_5_label">
+                                                [<span t-field="o.cone_5_id.default_code"/>]
+                                                <br/>
+                                                <span t-field="o.cone_5_id.name"/>
+                                            </t>
+                                            <t t-if="o.cone_5_label">
+                                                <span t-field="o.cone_5_label"/>
+                                            </t>
+                                          </th>
+
+                                          <th class="text-center" style="font-size:90%;" t-if="o.total_cone_6 &gt; 0">
+                                            <t t-if="not o.cone_6_label">
+                                                [<span t-field="o.cone_6_id.default_code"/>]
+                                                <br/>
+                                                <span t-field="o.cone_6_id.name"/>
+                                            </t>
+                                            <t t-if="o.cone_6_label">
+                                                <span t-field="o.cone_6_label"/>
+                                            </t>
+                                          </th>                                                                                                                
+
+                                          <th class="text-center" style="font-size:90%;" t-if="o.total_cone_7 &gt; 0">
+                                            <t t-if="not o.cone_7_label">
+                                                [<span t-field="o.cone_7_id.default_code"/>]
+                                                <br/>
+                                                <span t-field="o.cone_7_id.name"/>
+                                            </t>
+                                            <t t-if="o.cone_7_label">
+                                                <span t-field="o.cone_7_label"/>
+                                            </t>
+                                          </th>
+
+                                          <th class="text-center" style="font-size:90%;" t-if="o.total_cone_8 &gt; 0">
+                                            <t t-if="not o.cone_8_label">
+                                                [<span t-field="o.cone_8_id.default_code"/>]
+                                                <br/>
+                                                <span t-field="o.cone_8_id.name"/>
+                                            </t>
+                                            <t t-if="o.cone_8_label">
+                                                <span t-field="o.cone_8_label"/>
+                                            </t>
+                                          </th>
+
+                                          <th class="text-center" style="font-size:90%;" t-if="o.total_cone_9 &gt; 0">
+                                            <t t-if="not o.cone_9_label">
+                                                [<span t-field="o.cone_9_id.default_code"/>]
+                                                <br/>
+                                                <span t-field="o.cone_9_id.name"/>
+                                            </t>
+                                            <t t-if="o.cone_9_label">
+                                                <span t-field="o.cone_9_label"/>
+                                            </t>
+                                          </th>                                                                                        
+
+                                          <th class="text-center" style="font-size:90%;" t-if="o.total_cone_10 &gt; 0">
+                                            <t t-if="not o.cone_10_label">
+                                                [<span t-field="o.cone_10_id.default_code"/>]
+                                                <br/>
+                                                <span t-field="o.cone_10_id.name"/>
+                                            </t>
+                                            <t t-if="o.cone_10_label">
+                                                <span t-field="o.cone_10_label"/>
+                                            </t>
+                                          </th>
+
+
+
+                                          <th class="text-center" style="font-size:90%">Amount</th>
+                                          <th class="text-center" style="font-size:90%">Lot Number/Notes</th>
+                                      </tr>
+                                  </thead>
+                                  <tbody>
+                                    <tr t-foreach="o.call_sheet_line_ids" t-as="callsheet" style="page-break-inside: avoid !important;">
+                                        <t t-set="to_view_record" t-value="callsheet.viewPartnerOrder()"/>
+                                        <t t-if="to_view_record">
+                                            <td class="text-center" style="padding-top:1px;padding-bottom:1px;font-size:12pt">
+                                                <t t-if="callsheet.invoice_id">
+                                                  <span t-field="callsheet.invoice_id.number"/>
+                                                </t>
+                                            </td>
+                                            <td class="text-left" style="padding-top:1px;padding-bottom:1px;font-size:12pt">
+                                                <t t-if="callsheet.store_number">
+                                                  <span t-field="callsheet.store_number"/>
+                                                </t>
+                                            </td>                                 
+                                            <td class="text-left" style="padding-top:1px;padding-bottom:1px;font-size:12pt">
+                                                <t t-if="callsheet.store_name">
+                                                  <span t-field="callsheet.store_name"/>
+                                                </t>
+                                            </td>
+                                            <td class="text-left" style="padding-top:1px;padding-bottom:1px;font-size:12pt">
+                                                <t t-if="callsheet.partner_id.street">
+                                                  <span t-field="callsheet.partner_id.street"/>
+                                                </t>
+                                            </td>                                
+                                            <td class="text-center" t-if="o.total_cone_1 &gt; 0" style="padding-top:1px;padding-bottom:1px;font-size:12pt">
+                                                <t t-if="callsheet.cone_1">
+                                                  <span t-field="callsheet.cone_1"/>
+                                                </t>
+                                                <t t-if="not callsheet.cone_1">
+                                                  <span>0</span>
+                                                </t>
+                                            </td>
+                                            <td class="text-center" t-if="o.total_cone_2 &gt; 0" style="padding-top:1px;padding-bottom:1px;font-size:12pt">
+                                                <t t-if="callsheet.cone_2">
+                                                  <span t-field="callsheet.cone_2"/>
+                                                </t>
+                                                <t t-if="not callsheet.cone_2">
+                                                  <span>0</span>
+                                                </t>                                    
+                                            </td>
+                                            <td class="text-center" t-if="o.total_cone_3 &gt; 0" style="padding-top:1px;padding-bottom:1px;font-size:12pt">
+                                                <t t-if="callsheet.cone_3">
+                                                  <span t-field="callsheet.cone_3"/>
+                                                </t>
+                                                <t t-if="not callsheet.cone_3">
+                                                  <span>0</span>
+                                                </t>
+                                            </td>
+
+
+                                            <td class="text-center" t-if="o.total_cone_4 &gt; 0" style="padding-top:1px;padding-bottom:1px;font-size:12pt">
+                                                <t t-if="callsheet.cone_4">
+                                                  <span t-field="callsheet.cone_4"/>
+                                                </t>
+                                                <t t-if="not callsheet.cone_4">
+                                                  <span>0</span>
+                                                </t>
+                                            </td>
+                                            <td class="text-center" t-if="o.total_cone_5 &gt; 0" style="padding-top:1px;padding-bottom:1px;font-size:12pt">
+                                                <t t-if="callsheet.cone_5">
+                                                  <span t-field="callsheet.cone_5"/>
+                                                </t>
+                                                <t t-if="not callsheet.cone_5">
+                                                  <span>0</span>
+                                                </t>
+                                            </td>
+                                            <td class="text-center" t-if="o.total_cone_6 &gt; 0" style="padding-top:1px;padding-bottom:1px;font-size:12pt">
+                                                <t t-if="callsheet.cone_6">
+                                                  <span t-field="callsheet.cone_6"/>
+                                                </t>
+                                                <t t-if="not callsheet.cone_6">
+                                                  <span>0</span>
+                                                </t>
+                                            </td>
+
+                                            <td class="text-center" t-if="o.total_cone_7 &gt; 0" style="padding-top:1px;padding-bottom:1px;font-size:12pt">
+                                                <t t-if="callsheet.cone_7">
+                                                  <span t-field="callsheet.cone_7"/>
+                                                </t>
+                                                <t t-if="not callsheet.cone_7">
+                                                  <span>0</span>
+                                                </t>
+                                            </td>
+
+                                            <td class="text-center" t-if="o.total_cone_8 &gt; 0" style="padding-top:1px;padding-bottom:1px;font-size:12pt">
+                                                <t t-if="callsheet.cone_8">
+                                                  <span t-field="callsheet.cone_8"/>
+                                                </t>
+                                                <t t-if="not callsheet.cone_8">
+                                                  <span>0</span>
+                                                </t>
+                                            </td>
+
+                                            <td class="text-center" t-if="o.total_cone_9 &gt; 0" style="padding-top:1px;padding-bottom:1px;font-size:12pt">
+                                                <t t-if="callsheet.cone_9">
+                                                  <span t-field="callsheet.cone_9"/>
+                                                </t>
+                                                <t t-if="not callsheet.cone_9">
+                                                  <span>0</span>
+                                                </t>
+                                            </td>
+
+                                            <td class="text-center" t-if="o.total_cone_10 &gt; 0" style="padding-top:1px;padding-bottom:1px;font-size:12pt">
+                                                <t t-if="callsheet.cone_10">
+                                                  <span t-field="callsheet.cone_10"/>
+                                                </t>
+                                                <t t-if="not callsheet.cone_10">
+                                                  <span>0</span>
+                                                </t>
+                                            </td>
+                                                                                                                                                                          
+
+                                            <td class="text-center" style="padding-top:1px;padding-bottom:1px;font-size:12pt">
+                                                <t t-if="callsheet.total_amount">
+                                                  <span t-field="callsheet.total_amount"/>
+                                                </t>
+                                            </td>
+                                            <td/>
+                                        </t>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-right" colspan="4">
+                                          <span>Total : </span>
+                    
+                                        </td>
+                                        <td class="text-center" t-if="o.total_cone_1 &gt; 0" style="font-size:12pt">
+                                            <t t-if="o.total_cone_1">
+                                              <span t-field="o.total_cone_1"/>
+                                            </t>
+                                        </td>
+                                        <td class="text-center" t-if="o.total_cone_2 &gt; 0" style="font-size:12pt">
+                                            <t t-if="o.total_cone_2">
+                                              <span t-field="o.total_cone_2"/>
+                                            </t>
+                                        </td>
+                                        <td class="text-center" t-if="o.total_cone_3 &gt; 0" style="font-size:12pt">
+                                            <t t-if="o.total_cone_3">
+                                              <span t-field="o.total_cone_3"/>
+                                            </t>
+                                        </td>
+
+                                        <td class="text-center" t-if="o.total_cone_4 &gt; 0" style="font-size:12pt">
+                                            <t t-if="o.total_cone_4">
+                                              <span t-field="o.total_cone_4"/>
+                                            </t>
+                                        </td>
+                                        <td class="text-center" t-if="o.total_cone_5 &gt; 0" style="font-size:12pt">
+                                            <t t-if="o.total_cone_5">
+                                              <span t-field="o.total_cone_5"/>
+                                            </t>
+                                        </td>
+                                        <td class="text-center" t-if="o.total_cone_6 &gt; 0" style="font-size:12pt">
+                                            <t t-if="o.total_cone_6">
+                                              <span t-field="o.total_cone_6"/>
+                                            </t>
+                                        </td>
+                                        <td class="text-center" t-if="o.total_cone_7 &gt; 0" style="font-size:12pt">
+                                            <t t-if="o.total_cone_7">
+                                              <span t-field="o.total_cone_7"/>
+                                            </t>
+                                        </td>
+                                        <td class="text-center" t-if="o.total_cone_8 &gt; 0" style="font-size:12pt">
+                                            <t t-if="o.total_cone_8">
+                                              <span t-field="o.total_cone_8"/>
+                                            </t>
+                                        </td>
+                                        <td class="text-center" t-if="o.total_cone_9 &gt; 0" style="font-size:12pt">
+                                            <t t-if="o.total_cone_9">
+                                              <span t-field="o.total_cone_9"/>
+                                            </t>
+                                        </td>
+                                        <td class="text-center" t-if="o.total_cone_10 &gt; 0" style="font-size:12pt">
+                                            <t t-if="o.total_cone_10">
+                                              <span t-field="o.total_cone_10"/>
+                                            </t>
+                                        </td>                                        
+                                        <td class="text-center">
+                                          <span/>
+                                        </td>
+                                        <td/>
+                                    </tr>
+                                  </tbody>
+                              </table>
+                              <div class="oe_structure"/>
+                          </div>
+                      </t>
+                  </t>
+              </t>
+          </t>
+            <!--</t>-->
+        </template>
+
+
+        <template id="style_delivery_sheet">
+          body {
+              color: #000 !important;
+              word-wrap: break-word;
+              background-color:white;
+
+          }
+          .border-black td {
+              border-top: 1px solid black !important;
+          }
+          .table-condensed > thead > tr > th {
+              border-bottom: 1px solid black !important;
+          }
+          .table-condensed > tbody > tr {
+              page-break-inside: avoid !important;
+          }
+          /*
+          .zero_min_height {
+              min-height: 0px !important;
+          }
+          .footer{
+            background-color:white;
+            color: black
+          }
+          */
+        </template>
+
+
+
+
+
+
+        <template id="report_delivery_callsheet_header" inherit_id="web.external_layout_standard" primary="True">
+            <!--
+              <xpath expr="//div[@class='header']" position="replace"/>
+
+            -->
+            <xpath expr="//div[hasclass('header')]" position="replace"/>
+            
+            
+         </template>
+
+         <template id="external_layout_do_report" inherit_id="web.external_layout" primary="True">
+            <xpath expr="//t[@t-call='web.external_layout_standard']" position="replace">
+                <t t-call="gh_do_ext.report_delivery_callsheet_header"><t t-raw="0"/></t>
+            </xpath>
+         </template>        
+<!--
+        <template id="gh_delivery_callsheet_layout" inherit_id="web.report_layout" name="gh_delivery_callsheet_layout" primary="True">
+            <xpath expr="//head/t[@t-if='editable'][2]" position="after">              
+                 <style type="text/css">
+                        .table-bordered > tbody > tr {
+                            page-break-inside: avoid !important;
+                        }
+                  </style>
+            </xpath>                             
+        </template>
+
+        <template id="omni_delivery_report_html_container" inherit_id="web.html_container" name="omni_delivery_report_html_container" primary="True">
+            <xpath expr="//t[@t-call='web.report_layout']" position="attributes">
+                <attribute name="t-call">gh_do_ext.gh_delivery_callsheet_layout</attribute>
+            </xpath>
+        </template>         
+-->        
+    </data>
+    
+</odoo>

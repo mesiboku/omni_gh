@@ -1,0 +1,48 @@
+<odoo>
+    <data>
+        <!-- <template id="report_coneland_si" inherit_id="web.external_layout_standard" primary="True">
+            <xpath expr="//div[@class='header']" position="replace">
+                <div class="header"></div>
+            </xpath>
+            <xpath expr="//div[@class='footer']" position="replace">
+                <div class="footer">
+                    
+                </div>
+            </xpath>
+         </template>
+
+
+         <template id="external_layout_wrr" inherit_id="web.external_layout" primary="True">
+
+            <xpath expr="//t[@t-call='web.external_layout_standard']" position="replace">
+                <t t-call="gh_shoot_so_goodheart.report_goodheart_si"><t t-raw="0"/></t>                
+            </xpath>
+
+        </template> -->
+
+        <!-- START INVOICE -->
+        <template id="external_layout_invoice_gh">
+            <t t-if="not o and doc">
+                <t t-set="o" t-value="doc"/>
+            </t>
+
+            <t t-if="o and 'company_id' in o">
+                <t t-set="company" t-value="o.company_id.sudo()"/>
+            </t>
+
+            <t t-if="not o or not 'company_id' in o">
+                <t t-set="company" t-value="res_company"/>
+            </t>
+
+            <t t-call="gh_shoot_so_goodheart.external_layout_invoice_gh_custom"><t t-raw="0"/></t>
+        </template>
+
+        <template id="external_layout_invoice_gh_custom">
+            <div class="article o_report_layout_standard">
+                <t t-raw="0" />
+            </div>
+        </template>
+        <!-- END INVOICE -->
+
+    </data>
+</odoo>

@@ -1,0 +1,1 @@
+from . import link_picking_purchase_view
