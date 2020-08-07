@@ -158,6 +158,10 @@
                          <span t-field="o.bank" style="top:4.70in;left:4.25in;position:absolute;font-size: 10pt;"/>
                          <span t-field="o.check_number" style="top:4.70in;left:6.10in;position:absolute;font-size: 10pt;"/>
 
+
+                        <span t-field="o.create_uid.name" style="top:5.8in;left:0.1in;position:absolute;font-size: 10pt;"/>                         
+                        <span style="top:6in;left:0.1in;position:absolute;font-size: 10pt;" class="text-center">Prepared By </span>
+
                     </div>
                 </t>
               </t>
@@ -253,6 +257,10 @@
                          <span t-esc="'{0:,.2f}'.format(o.amount)" style="top:3.8in;left:4.33in;position:absolute;font-size: 10pt;"/>
                          <span t-esc="o.check_amount_in_words + ' ' + 'Only'" style="top:4.2in;left:4.45in;position:absolute;font-size: 10pt;"/>
 
+
+
+                        <span t-field="o.create_uid.name" style="top:5.8in;left:0.1in;position:absolute;font-size: 10pt;"/>                         
+                        <span style="top:6in;left:0.1in;position:absolute;font-size: 10pt;" class="text-center">Prepared By </span>
                     </div>
                 </t>
               </t>

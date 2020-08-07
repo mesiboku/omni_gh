@@ -9,6 +9,7 @@
             <page name="vendor_bills" string="Vendor Bills" attrs="{'invisible': [('payment_type', 'not in',['outbound', 'transfer'])]}">
                 <group name="Deliveries Info">
                     <group>
+                      <field name="payment_for"/>
                       <field name="dr_dates"/>
                       <field name="dr_number"/>                    
                     </group>

@@ -19,7 +19,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['mrp'],
+    'depends': ['mrp', 'stock'],
 
     # always loaded
     'data': [
@@ -28,6 +28,7 @@
         'security/ir.model.access.csv',
         'views/mrp_production_views.xml',
         'views/stock_move_views.xml',
+        'views/product.xml',
         #'views/templates.xml',
         #'views/report_coll_sht.xml',
     ],

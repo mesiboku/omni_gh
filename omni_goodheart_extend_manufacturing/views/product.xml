@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="product_product_view_form_easy_extend" model="ir.ui.view">
+        <field name="name">product.product.view.form.easy.extend</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_variant_easy_edit_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='packaging']" position="after">
+                <group name="manufac" string="Manufacturing">
+                    <field name="is_check_related_product"/>
+                    <field name="related_product_id"/>
+                </group>
+            </xpath>
+        </field>
+    </record>    
+
+    <record id="product_product_form_extend" model="ir.ui.view">
+        <field name="name">product.product.form.extend</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_normal_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='inventory']" position="after">
+                <page name="manufac" string="Manufacturing">
+                    <group>
+                        <group>
+                            <field name="is_check_related_product"/>
+                            <field name="related_product_id"/>                            
+                        </group>
+                    </group>
+
+                </page>
+            </xpath>
+        </field>
+    </record>        
+</odoo>
