@@ -199,7 +199,7 @@ class MrpProduction(models.Model):
 		check_bom_lines = True
 
 		product_id = bom_line.product_id
-		_logger.info('START' +  bom_line.product_id.name + '(' +  bom_line.product_id.attribute_value_ids.name  + ')')
+		#_logger.info('START' +  bom_line.product_id.name + '(' +  bom_line.product_id.attribute_value_ids.name  + ')')
 		if bom_line.product_id.product_tmpl_id.attribute_line_ids:
 			_logger.info('START BOM' +  bom_line.product_id.name + '(' +  bom_line.product_id.attribute_value_ids.name  + ')')
 

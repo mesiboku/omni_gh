@@ -12,6 +12,7 @@ class account_payment_report(models.Model):
     _inherit = 'account.payment'
 
     checkvoucher_amount_total = fields.Char('Amount Tax', compute = '_compute_get_amount_total')
+    payment_for = fields.Char('Payment For')
     dr_dates = fields.Char('DR Dates')
     dr_number = fields.Char('DR Numbers')
     particulars_invoice_ids = fields.Many2many('account.invoice', 
@@ -55,15 +56,16 @@ class account_payment_report(models.Model):
 
     @api.multi
     def getJournalItems(self):
-    	self.ensure_one()
-    	account_move_line = self.env['account.move.line'].search([('payment_id', 'in', self.ids)])
-    	return account_move_line or False
+        self.ensure_one()
+        account_move_line = self.env['account.move.line'].search([('payment_id', 'in', self.ids)])
+        return account_move_line or False
 
     @api.multi
     def getJLItems(self):
         self.ensure_one()
-        account_move_line = self.env['account.move.line'].search([('payment_id', 'in', self.ids),('credit', '>', 0.00)], limit=1)
-        return account_move_line and account_move_line.account_id and account_move_line.account_id.name  or ''
+        return self.payment_for or False
+        #account_move_line = self.env['account.move.line'].search([('payment_id', 'in', self.ids),('credit', '>', 0.00)], limit=1)
+        #return account_move_line and account_move_line.account_id and account_move_line.account_id.name  or ''
 
     @api.multi
     def getDeliverDates(self):
