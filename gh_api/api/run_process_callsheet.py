@@ -19,11 +19,11 @@ import pandas as pd
 # dest_DB = 'GH-prodtest'
 
 # TEST
-dest_URL = 'http://203.160.190.162:8069'
-dest_DB = 'GH-prodtest'
+dest_URL = 'http://localhost:8069'
+dest_DB = 'GH-live-production'
 
 dest_USER = 'admin'
-dest_PASS = '0mn1gh_2019admin'
+dest_PASS = '0mn1gh_202007admin'
 
 # STAGING CONNECTION
 dest_common = xmlrpclib.ServerProxy('{}/xmlrpc/2/common'.format(dest_URL))
